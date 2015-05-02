@@ -1,0 +1,24 @@
+project(':yahoocurrencyextractor') {
+
+    apply plugin: 'application'
+    apply plugin: 'java'
+
+    mainClassName = 'com.jedikv.RawCurrencyExtractor'
+
+    def outputDirPath = "../yahoocurrencyextractor/gen-output/currency_output.json"
+    def inputDirPath = "../yahoocurrencyextractor/resources/currency_data.txt"
+
+    dependencies {
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+        compile 'com.google.code.gson:gson:2.2.4'
+    }
+
+    task createOutput {
+        def output = file(outputDirPath)
+        output.mkdirs()
+    }
+
+    run {
+        args = [outputDirPath, inputDirPath]
+    }
+}
