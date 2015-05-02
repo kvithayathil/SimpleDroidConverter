@@ -8,4 +8,4 @@
 *.name
 *.idea
 *.iml
-yahoocurrencyextractor/build/
+*.class
