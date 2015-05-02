@@ -5,7 +5,7 @@ project(':yahoocurrencyextractor') {
 
     mainClassName = 'com.jedikv.YahooCurrencyExtractor'
 
-    def outputDirPath = "../yahoocurrencyextractor/gen-output"
+    def outputDirPath = "../yahoocurrencyextractor/gen-output/currency_output.json"
     def inputDirPath = "../yahoocurrencyextractor/resources/currency_data.txt"
 
     dependencies {

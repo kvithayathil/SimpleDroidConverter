@@ -79,7 +79,7 @@ public class YahooCurrencyExtractor {
 
             if(!currencyItemList.isEmpty()) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                PrintWriter writer = new PrintWriter(outputPath + File.separator + "currency_output.json", "UTF-8");
+                PrintWriter writer = new PrintWriter(outputPath, "UTF-8");
                 writer.print(gson.toJson(currencyItemList));
                 writer.close();
             }
