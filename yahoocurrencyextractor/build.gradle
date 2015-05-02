@@ -3,7 +3,7 @@ project(':yahoocurrencyextractor') {
     apply plugin: 'application'
     apply plugin: 'java'
 
-    mainClassName = 'com.jedikv.YahooCurrencyExtractor'
+    mainClassName = 'com.jedikv.RawCurrencyExtractor'
 
     def outputDirPath = "../yahoocurrencyextractor/gen-output/currency_output.json"
     def inputDirPath = "../yahoocurrencyextractor/resources/currency_data.txt"
