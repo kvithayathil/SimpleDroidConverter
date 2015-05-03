@@ -23,12 +23,12 @@ public class YahooCurrencyRestAdapter {
     public static RestAdapter getInstance() {
 
         //Custom converter for yahoo currency response
-        Gson gson = new GsonBuilder().registerTypeAdapter(ExchangePairResponse.class, new CurrencyPairResponseDeserializer()).create();
+        //Gson gson = new GsonBuilder().registerTypeAdapter(ExchangePairResponse.class, new CurrencyPairResponseDeserializer()).create();
 
         if(mInstance == null) {
             mInstance = new RestAdapter.Builder()
                     .setEndpoint(Constants.YAHOO_CURRENCY_URL)
-                    .setConverter(new GsonConverter(gson))
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
         }
 

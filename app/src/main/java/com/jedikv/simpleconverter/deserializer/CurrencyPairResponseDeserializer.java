@@ -33,6 +33,8 @@ public class CurrencyPairResponseDeserializer implements JsonDeserializer<Exchan
 
         final JsonObject jsonObject = json.getAsJsonObject();
 
+        jsonObject.getAsJsonObject("query").get("created").getAsString();
+
         final String id = jsonObject.get("id").getAsString();
         final String pair = jsonObject.get("Name").getAsString();
         final BigDecimal rate = jsonObject.get("Rate").getAsBigDecimal();
