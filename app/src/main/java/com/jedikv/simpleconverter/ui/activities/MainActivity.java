@@ -1,17 +1,49 @@
-package com.jedikv.simpleconverter;
+package com.jedikv.simpleconverter.ui.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 
-public class MainActivity extends ActionBarActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    @InjectView(R.id.et_input)
+    AppCompatEditText etInput;
+    @InjectView(R.id.btn_update_currency)
+    AppCompatButton btnDownload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
+
+
+
+
+    }
+
+
+    @OnClick(R.id.btn_update_currency)
+    public void downloadCurrency() {
+
+        ArrayList<String> list = new ArrayList<>(Arrays.asList("GBP", "CHF"));
+
+        CurrencyUpdateIntentService.startService(this, list, "USD");
     }
 
     @Override
