@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.jedikv.simpleconverter.component.AppComponent;
 import com.jedikv.simpleconverter.component.DaggerAppComponent;
+import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
 
 import converter_db.DaoMaster;
 import converter_db.DaoSession;
@@ -54,7 +55,7 @@ public class App extends Application {
 
     private void setUpDatabase() {
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "converter_db", null);
+        ConverterDaoMaster helper = new ConverterDaoMaster(this, "converter_db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         mDaoSession = daoMaster.newSession();

@@ -22,9 +22,9 @@ public class AppDaoGenerator {
         Entity entity = schema.addEntity("CurrencyEntity");
         entity.addStringProperty("symbol");
         entity.addStringProperty("name");
-        entity.addStringProperty("country_name");
-        entity.addLongProperty("numeric_code").primaryKey();
-        entity.addStringProperty("currency_code").unique().notNull();
+        entity.addStringProperty("countryName");
+        entity.addLongProperty("numericCode").primaryKey();
+        entity.addStringProperty("code").unique().notNull();
     }
 
     public static void createCurrencyPairTable(Schema schema) {

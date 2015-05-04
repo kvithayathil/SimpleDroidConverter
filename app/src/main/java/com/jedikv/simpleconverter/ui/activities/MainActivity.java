@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,15 +26,16 @@ public class MainActivity extends AppCompatActivity {
     AppCompatEditText etInput;
     @InjectView(R.id.btn_update_currency)
     AppCompatButton btnDownload;
+    @InjectView(R.id.tv_currency_code)
+    AppCompatTextView tvCurrencyCode;
+    @InjectView(R.id.tv_currency_symbol)
+    AppCompatTextView tvCurrencySymbol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-
-
-
 
     }
 

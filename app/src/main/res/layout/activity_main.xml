@@ -5,10 +5,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/ib_flag"
+        android:src="@drawable/do_"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_currency_symbol"
+        android:layout_alignTop="@+id/ib_flag"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@+id/ib_flag"
+        android:text="$"
+        android:layout_toRightOf="@+id/ib_flag"/>
+
     <EditText
         android:id="@+id/et_input"
+        android:hint="@string/hint_currency_input"
+        android:layout_toRightOf="@+id/tv_currency_symbol"
+        android:layout_toLeftOf="@+id/tv_currency_code"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_currency_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GBP"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@+id/et_input"/>
 
     <Button
         android:id="@+id/btn_update_currency"
