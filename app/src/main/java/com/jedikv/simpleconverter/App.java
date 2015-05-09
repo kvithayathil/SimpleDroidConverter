@@ -59,6 +59,11 @@ public class App extends Application {
         return mDaoSession;
     }
 
+    public static OttoBus getBusInstance() {
+        return mBus;
+    }
+
+
     private void setUpDatabase() {
 
         ConverterDaoMaster helper = new ConverterDaoMaster(this, "converter_db", null);

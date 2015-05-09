@@ -20,12 +20,17 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
+import com.jedikv.simpleconverter.ui.adapters.CurrencyAdapter;
+import com.squareup.otto.Subscribe;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -33,6 +38,7 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity {
@@ -50,7 +56,10 @@ public class MainActivity extends BaseActivity {
     @InjectView(R.id.list)
     RecyclerView recyclerView;
 
+    private CurrencyAdapter mCurrencyAdapter;
+
     private boolean mInputFocus = false;
+    private String mInputedValueString;
     private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
     @Override
@@ -58,9 +67,13 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        mDecimalFormat.setParseBigDecimal(true);
+        mDecimalFormat.setMinimumFractionDigits(4);
+
+        mCurrencyAdapter = new CurrencyAdapter(App.get(this));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        recyclerView.setAdapter(mCurrencyAdapter);
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -131,6 +144,22 @@ public class MainActivity extends BaseActivity {
 
     private void convertValue(String entry) {
 
+        mInputedValueString = entry;
+
+        try {
+            BigDecimal enteredValue = (BigDecimal)mDecimalFormat.parse(entry);
+            etInput.setText(mDecimalFormat.format(enteredValue.doubleValue()));
+            mCurrencyAdapter.updateCurrencyTargets("USD", enteredValue);
+
+            downloadCurrency();
+
+        } catch (NumberFormatException e) {
+            Timber.e(e, e.getMessage());
+
+        } catch (ParseException e) {
+            Timber.e(e, e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -142,5 +171,11 @@ public class MainActivity extends BaseActivity {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
         editText.clearFocus();
+    }
+
+    @Subscribe
+    public void updateCurrencyEvent(CurrencyUpdateEvent event) {
+
+        mCurrencyAdapter.notifyDataSetChanged();
     }
 }

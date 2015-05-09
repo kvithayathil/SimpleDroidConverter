@@ -16,8 +16,12 @@ import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -38,11 +42,13 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     private int mInputValue;
 
+
     public CurrencyAdapter(Context context) {
         Timber.tag(CurrencyAdapter.class.getSimpleName());
         mCurrencyPairDbHelper = new CurrencyPairDbHelper(App.get(context));
         mCurrencyDbHelper = new CurrencyDbHelper(App.get(context));
         mCurrencyPairList = new ArrayList<>();
+
     }
 
     public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
@@ -54,6 +60,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         //Ensure the value is converted to int to retain float values
         mInputValue = inputValue.multiply(new BigDecimal(10000)).intValue();
 
+        Timber.d("Preinput: " + inputValue + " PostInput: " + mInputValue);
         notifyDataSetChanged();
     }
 
@@ -70,8 +77,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
 
         CurrencyPairEntity pairEntity = mCurrencyPairList.get(position);
-        CurrencyEntity currencyEntity = mCurrencyDbHelper.getCurrency(mSourceCurrencyCode);
-        holder.bind(pairEntity, currencyEntity);
+        String code = pairEntity.getPair().substring(4);
+
+        CurrencyEntity currencyEntity = mCurrencyDbHelper.getCurrency(code);
+        holder.bind(mInputValue, pairEntity, currencyEntity);
     }
 
     @Override
@@ -80,6 +89,9 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     }
 
     public static class CurrencyViewHolder extends RecyclerView.ViewHolder {
+
+        private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
+
 
         @InjectView(R.id.iv_flag)
         ImageView ivFlag;
@@ -91,31 +103,43 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         public CurrencyViewHolder(View v) {
             super(v);
             ButterKnife.inject(this, v);
+            mDecimalFormat.setParseBigDecimal(true);
+            mDecimalFormat.setMinimumFractionDigits(4);
         }
 
 
-        public void bind(CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
+        public void bind(int value, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
 
 
             String code = currencyPairEntity.getPair().substring(4);
-            setFlagDrawable(ivFlag.getContext(), code);
+            setFlagDrawable(ivFlag.getContext(), code.substring(0,2).toLowerCase());
 
             tvCurrencyName.setText(currencyEntity.getName());
             tvValue.setText(currencyEntity.getSymbol() + "value");
 
-
+            setValue(value, currencyPairEntity.getRate());
         }
 
         private void setFlagDrawable(Context context, String currencyCode) {
 
-            final int flagId = context.getResources().getIdentifier(currencyCode, "drawable", context.getPackageName());
+            Timber.d("Country Code: " + currencyCode);
+
+            final int flagId = context.getResources().getIdentifier(currencyCode+ "_", "drawable", context.getPackageName());
             ivFlag.setImageResource(flagId);
         }
 
         public void setValue(int inputValue, int rate) {
 
+            Timber.d("Input value: " + inputValue + " rate: " + rate);
             int result = inputValue * rate;
 
+            BigDecimal intResult = new BigDecimal(result);
+            //Revert the value back to the original decimal point position
+            BigDecimal decimalResult = intResult.divide(new BigDecimal(10000 * 10000), 4, RoundingMode.HALF_UP);
+
+            Timber.d("Result: " + result + " Converted result: " + decimalResult);
+
+            tvValue.setText(decimalResult.toString());
         }
 
     }
