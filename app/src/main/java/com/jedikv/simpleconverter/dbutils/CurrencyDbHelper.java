@@ -35,6 +35,9 @@ public class CurrencyDbHelper extends BaseDbHelper {
 
     }
 
+    public CurrencyEntity getCurrency(String currencyCode) {
+        return getDao().queryBuilder().where(CurrencyEntityDao.Properties.Code.eq(currencyCode)).build().uniqueOrThrow();
+    }
 
     public void deleteAll() {
         getDao().deleteAll();

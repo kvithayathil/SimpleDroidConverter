@@ -34,6 +34,10 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     }
 
+    public List<CurrencyPairEntity> getCurrencyTargetList(String sourceCurrencyCode) {
+
+        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Pair.like(sourceCurrencyCode+"%")).build().list();
+    }
 
     public void deleteAll() {
         getDao().deleteAll();

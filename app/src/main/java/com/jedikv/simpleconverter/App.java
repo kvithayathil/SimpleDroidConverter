@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.jedikv.simpleconverter.component.AppComponent;
 import com.jedikv.simpleconverter.component.DaggerAppComponent;
 import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
+import com.jedikv.simpleconverter.utils.OttoBus;
+import com.squareup.otto.ThreadEnforcer;
 
 import converter_db.DaoMaster;
 import converter_db.DaoSession;
@@ -23,10 +25,14 @@ public class App extends Application {
     private AppComponent mAppComponent;
     private DaoSession mDaoSession;
 
+    private static OttoBus mBus;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         Timber.tag(TAG);
+        mBus = new OttoBus(ThreadEnforcer.MAIN);
         Timber.plant(new Timber.DebugTree());
 
         setUpGraph();
