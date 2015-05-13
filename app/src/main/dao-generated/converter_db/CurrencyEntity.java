@@ -11,10 +11,10 @@ public class CurrencyEntity {
 
     private String symbol;
     private String name;
-    private String country_name;
-    private Long numeric_code;
+    private String countryName;
+    private Long numericCode;
     /** Not-null value. */
-    private String currency_code;
+    private String code;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -22,16 +22,16 @@ public class CurrencyEntity {
     public CurrencyEntity() {
     }
 
-    public CurrencyEntity(Long numeric_code) {
-        this.numeric_code = numeric_code;
+    public CurrencyEntity(Long numericCode) {
+        this.numericCode = numericCode;
     }
 
-    public CurrencyEntity(String symbol, String name, String country_name, Long numeric_code, String currency_code) {
+    public CurrencyEntity(String symbol, String name, String countryName, Long numericCode, String code) {
         this.symbol = symbol;
         this.name = name;
-        this.country_name = country_name;
-        this.numeric_code = numeric_code;
-        this.currency_code = currency_code;
+        this.countryName = countryName;
+        this.numericCode = numericCode;
+        this.code = code;
     }
 
     public String getSymbol() {
@@ -50,30 +50,30 @@ public class CurrencyEntity {
         this.name = name;
     }
 
-    public String getCountry_name() {
-        return country_name;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setCountry_name(String country_name) {
-        this.country_name = country_name;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
-    public Long getNumeric_code() {
-        return numeric_code;
+    public Long getNumericCode() {
+        return numericCode;
     }
 
-    public void setNumeric_code(Long numeric_code) {
-        this.numeric_code = numeric_code;
+    public void setNumericCode(Long numericCode) {
+        this.numericCode = numericCode;
     }
 
     /** Not-null value. */
-    public String getCurrency_code() {
-        return currency_code;
+    public String getCode() {
+        return code;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setCurrency_code(String currency_code) {
-        this.currency_code = currency_code;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     // KEEP METHODS - put your custom methods here

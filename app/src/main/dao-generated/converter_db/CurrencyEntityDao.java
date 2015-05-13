@@ -25,9 +25,9 @@ public class CurrencyEntityDao extends AbstractDao<CurrencyEntity, Long> {
     public static class Properties {
         public final static Property Symbol = new Property(0, String.class, "symbol", false, "SYMBOL");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
-        public final static Property Country_name = new Property(2, String.class, "country_name", false, "COUNTRY_NAME");
-        public final static Property Numeric_code = new Property(3, Long.class, "numeric_code", true, "NUMERIC_CODE");
-        public final static Property Currency_code = new Property(4, String.class, "currency_code", false, "CURRENCY_CODE");
+        public final static Property CountryName = new Property(2, String.class, "countryName", false, "COUNTRY_NAME");
+        public final static Property NumericCode = new Property(3, Long.class, "numericCode", true, "NUMERIC_CODE");
+        public final static Property Code = new Property(4, String.class, "code", false, "CODE");
     };
 
 
@@ -45,9 +45,9 @@ public class CurrencyEntityDao extends AbstractDao<CurrencyEntity, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'CURRENCY_ENTITY' (" + //
                 "'SYMBOL' TEXT," + // 0: symbol
                 "'NAME' TEXT," + // 1: name
-                "'COUNTRY_NAME' TEXT," + // 2: country_name
-                "'NUMERIC_CODE' INTEGER PRIMARY KEY ," + // 3: numeric_code
-                "'CURRENCY_CODE' TEXT NOT NULL UNIQUE );"); // 4: currency_code
+                "'COUNTRY_NAME' TEXT," + // 2: countryName
+                "'NUMERIC_CODE' INTEGER PRIMARY KEY ," + // 3: numericCode
+                "'CODE' TEXT NOT NULL UNIQUE );"); // 4: code
     }
 
     /** Drops the underlying database table. */
@@ -71,16 +71,16 @@ public class CurrencyEntityDao extends AbstractDao<CurrencyEntity, Long> {
             stmt.bindString(2, name);
         }
  
-        String country_name = entity.getCountry_name();
-        if (country_name != null) {
-            stmt.bindString(3, country_name);
+        String countryName = entity.getCountryName();
+        if (countryName != null) {
+            stmt.bindString(3, countryName);
         }
  
-        Long numeric_code = entity.getNumeric_code();
-        if (numeric_code != null) {
-            stmt.bindLong(4, numeric_code);
+        Long numericCode = entity.getNumericCode();
+        if (numericCode != null) {
+            stmt.bindLong(4, numericCode);
         }
-        stmt.bindString(5, entity.getCurrency_code());
+        stmt.bindString(5, entity.getCode());
     }
 
     /** @inheritdoc */
@@ -95,9 +95,9 @@ public class CurrencyEntityDao extends AbstractDao<CurrencyEntity, Long> {
         CurrencyEntity entity = new CurrencyEntity( //
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // symbol
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // country_name
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // numeric_code
-            cursor.getString(offset + 4) // currency_code
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // countryName
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // numericCode
+            cursor.getString(offset + 4) // code
         );
         return entity;
     }
@@ -107,15 +107,15 @@ public class CurrencyEntityDao extends AbstractDao<CurrencyEntity, Long> {
     public void readEntity(Cursor cursor, CurrencyEntity entity, int offset) {
         entity.setSymbol(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setCountry_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setNumeric_code(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setCurrency_code(cursor.getString(offset + 4));
+        entity.setCountryName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setNumericCode(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
+        entity.setCode(cursor.getString(offset + 4));
      }
     
     /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(CurrencyEntity entity, long rowId) {
-        entity.setNumeric_code(rowId);
+        entity.setNumericCode(rowId);
         return rowId;
     }
     
@@ -123,7 +123,7 @@ public class CurrencyEntityDao extends AbstractDao<CurrencyEntity, Long> {
     @Override
     public Long getKey(CurrencyEntity entity) {
         if(entity != null) {
-            return entity.getNumeric_code();
+            return entity.getNumericCode();
         } else {
             return null;
         }

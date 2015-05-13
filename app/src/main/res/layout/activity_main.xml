@@ -1,22 +1,84 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_container"
+    android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity">
+
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:id="@+id/ib_flag"
+        android:src="@drawable/do_"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_currency_symbol"
+        android:layout_alignTop="@+id/ib_flag"
+        android:layout_marginLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@+id/ib_flag"
+        android:text="$"
+        android:layout_toRightOf="@+id/ib_flag"/>
 
     <EditText
         android:id="@+id/et_input"
+        android:hint="@string/hint_currency_input"
+        android:layout_toRightOf="@+id/tv_currency_symbol"
+        android:layout_toLeftOf="@+id/tv_currency_code"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/tv_currency_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GBP"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@+id/et_input"/>
+
     <Button
         android:id="@+id/btn_update_currency"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/et_input"
+        android:layout_centerHorizontal="true"
         android:text="Download"
         android:layout_width="wrap_content"
         android:minWidth="100dp"
         android:layout_height="48dp" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_below="@+id/btn_update_currency"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_action_content_add"
+        app:fab_colorNormal="@color/fab_primary"
+        app:fab_colorPressed="@color/fab_primary_pressed"
+        app:fab_colorRipple="@color/fab_ripple" />
 
 </RelativeLayout>

@@ -4,10 +4,12 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 
+import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.api.IYahooCurrencyApi;
 import com.jedikv.simpleconverter.api.YahooCurrencyRestAdapter;
 import com.jedikv.simpleconverter.api.responses.YahooDataContainer;
 import com.jedikv.simpleconverter.api.responses.YahooCurrencyRate;
+import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 
 import java.math.BigDecimal;
@@ -162,5 +164,7 @@ public class CurrencyUpdateIntentService extends IntentService {
 
         CurrencyPairDbHelper helper = new CurrencyPairDbHelper(this);
         helper.bulkInsertOrUpdate(entities);
+
+        App.getBusInstance().post(new CurrencyUpdateEvent());
     }
 }

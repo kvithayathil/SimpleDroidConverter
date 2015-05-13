@@ -16,12 +16,12 @@ import de.greenrobot.dao.AbstractDao;
 public class CurrencyPairDbHelper extends BaseDbHelper {
 
     public CurrencyPairDbHelper(Context context) {
-        super(App.get(context));
+        super(context);
     }
 
     public long insertOrUpdate(CurrencyPairEntity entity) {
 
-        return getDaoSession(mContext).insertOrReplace(entity);
+        return getDaoSession().insertOrReplace(entity);
     }
 
     public void bulkUpdate(List<CurrencyPairEntity> entities) {
@@ -34,6 +34,10 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     }
 
+    public List<CurrencyPairEntity> getCurrencyTargetList(String sourceCurrencyCode) {
+
+        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Pair.like(sourceCurrencyCode+"%")).build().list();
+    }
 
     public void deleteAll() {
         getDao().deleteAll();
@@ -45,6 +49,6 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     @Override
     public CurrencyPairEntityDao getDao() {
-        return getDaoSession(mContext).getCurrencyPairEntityDao();
+        return getDaoSession().getCurrencyPairEntityDao();
     }
 }
