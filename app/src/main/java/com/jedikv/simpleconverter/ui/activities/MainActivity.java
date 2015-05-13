@@ -25,6 +25,7 @@ import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyAdapter;
+import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
 import java.math.BigDecimal;
@@ -55,6 +56,8 @@ public class MainActivity extends BaseActivity {
     RelativeLayout rlContainer;
     @InjectView(R.id.list)
     RecyclerView recyclerView;
+    @InjectView(R.id.fab)
+    FloatingActionButton floatingActionButton;
 
     private CurrencyAdapter mCurrencyAdapter;
 
@@ -74,6 +77,8 @@ public class MainActivity extends BaseActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mCurrencyAdapter);
+
+        floatingActionButton.attachToRecyclerView(recyclerView);
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 

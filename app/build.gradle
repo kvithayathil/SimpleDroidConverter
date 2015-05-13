@@ -84,4 +84,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.10.19'
+
+    //Floating action button
+    compile 'com.melnykov:floatingactionbutton:1.3.0'
+
 }
