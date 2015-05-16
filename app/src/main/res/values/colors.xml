@@ -3,6 +3,9 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
 
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+
     <color name="fab_primary">#3f51b5</color>
     <color name="fab_primary_pressed">#303f9f</color>
     <color name="fab_ripple">#F06292</color>

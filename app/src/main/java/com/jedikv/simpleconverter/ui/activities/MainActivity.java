@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +59,9 @@ public class MainActivity extends BaseActivity {
     @InjectView(R.id.fab)
     FloatingActionButton floatingActionButton;
 
+    @InjectView(R.id.toolbar)
+    Toolbar toolBar;
+
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
     private boolean mInputFocus = false;
@@ -69,6 +73,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        setSupportActionBar(toolBar);
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
 
