@@ -7,12 +7,15 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.utils.ConversionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -23,14 +26,18 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 13/05/2015.
  */
-public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAdapter.CurrencyItemViewHolder>  {
+public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAdapter.CurrencyItemViewHolder> implements Filterable {
 
     private final List<CurrencyEntity> mCurrencyList;
+    private List<CurrencyEntity> mFilteredList;
+    private CurrencyFilter mCurrencyFilter;
 
     public CurrencyPickerAdapter(Context context, List<String> currencyCodesToFilter) {
 
         mCurrencyList = new CurrencyDbHelper(context).getFilteredCurrencies(currencyCodesToFilter);
+        mFilteredList = mCurrencyList;
 
+        getFilter();
     }
 
     @Override
@@ -45,13 +52,13 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
     @Override
     public void onBindViewHolder(CurrencyItemViewHolder holder, int position) {
 
-        CurrencyEntity entity = mCurrencyList.get(position);
+        CurrencyEntity entity = mFilteredList.get(position);
         holder.bind(entity);
     }
 
     @Override
     public int getItemCount() {
-        return mCurrencyList.size();
+        return mFilteredList.size();
     }
 
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder {
@@ -90,6 +97,62 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
                 tvCurrencySymbol.setText("");
             }
 
+        }
+    }
+
+    @Override
+    public Filter getFilter() {
+
+        if(mCurrencyFilter == null) {
+            mCurrencyFilter = new CurrencyFilter();
+        }
+
+        return mCurrencyFilter;
+    }
+
+
+    private class CurrencyFilter extends Filter {
+
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            FilterResults filterResults = new FilterResults();
+            if(!TextUtils.isEmpty(constraint)) {
+                ArrayList<CurrencyEntity> tempList = new ArrayList<>();
+
+                for(CurrencyEntity currency:mCurrencyList) {
+
+                    String content = currency.getCode() + " " + currency.getName() + " " + currency.getSymbol() + " " + currency.getCountryName();
+
+                    if(content.toLowerCase().contains(constraint.toString().toLowerCase())) {
+
+                        tempList.add(currency);
+                    }
+                }
+
+                filterResults.count = tempList.size();
+                filterResults.values = tempList;
+
+            } else {
+
+                filterResults.count = mCurrencyList.size();
+                filterResults.values = mCurrencyList;
+            }
+
+            return filterResults;
+        }
+
+        /**
+         * Notify about filtered list to UI
+         * @param constraint text
+         * @param results filtered result
+         */
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            mFilteredList = (ArrayList<CurrencyEntity>)results.values;
+            notifyDataSetChanged();
         }
     }
 }

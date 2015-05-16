@@ -4,26 +4,41 @@ package com.jedikv.simpleconverter.ui.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 
+
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyPickerAdapter;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import timber.log.Timber;
 
 /**
  * Created by Kurian on 13/05/2015.
  */
-public class CurrencyPickerActivity extends BaseActivity {
+public class CurrencyPickerActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
     public static final int REQUEST_CODE_ADD_CURRENCY = 100;
     public static final int REQUEST_CODE_CHANGE_CURRENCY = 200;
@@ -35,9 +50,11 @@ public class CurrencyPickerActivity extends BaseActivity {
     // The elevation of the toolbar when content is scrolled behind
     private static final float TOOLBAR_ELEVATION = 14f;
     @InjectView(R.id.list)
-    RecyclerView recyclerView;
+    ObservableRecyclerView recyclerView;
     @InjectView(R.id.toolbar)
     Toolbar toolBar;
+
+    private SearchView searchView;
 
     private CurrencyPickerAdapter mAdapter;
 
@@ -48,72 +65,11 @@ public class CurrencyPickerActivity extends BaseActivity {
         ButterKnife.inject(this);
         setSupportActionBar(toolBar);
 
+        recyclerView.setScrollViewCallbacks(this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-
-        // We need to detect scrolling changes in the RecyclerView
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            // Keeps track of the overall vertical offset in the list
-            int verticalOffset;
-
-            // Determines the scroll UP/DOWN direction
-            boolean scrollingUp;
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (scrollingUp) {
-                        if (verticalOffset > toolBar.getHeight()) {
-                            toolbarAnimateHide();
-                        } else {
-                            toolbarAnimateShow(verticalOffset);
-                        }
-                    } else {
-                        if (toolBar.getTranslationY() < toolBar.getHeight() * -0.6 && verticalOffset > toolBar.getHeight()) {
-                            toolbarAnimateHide();
-                        } else {
-                            toolbarAnimateShow(verticalOffset);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public final void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                verticalOffset += dy;
-                scrollingUp = dy > 0;
-                int toolbarYOffset = (int) (dy - toolBar.getTranslationY());
-                toolBar.animate().cancel();
-                if (scrollingUp) {
-                    if (toolbarYOffset < toolBar.getHeight()) {
-                        if (verticalOffset > toolBar.getHeight()) {
-                            toolbarSetElevation(TOOLBAR_ELEVATION);
-                        }
-                        toolBar.setTranslationY(-toolbarYOffset);
-                    } else {
-                        toolbarSetElevation(0);
-                        toolBar.setTranslationY(-toolBar.getHeight());
-                    }
-                } else {
-                    if (toolbarYOffset < 0) {
-                        if (verticalOffset <= 0) {
-                            toolbarSetElevation(0);
-                        }
-                        toolBar.setTranslationY(0);
-                    } else {
-                        if (verticalOffset > toolBar.getHeight()) {
-                            toolbarSetElevation(TOOLBAR_ELEVATION);
-                        }
-                        toolBar.setTranslationY(-toolbarYOffset);
-                    }
-                }
-            }
-        });
-
-
 
         if(getIntent().getExtras() != null) {
 
@@ -126,57 +82,37 @@ public class CurrencyPickerActivity extends BaseActivity {
 
     }
 
-    /**
-     * Raise the toolbar elevation when animating over the list
-     * @param elevation
-     */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void toolbarSetElevation(float elevation) {
-        // setElevation() only works on Lollipop
-        if (AndroidUtils.isLollipop()) {
-            toolBar.setElevation(elevation);
-        }
-    }
-
-    /**
-     * For use when scrolling down on the list
-     * @param verticalOffset
-     */
-    private void toolbarAnimateShow(final int verticalOffset) {
-        toolBar.animate()
-                .translationY(0)
-                .setInterpolator(new LinearInterpolator())
-                .setDuration(180)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-                        toolbarSetElevation(verticalOffset == 0 ? 0 : TOOLBAR_ELEVATION);
-                    }
-                });
-    }
-
-    /**
-     * For use when scrolling up on the list
-     */
-    private void toolbarAnimateHide() {
-        toolBar.animate()
-                .translationY(-toolBar.getHeight())
-                .setInterpolator(new LinearInterpolator())
-                .setDuration(180)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        toolbarSetElevation(0);
-                    }
-                });
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_currency_picker, menu);
-        return true;
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchManager searchManager = (SearchManager) CurrencyPickerActivity.this.getSystemService(Context.SEARCH_SERVICE);
+
+        if(searchItem != null) {
+            searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    mAdapter.getFilter().filter(newText);
+                    return true;
+                }
+            });
+        }
+
+        if(searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(CurrencyPickerActivity.this.getComponentName()));
+
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -194,4 +130,68 @@ public class CurrencyPickerActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean toolbarIsShown() {
+        return ViewHelper.getTranslationY(toolBar) == 0;
+    }
+
+
+    private boolean toolbarIsHidden() {
+        return ViewHelper.getTranslationY(toolBar) == -toolBar.getHeight();
+    }
+
+
+    private void showToolbar() {
+        moveToolbar(0);
+    }
+
+
+    private void hideToolbar() {
+        moveToolbar(-toolBar.getHeight());
+    }
+
+    @Override
+    public void onScrollChanged(int i, boolean b, boolean b1) {
+
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+        Timber.d("onUpOrCancelMotionEvent: " + scrollState);
+
+        if(scrollState == ScrollState.UP) {
+            if(toolbarIsShown()) {
+                hideToolbar();
+            }
+        } else if (scrollState == ScrollState.DOWN) {
+
+            if(toolbarIsHidden()) {
+                showToolbar();
+            }
+        }
+    }
+
+    private void moveToolbar(float toTranslationY) {
+        if (ViewHelper.getTranslationY(toolBar) == toTranslationY) {
+            return;
+        }
+        ValueAnimator animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(toolBar), toTranslationY).setDuration(200);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float translationY = (float) animation.getAnimatedValue();
+                ViewHelper.setTranslationY(toolBar, translationY);
+                ViewHelper.setTranslationY((View) recyclerView, translationY);
+                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) ((View) recyclerView).getLayoutParams();
+                lp.height = (int) -translationY + getScreenHeight() - lp.topMargin;
+                ((View) recyclerView).requestLayout();
+            }
+        });
+        animator.start();
+    }
 }

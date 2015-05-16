@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@null"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
-        android:fadeScrollbars="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <include
+        android:layout_gravity="top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/tool_bar"/>
 
 
-</RelativeLayout>
+    <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+        android:id="@+id/list"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:fadeScrollbars="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+
+</FrameLayout>

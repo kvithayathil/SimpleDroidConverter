@@ -36,4 +36,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
+
+    protected int getScreenHeight() {
+        return findViewById(android.R.id.content).getHeight();
+    }
 }

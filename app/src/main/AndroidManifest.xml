@@ -21,7 +21,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.CurrencyPickerActivity"
-            android:parentActivityName=".ui.activities.MainActivity"/>
+            android:parentActivityName=".ui.activities.MainActivity">
+                <!--<action android:name="android.intent.action.SEARCH"/>-->
+                <!--<action android:name="android.intent.action.view"/>-->
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/currency_search"/>
+        </activity>
 
         <service
             android:name=".intentsevice.CurrencyUpdateIntentService"
