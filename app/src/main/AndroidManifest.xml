@@ -20,6 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activities.CurrencyPickerActivity"
+            android:parentActivityName=".ui.activities.MainActivity"/>
 
         <service
             android:name=".intentsevice.CurrencyUpdateIntentService"

@@ -1,6 +1,7 @@
 package com.jedikv.simpleconverter.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
+import com.jedikv.simpleconverter.deserializer.CurrencyPairResponseDeserializer;
 import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyAdapter;
 import com.melnykov.fab.FloatingActionButton;
@@ -116,6 +118,17 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @OnClick(R.id.fab)
+    public void addCurrency() {
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(CurrencyPickerActivity.EXTRA_CURRENCY_LIST, new ArrayList<>(Arrays.asList(new String[]{"USD"})));
+
+        Intent pickCurrencyIntent = new Intent(this, CurrencyPickerActivity.class);
+        pickCurrencyIntent.putExtras(bundle);
+
+        startActivity(pickCurrencyIntent);
+    }
 
     @OnClick(R.id.btn_update_currency)
     public void downloadCurrency() {

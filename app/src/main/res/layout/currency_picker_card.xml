@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_marginRight="8dp"
+            android:id="@+id/iv_flag"
+            android:src="@drawable/gb_"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+        <TextView
+            android:id="@+id/tv_currency_name"
+            android:text="Great British Pound"
+            android:textSize="24sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_flag"
+            android:layout_toRightOf="@+id/iv_flag"
+            android:gravity="center_vertical|left"
+            android:layout_alignBottom="@+id/iv_flag"/>
+
+        <TextView
+            android:id="@+id/tv_currency_code"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="28sp"
+            android:text="GBP"
+            android:gravity="center"
+            android:layout_below="@+id/iv_flag"/>
+
+        <TextView
+            android:id="@+id/tv_currency_symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="£"
+            android:textSize="28sp"
+            android:layout_alignTop="@+id/tv_currency_code"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

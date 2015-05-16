@@ -14,6 +14,7 @@ import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
+import com.jedikv.simpleconverter.utils.ConversionUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -124,7 +125,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
             Timber.d("Country Code: " + currencyCode);
 
-            final int flagId = context.getResources().getIdentifier(currencyCode+ "_", "drawable", context.getPackageName());
+            final int flagId = ConversionUtils.getDrawableResId(context, currencyCode + "_");
+            //context.getResources().getIdentifier(currencyCode+ "_", "drawable", context.getPackageName());
             ivFlag.setImageResource(flagId);
         }
 
