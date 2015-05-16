@@ -55,7 +55,7 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder {
 
-        @InjectView(R.id.ib_flag)
+        @InjectView(R.id.iv_flag)
         ImageView ivFlag;
         @InjectView(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
@@ -71,11 +71,11 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
         public void bind(CurrencyEntity currencyEntity) {
 
-            final int flagId = ConversionUtils.getDrawableResId(ivFlag.getContext(), currencyEntity.getCode().toLowerCase() + "_");
+            final int flagId = ConversionUtils.getDrawableResId(ivFlag.getContext(), currencyEntity.getCode().substring(0,2).toLowerCase() + "_");
             ivFlag.setImageResource(flagId);
 
             tvCurrencyName.setText(currencyEntity.getName());
-            tvCurrencyCode.setText(currencyEntity.getSymbol());
+            tvCurrencyCode.setText(currencyEntity.getCode());
 
             //Some currency symbols are just the currency code, so we avoid having to print it twice
             if(!TextUtils.equals(currencyEntity.getCode(), currencyEntity.getSymbol())) {

@@ -34,11 +34,17 @@ public class CurrencyPickerActivity extends BaseActivity {
         setContentView(R.layout.activity_currency_picker);
         ButterKnife.inject(this);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
+
 
         if(getIntent().getExtras() != null) {
 
             mAdapter = new CurrencyPickerAdapter(this, getIntent().getExtras().getStringArrayList(EXTRA_CURRENCY_LIST));
+
+
             recyclerView.setAdapter(mAdapter);
         }
 

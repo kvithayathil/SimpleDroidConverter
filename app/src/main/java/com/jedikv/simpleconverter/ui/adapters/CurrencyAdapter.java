@@ -41,7 +41,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     private String mSourceCurrencyCode;
 
-    private int mInputValue;
+    private long mInputValue;
 
 
     public CurrencyAdapter(Context context) {
@@ -59,7 +59,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         mCurrencyPairList.addAll(mCurrencyPairDbHelper.getCurrencyTargetList(currencyCode + "/"));
 
         //Ensure the value is converted to int to retain float values
-        mInputValue = inputValue.multiply(new BigDecimal(10000)).intValue();
+        mInputValue = inputValue.multiply(new BigDecimal(10000)).longValue();
 
         Timber.d("Preinput: " + inputValue + " PostInput: " + mInputValue);
         notifyDataSetChanged();
@@ -109,7 +109,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         }
 
 
-        public void bind(int value, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
+        public void bind(long value, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
 
 
             String code = currencyPairEntity.getPair().substring(4);
@@ -130,10 +130,10 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
             ivFlag.setImageResource(flagId);
         }
 
-        public void setValue(int inputValue, int rate) {
+        public void setValue(long inputValue, long rate) {
 
             Timber.d("Input value: " + inputValue + " rate: " + rate);
-            int result = inputValue * rate;
+            long result = inputValue * rate;
 
             BigDecimal intResult = new BigDecimal(result);
             //Revert the value back to the original decimal point position
