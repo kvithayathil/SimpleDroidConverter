@@ -2,9 +2,7 @@ package com.jedikv.simpleconverter.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
@@ -24,9 +22,8 @@ import android.widget.TextView;
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
-import com.jedikv.simpleconverter.deserializer.CurrencyPairResponseDeserializer;
 import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
-import com.jedikv.simpleconverter.ui.adapters.CurrencyAdapter;
+import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
@@ -61,7 +58,7 @@ public class MainActivity extends BaseActivity {
     @InjectView(R.id.fab)
     FloatingActionButton floatingActionButton;
 
-    private CurrencyAdapter mCurrencyAdapter;
+    private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
     private boolean mInputFocus = false;
     private String mInputedValueString;
@@ -75,10 +72,10 @@ public class MainActivity extends BaseActivity {
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
 
-        mCurrencyAdapter = new CurrencyAdapter(App.get(this));
+        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(mCurrencyAdapter);
+        recyclerView.setAdapter(mCurrencyConversionsAdapter);
 
         floatingActionButton.attachToRecyclerView(recyclerView);
 
@@ -167,7 +164,7 @@ public class MainActivity extends BaseActivity {
         try {
             BigDecimal enteredValue = (BigDecimal)mDecimalFormat.parse(entry);
             etInput.setText(mDecimalFormat.format(enteredValue.doubleValue()));
-            mCurrencyAdapter.updateCurrencyTargets("USD", enteredValue);
+            mCurrencyConversionsAdapter.updateCurrencyTargets("USD", enteredValue);
 
             downloadCurrency();
 
@@ -194,6 +191,6 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
 
-        mCurrencyAdapter.notifyDataSetChanged();
+        mCurrencyConversionsAdapter.notifyDataSetChanged();
     }
 }

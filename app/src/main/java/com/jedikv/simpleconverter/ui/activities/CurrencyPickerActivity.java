@@ -1,6 +1,7 @@
 package com.jedikv.simpleconverter.ui.activities;
 
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -25,6 +26,8 @@ public class CurrencyPickerActivity extends BaseActivity {
 
     @InjectView(R.id.list)
     RecyclerView recyclerView;
+    @InjectView(R.id.autocomp_search)
+    AppCompatAutoCompleteTextView autoCompleteTextView;
 
     private CurrencyPickerAdapter mAdapter;
 

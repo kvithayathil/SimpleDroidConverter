@@ -18,6 +18,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import converter_db.CurrencyEntity;
+import timber.log.Timber;
 
 /**
  * Created by Kurian on 13/05/2015.
@@ -72,6 +73,11 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
         public void bind(CurrencyEntity currencyEntity) {
 
             final int flagId = ConversionUtils.getDrawableResId(ivFlag.getContext(), currencyEntity.getCode().substring(0,2).toLowerCase() + "_");
+
+            if(TextUtils.equals(currencyEntity.getCode(), "XCD")) {
+                Timber.d("XCD: " + flagId);
+            }
+
             ivFlag.setImageResource(flagId);
 
             tvCurrencyName.setText(currencyEntity.getName());

@@ -1,14 +1,12 @@
 package com.jedikv.simpleconverter.ui.adapters;
 
 import android.content.Context;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
@@ -33,7 +31,7 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 08/05/2015.
  */
-public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder> {
+public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
 
     private List<CurrencyPairEntity> mCurrencyPairList;
     private CurrencyPairDbHelper mCurrencyPairDbHelper;
@@ -44,8 +42,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     private long mInputValue;
 
 
-    public CurrencyAdapter(Context context) {
-        Timber.tag(CurrencyAdapter.class.getSimpleName());
+    public CurrencyConversionsAdapter(Context context) {
+        Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         mCurrencyPairDbHelper = new CurrencyPairDbHelper(App.get(context));
         mCurrencyDbHelper = new CurrencyDbHelper(App.get(context));
         mCurrencyPairList = new ArrayList<>();

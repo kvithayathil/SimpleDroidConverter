@@ -85,7 +85,7 @@
   },
   {
     "numericCode": 388,
-    "symbol": "JMD",
+    "symbol": "$",
     "name": "Jamaican Dollar",
     "countryName": "Jamaica",
     "code": "JMD"
@@ -99,7 +99,7 @@
   },
   {
     "numericCode": 968,
-    "symbol": "SRD",
+    "symbol": "$",
     "name": "Surinamese Dollar",
     "countryName": "Suriname",
     "code": "SRD"
@@ -120,7 +120,7 @@
   },
   {
     "numericCode": 480,
-    "symbol": "MUR",
+    "symbol": "Rs.",
     "name": "Mauritian Rupee",
     "countryName": "Mauritius",
     "code": "MUR"
@@ -155,14 +155,14 @@
   },
   {
     "numericCode": 950,
-    "symbol": "XAF",
+    "symbol": "Fs",
     "name": "CFA Franc BEAC",
     "countryName": "XA",
     "code": "XAF"
   },
   {
     "numericCode": 422,
-    "symbol": "ل.ل.‏",
+    "symbol": "£",
     "name": "Lebanese Pound",
     "countryName": "Lebanon",
     "code": "LBP"
@@ -183,7 +183,7 @@
   },
   {
     "numericCode": 372,
-    "symbol": "IEP",
+    "symbol": "£",
     "name": "Irish Pound",
     "countryName": "Ireland",
     "code": "IEP"
@@ -225,7 +225,7 @@
   },
   {
     "numericCode": 953,
-    "symbol": "XPF",
+    "symbol": "Fs",
     "name": "CFP Franc",
     "countryName": "XP",
     "code": "XPF"
@@ -302,7 +302,7 @@
   },
   {
     "numericCode": 760,
-    "symbol": "ل.س.‏",
+    "symbol": "£",
     "name": "Syrian Pound",
     "countryName": "Syria",
     "code": "SYP"
@@ -330,7 +330,7 @@
   },
   {
     "numericCode": 44,
-    "symbol": "BSD",
+    "symbol": "$",
     "name": "Bahamian Dollar",
     "countryName": "Bahamas",
     "code": "BSD"
@@ -344,14 +344,14 @@
   },
   {
     "numericCode": 324,
-    "symbol": "GNF",
+    "symbol": "Fs",
     "name": "Guinean Franc",
     "countryName": "Guinea",
     "code": "GNF"
   },
   {
     "numericCode": 60,
-    "symbol": "BMD",
+    "symbol": "$",
     "name": "Bermudan Dollar",
     "countryName": "Bermuda",
     "code": "BMD"
@@ -372,7 +372,7 @@
   },
   {
     "numericCode": 108,
-    "symbol": "BIF",
+    "symbol": "Fs",
     "name": "Burundian Franc",
     "countryName": "Burundi",
     "code": "BIF"
@@ -393,7 +393,7 @@
   },
   {
     "numericCode": 654,
-    "symbol": "SHP",
+    "symbol": "£",
     "name": "Saint Helena Pound",
     "countryName": "Saint Helena",
     "code": "SHP"
@@ -428,28 +428,28 @@
   },
   {
     "numericCode": 780,
-    "symbol": "TTD",
+    "symbol": "$",
     "name": "Trinidad and Tobago Dollar",
     "countryName": "Trinidad and Tobago",
     "code": "TTD"
   },
   {
     "numericCode": 690,
-    "symbol": "SCR",
+    "symbol": "Rs.",
     "name": "Seychellois Rupee",
     "countryName": "Seychelles",
     "code": "SCR"
   },
   {
     "numericCode": 52,
-    "symbol": "BBD",
+    "symbol": "$",
     "name": "Barbadian Dollar",
     "countryName": "Barbados",
     "code": "BBD"
   },
   {
     "numericCode": 90,
-    "symbol": "SBD",
+    "symbol": "$",
     "name": "Solomon Islands Dollar",
     "countryName": "Solomon Islands",
     "code": "SBD"
@@ -477,7 +477,7 @@
   },
   {
     "numericCode": 586,
-    "symbol": "PKR",
+    "symbol": "Rs.",
     "name": "Pakistani Rupee",
     "countryName": "Pakistan",
     "code": "PKR"
@@ -519,14 +519,14 @@
   },
   {
     "numericCode": 430,
-    "symbol": "LRD",
+    "symbol": "$",
     "name": "Liberian Dollar",
     "countryName": "Liberia",
     "code": "LRD"
   },
   {
     "numericCode": 250,
-    "symbol": "FRF",
+    "symbol": "Fs",
     "name": "French Franc",
     "countryName": "France",
     "code": "FRF"
@@ -554,7 +554,7 @@
   },
   {
     "numericCode": 952,
-    "symbol": "XOF",
+    "symbol": "Fs",
     "name": "CFA Franc BCEAO",
     "countryName": "XO",
     "code": "XOF"
@@ -568,7 +568,7 @@
   },
   {
     "numericCode": 976,
-    "symbol": "CDF",
+    "symbol": "Fs",
     "name": "Congolese Franc",
     "countryName": "The Democratic Republic Of Congo",
     "code": "CDF"
@@ -589,7 +589,7 @@
   },
   {
     "numericCode": 524,
-    "symbol": "NPR",
+    "symbol": "Rs.",
     "name": "Nepalese Rupee",
     "countryName": "Nepal",
     "code": "NPR"
@@ -603,7 +603,7 @@
   },
   {
     "numericCode": 932,
-    "symbol": "ZWL",
+    "symbol": "$",
     "name": "Zimbabwean Dollar (2009)",
     "countryName": "Zimbabwe",
     "code": "ZWL"
@@ -624,14 +624,14 @@
   },
   {
     "numericCode": 144,
-    "symbol": "LKR",
+    "symbol": "Rs.",
     "name": "Sri Lankan Rupee",
     "countryName": "Sri Lanka",
     "code": "LKR"
   },
   {
     "numericCode": 238,
-    "symbol": "FKP",
+    "symbol": "£",
     "name": "Falkland Islands Pound",
     "countryName": "Falkland Islands",
     "code": "FKP"
@@ -645,14 +645,14 @@
   },
   {
     "numericCode": 756,
-    "symbol": "SFr.",
+    "symbol": "Fs",
     "name": "Swiss Franc",
     "countryName": "Switzerland",
     "code": "CHF"
   },
   {
     "numericCode": 136,
-    "symbol": "KYD",
+    "symbol": "$",
     "name": "Cayman Islands Dollar",
     "countryName": "Cayman Islands",
     "code": "KYD"
@@ -680,7 +680,7 @@
   },
   {
     "numericCode": 262,
-    "symbol": "DJF",
+    "symbol": "Fs",
     "name": "Djiboutian Franc",
     "countryName": "Djibouti",
     "code": "DJF"
@@ -743,7 +743,7 @@
   },
   {
     "numericCode": 292,
-    "symbol": "GIP",
+    "symbol": "£",
     "name": "Gibraltar Pound",
     "countryName": "Gibraltar",
     "code": "GIP"
@@ -757,7 +757,7 @@
   },
   {
     "numericCode": 96,
-    "symbol": "BND",
+    "symbol": "$",
     "name": "Brunei Dollar",
     "countryName": "Brunei",
     "code": "BND"
@@ -785,7 +785,7 @@
   },
   {
     "numericCode": 84,
-    "symbol": "BZD",
+    "symbol": "$",
     "name": "Belize Dollar",
     "countryName": "Belize",
     "code": "BZD"
@@ -806,14 +806,14 @@
   },
   {
     "numericCode": 646,
-    "symbol": "RWF",
+    "symbol": "Fs",
     "name": "Rwandan Franc",
     "countryName": "Rwanda",
     "code": "RWF"
   },
   {
     "numericCode": 440,
-    "symbol": "LTL",
+    "symbol": "Lt",
     "name": "Lithuanian Litas",
     "countryName": "Lithuania",
     "code": "LTL"
@@ -848,7 +848,7 @@
   },
   {
     "numericCode": 516,
-    "symbol": "NAD",
+    "symbol": "$",
     "name": "Namibian Dollar",
     "countryName": "Namibia",
     "code": "NAD"
@@ -876,7 +876,7 @@
   },
   {
     "numericCode": 174,
-    "symbol": "KMF",
+    "symbol": "Fs",
     "name": "Comorian Franc",
     "countryName": "Comoros",
     "code": "KMF"
@@ -918,7 +918,7 @@
   },
   {
     "numericCode": 196,
-    "symbol": "CYP",
+    "symbol": "£",
     "name": "Cypriot Pound",
     "countryName": "Cyprus",
     "code": "CYP"
@@ -932,14 +932,14 @@
   },
   {
     "numericCode": 951,
-    "symbol": "XCD",
+    "symbol": "$",
     "name": "East Caribbean Dollar",
     "countryName": "XC",
     "code": "XCD"
   },
   {
     "numericCode": 938,
-    "symbol": "ج.س.‏",
+    "symbol": "£",
     "name": "Sudanese Pound",
     "countryName": "Sudan",
     "code": "SDG"
@@ -974,7 +974,7 @@
   },
   {
     "numericCode": 242,
-    "symbol": "FJD",
+    "symbol": "$",
     "name": "Fijian Dollar",
     "countryName": "Fiji",
     "code": "FJD"
@@ -1023,7 +1023,7 @@
   },
   {
     "numericCode": 818,
-    "symbol": "ج.م.‏",
+    "symbol": "£",
     "name": "Egyptian Pound",
     "countryName": "Egypt",
     "code": "EGP"
@@ -1072,7 +1072,7 @@
   },
   {
     "numericCode": 328,
-    "symbol": "GYD",
+    "symbol": "$",
     "name": "Guyanaese Dollar",
     "countryName": "Guyana",
     "code": "GYD"
