@@ -11,7 +11,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 
+import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.utils.ConversionUtils;
 
@@ -61,7 +63,7 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
         return mFilteredList.size();
     }
 
-    public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder {
+    public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @InjectView(R.id.iv_flag)
         ImageView ivFlag;
@@ -72,12 +74,17 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
         @InjectView(R.id.tv_currency_symbol)
         AppCompatTextView tvCurrencySymbol;
 
+        private String mCurrencyCode;
+
         public CurrencyItemViewHolder(View v) {
             super(v);
             ButterKnife.inject(this, v);
+            v.setOnClickListener(this);
         }
 
         public void bind(CurrencyEntity currencyEntity) {
+
+            mCurrencyCode = currencyEntity.getCode();
 
             final int flagId = ConversionUtils.getDrawableResId(ivFlag.getContext(), currencyEntity.getCode().substring(0,2).toLowerCase() + "_");
 
@@ -98,6 +105,12 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
             }
 
         }
+
+        @Override
+        public void onClick(View v) {
+            App.getBusInstance().post(new AddCurrencyEvent(mCurrencyCode));
+        }
+
     }
 
     @Override

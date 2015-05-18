@@ -1,9 +1,13 @@
 package com.jedikv.simpleconverter.ui.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
+import com.jedikv.simpleconverter.utils.Constants;
 
 import icepick.Icepick;
 
@@ -11,6 +15,8 @@ import icepick.Icepick;
  * Created by Kurian on 08/05/2015.
  */
 public class BaseActivity extends AppCompatActivity {
+
+    private CurrencyDbHelper mCurrencyEntityHelper;
 
     @Override
     protected void onStart() {
@@ -28,6 +34,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
+        mCurrencyEntityHelper = new CurrencyDbHelper(this);
 
     }
 
@@ -39,5 +46,15 @@ public class BaseActivity extends AppCompatActivity {
 
     protected int getScreenHeight() {
         return findViewById(android.R.id.content).getHeight();
+    }
+
+
+    protected SharedPreferences getDefaultSharedPrefs() {
+
+        return PreferenceManager.getDefaultSharedPreferences(App.get(this));
+    }
+
+    protected CurrencyDbHelper getCurrencyDbHelper() {
+        return mCurrencyEntityHelper;
     }
 }

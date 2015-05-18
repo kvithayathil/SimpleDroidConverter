@@ -2,7 +2,9 @@ package com.jedikv.simpleconverter.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
@@ -17,14 +19,18 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
+import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
+import com.jedikv.simpleconverter.utils.Constants;
+import com.jedikv.simpleconverter.utils.ConversionUtils;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
@@ -39,6 +45,7 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import converter_db.CurrencyEntity;
 import timber.log.Timber;
 
 
@@ -58,6 +65,8 @@ public class MainActivity extends BaseActivity {
     RecyclerView recyclerView;
     @InjectView(R.id.fab)
     FloatingActionButton floatingActionButton;
+    @InjectView(R.id.ib_flag)
+    ImageButton ibFlag;
 
     @InjectView(R.id.toolbar)
     Toolbar toolBar;
@@ -123,13 +132,13 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.fab)
     public void addCurrency() {
 
-        Bundle bundle = new Bundle();
-        bundle.putStringArrayList(CurrencyPickerActivity.EXTRA_CURRENCY_LIST, new ArrayList<>(Arrays.asList(new String[]{"USD"})));
+        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY, new ArrayList<>(Arrays.asList("GBP", "CHF")));
+    }
 
-        Intent pickCurrencyIntent = new Intent(this, CurrencyPickerActivity.class);
-        pickCurrencyIntent.putExtras(bundle);
+    @OnClick(R.id.ib_flag)
+    public void changeSourceCurrency() {
 
-        startActivity(pickCurrencyIntent);
+        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY, new ArrayList<>(Arrays.asList(getSourceCurrency())));
     }
 
     @OnClick(R.id.btn_update_currency)
@@ -137,7 +146,17 @@ public class MainActivity extends BaseActivity {
 
         ArrayList<String> list = new ArrayList<>(Arrays.asList("GBP", "CHF"));
 
-        CurrencyUpdateIntentService.startService(this, list, "USD");
+        CurrencyUpdateIntentService.startService(this, list, getSourceCurrency());
+    }
+
+    private void startCurrencyPicker(int requestCode, ArrayList<String> currencyArray) {
+
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList(CurrencyPickerActivity.EXTRA_CURRENCY_LIST, new ArrayList<>(Arrays.asList(new String[]{"USD"})));
+
+        Intent pickCurrencyIntent = new Intent(this, CurrencyPickerActivity.class);
+        pickCurrencyIntent.putExtras(bundle);
+        startActivityForResult(pickCurrencyIntent, requestCode);
     }
 
     @Override
@@ -193,9 +212,66 @@ public class MainActivity extends BaseActivity {
         editText.clearFocus();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateSourceCurrencyUI();
+    }
+
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
 
         mCurrencyConversionsAdapter.notifyDataSetChanged();
+    }
+
+
+    private void updateSourceCurrencyUI() {
+
+        CurrencyEntity entity = getCurrencyDbHelper().getCurrency(getSourceCurrency());
+
+        String countryCode = entity.getCode().substring(0,2).toLowerCase();
+        Timber.d("Country code: " + countryCode);
+
+        final int flagId = ConversionUtils.getDrawableResId(this, entity.getCode().substring(0,2).toLowerCase() + "_");
+        ibFlag.setImageResource(flagId);
+        tvCurrencyCode.setText(entity.getCode());
+        tvCurrencySymbol.setText(entity.getSymbol());
+
+    }
+
+    public String getSourceCurrency() {
+        return getDefaultSharedPrefs().getString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, getString(R.string.default_source_currency));
+    }
+
+    public void updateSourceCurrency(String currencyCode) {
+
+        if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyCode).commit()) {
+            updateSourceCurrencyUI();
+            downloadCurrency();
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == CurrencyPickerActivity.RESULT_CODE_SUCCESS) {
+
+            String currencyCode = data.getStringExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE);
+
+            switch (requestCode) {
+
+                case CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY: {
+
+                    break;
+                }
+
+                case CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY: {
+                    updateSourceCurrency(currencyCode);
+                    break;
+                }
+            }
+        }
     }
 }

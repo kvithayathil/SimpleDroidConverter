@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -26,13 +27,16 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCal
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyPickerAdapter;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import icepick.Icicle;
 import timber.log.Timber;
 
 /**
@@ -40,13 +44,15 @@ import timber.log.Timber;
  */
 public class CurrencyPickerActivity extends BaseActivity implements ObservableScrollViewCallbacks {
 
-    public static final int REQUEST_CODE_ADD_CURRENCY = 100;
-    public static final int REQUEST_CODE_CHANGE_CURRENCY = 200;
+    public static final int REQUEST_CODE_ADD_CURRENCY = 1000;
+    public static final int REQUEST_CODE_CHANGE_CURRENCY = 2000;
 
-    public static final int RESULT_CODE_ADD_CURRENCY_SUCCESS = 101;
-    public static final int RESULT_CODE_CHANGE_CURRENCY_SUCCESS = 201;
+    public static final int RESULT_CODE_SUCCESS = 1001;
 
     public static final String EXTRA_CURRENCY_LIST = "extra_currency_list";
+
+    public static final String EXTRA_SELECTED_CURRENCY_CODE = "extra_selected_currency_code";
+
     // The elevation of the toolbar when content is scrolled behind
     private static final float TOOLBAR_ELEVATION = 14f;
     @InjectView(R.id.list)
@@ -75,10 +81,8 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
 
             mAdapter = new CurrencyPickerAdapter(this, getIntent().getExtras().getStringArrayList(EXTRA_CURRENCY_LIST));
 
-
             recyclerView.setAdapter(mAdapter);
         }
-
 
     }
 
@@ -193,5 +197,14 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
             }
         });
         animator.start();
+    }
+
+    @Subscribe
+    public void onCurrencyPicked(AddCurrencyEvent event) {
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(EXTRA_SELECTED_CURRENCY_CODE, event.getCurrencyCode());
+        setResult(RESULT_CODE_SUCCESS, resultIntent);
+        finish();
     }
 }

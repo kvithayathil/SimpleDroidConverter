@@ -8,4 +8,7 @@
 
 
     <string name="hint_currency_input">Enter a value...</string>
+
+    <string name="default_source_currency">USD</string>
+
 </resources>

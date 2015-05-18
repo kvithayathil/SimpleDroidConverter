@@ -1,13 +1,17 @@
 package com.jedikv.simpleconverter.dbutils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.utils.Constants;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -77,11 +81,20 @@ public class ConverterDaoMaster extends DaoMaster.OpenHelper {
         db.setTransactionSuccessful();
         db.endTransaction();
 
+        //Set the default currency
+        setDefaultCurrency(mContext.getString(R.string.default_source_currency));
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    private void setDefaultCurrency(String currencyCode) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        sharedPreferences.edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyCode).apply();
     }
 
     private List<CurrencyEntity> loadJsonFromAsset(Context context) {
