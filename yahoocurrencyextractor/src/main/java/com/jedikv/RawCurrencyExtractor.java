@@ -1,5 +1,6 @@
 package com.jedikv;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jedikv.currencyUtils.CurrencyUtils;
@@ -70,6 +71,22 @@ public class RawCurrencyExtractor {
                         if(symbol.equals("US$")) {
                             symbol = "$";
                         }
+
+                        String currencyDisplayName = instance.getDisplayName(locale);
+
+                        if(currencyDisplayName.contains("Franc")) {
+                            symbol = "Fs";
+                        } else if(currencyDisplayName.contains("Pound")) {
+                            symbol = "£";
+                        } else if (currencyDisplayName.contains("Rupee")) {
+                            symbol = "Rs.";
+                        } else if (currencyDisplayName.contains("Dollar") && symbol.equals(code)) {
+
+                            System.out.println("Dollar - " + code + ": " + symbol);
+
+                            symbol = "$";
+                        }
+
                         currencyItemList.add(new CurrencyItem(locale, instance, symbol));
                     } catch (IllegalArgumentException e) {
                         System.out.print("SKIPPED " + code + " " + locale.getDisplayCountry());

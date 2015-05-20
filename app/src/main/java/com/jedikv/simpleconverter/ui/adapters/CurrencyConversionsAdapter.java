@@ -1,19 +1,18 @@
 package com.jedikv.simpleconverter.ui.adapters;
 
 import android.content.Context;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
+import com.jedikv.simpleconverter.utils.ConversionUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,7 +31,7 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 08/05/2015.
  */
-public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder> {
+public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
 
     private List<CurrencyPairEntity> mCurrencyPairList;
     private CurrencyPairDbHelper mCurrencyPairDbHelper;
@@ -40,14 +39,15 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     private String mSourceCurrencyCode;
 
-    private int mInputValue;
+    private long mInputValue;
 
 
-    public CurrencyAdapter(Context context) {
-        Timber.tag(CurrencyAdapter.class.getSimpleName());
+    public CurrencyConversionsAdapter(Context context, String sourceCurrency) {
+        Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         mCurrencyPairDbHelper = new CurrencyPairDbHelper(App.get(context));
         mCurrencyDbHelper = new CurrencyDbHelper(App.get(context));
         mCurrencyPairList = new ArrayList<>();
+        mSourceCurrencyCode = sourceCurrency;
 
     }
 
@@ -58,10 +58,33 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         mCurrencyPairList.addAll(mCurrencyPairDbHelper.getCurrencyTargetList(currencyCode + "/"));
 
         //Ensure the value is converted to int to retain float values
-        mInputValue = inputValue.multiply(new BigDecimal(10000)).intValue();
+        mInputValue = inputValue.multiply(new BigDecimal(10000)).longValue();
 
         Timber.d("Preinput: " + inputValue + " PostInput: " + mInputValue);
         notifyDataSetChanged();
+    }
+
+    public void onPostNetworkUpdate() {
+
+        mCurrencyPairList.clear();
+        mCurrencyPairList.addAll(mCurrencyPairDbHelper.getCurrencyTargetList(mSourceCurrencyCode + "/"));
+        notifyDataSetChanged();
+    }
+
+    public long getInputValue() {
+        return mInputValue;
+    }
+
+    public ArrayList<String> getSelectedCurrencyCodeList() {
+
+        ArrayList<String> codeList = new ArrayList<>();
+
+        for(CurrencyPairEntity entity : mCurrencyPairList) {
+
+            codeList.add(entity.getPair().substring(4));
+        }
+
+        return codeList;
     }
 
     @Override
@@ -88,6 +111,32 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         return mCurrencyPairList.size();
     }
 
+    public List<CurrencyPairEntity> getItems() {
+        return mCurrencyPairList;
+    }
+
+    public void addItem(CurrencyPairEntity pairEntity) {
+
+        if(mCurrencyPairList.add(pairEntity)) {
+            notifyItemInserted(mCurrencyPairList.size() - 1);
+        }
+    }
+
+    public void addItemAtPosition(int position, CurrencyPairEntity pairEntity) {
+
+        mCurrencyPairList.add(position, pairEntity);
+        notifyItemInserted(position);
+    }
+
+    public CurrencyPairEntity removeItem(int position) {
+
+         CurrencyPairEntity entity = mCurrencyPairList.remove(position);
+        notifyItemRemoved(position);
+        return entity;
+    }
+
+
+
     public static class CurrencyViewHolder extends RecyclerView.ViewHolder {
 
         private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
@@ -108,7 +157,7 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         }
 
 
-        public void bind(int value, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
+        public void bind(long value, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
 
 
             String code = currencyPairEntity.getPair().substring(4);
@@ -124,14 +173,15 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
             Timber.d("Country Code: " + currencyCode);
 
-            final int flagId = context.getResources().getIdentifier(currencyCode+ "_", "drawable", context.getPackageName());
+            final int flagId = ConversionUtils.getDrawableResId(context, currencyCode + "_");
+            //context.getResources().getIdentifier(currencyCode+ "_", "drawable", context.getPackageName());
             ivFlag.setImageResource(flagId);
         }
 
-        public void setValue(int inputValue, int rate) {
+        public void setValue(long inputValue, long rate) {
 
             Timber.d("Input value: " + inputValue + " rate: " + rate);
-            int result = inputValue * rate;
+            long result = inputValue * rate;
 
             BigDecimal intResult = new BigDecimal(result);
             //Revert the value back to the original decimal point position

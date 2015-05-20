@@ -3,6 +3,7 @@ package com.jedikv.simpleconverter.intentsevice;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.api.IYahooCurrencyApi;
@@ -49,13 +50,21 @@ public class CurrencyUpdateIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startService(Context context, ArrayList<String> targetCurrencies, String sourceCurrency) {
+    public static void startService(Context context, List<CurrencyPairEntity> targetCurrencies, String sourceCurrency) {
         Intent intent = new Intent(context, CurrencyUpdateIntentService.class);
 
-        intent.putStringArrayListExtra(EXTRA_CURRENCY_TARGETS, targetCurrencies);
-        intent.putExtra(EXTRA_CURRENCY_SOURCE, sourceCurrency);
+        if(!targetCurrencies.isEmpty() && !TextUtils.isEmpty(sourceCurrency)) {
+            ArrayList<String> codeList = new ArrayList<>();
 
-        context.startService(intent);
+            for (CurrencyPairEntity entity : targetCurrencies) {
+                codeList.add(entity.getPair().substring(4));
+            }
+
+            intent.putStringArrayListExtra(EXTRA_CURRENCY_TARGETS, codeList);
+            intent.putExtra(EXTRA_CURRENCY_SOURCE, sourceCurrency);
+
+            context.startService(intent);
+        }
     }
 
 

@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:name=".App"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/ConverterTheme" >
         <activity
             android:name=".ui.activities.MainActivity"
             android:label="@string/app_name" >
@@ -19,6 +19,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.activities.CurrencyPickerActivity"
+            android:parentActivityName=".ui.activities.MainActivity">
+                <!--<action android:name="android.intent.action.SEARCH"/>-->
+                <!--<action android:name="android.intent.action.view"/>-->
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/currency_search"/>
         </activity>
 
         <service

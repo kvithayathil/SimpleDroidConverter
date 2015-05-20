@@ -3,6 +3,12 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="hint_search_currency">Enter currency...</string>
+
 
     <string name="hint_currency_input">Enter a value...</string>
+
+    <string name="default_source_currency">USD</string>
+
 </resources>

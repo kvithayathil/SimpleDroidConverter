@@ -5,4 +5,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- Base application theme. -->
+    <style name="ConverterTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    </style>
+
+
 </resources>
