@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
+import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
@@ -51,6 +52,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import converter_db.ConversionEntity;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import timber.log.Timber;
@@ -132,7 +134,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 //Only do live updates when the edittext is focused
-                if(mIsWatching) {
+                if (mIsWatching) {
                     convertValue(s.toString());
                 }
             }
@@ -146,6 +148,7 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
+
     }
 
     @OnFocusChange(R.id.et_input)
@@ -171,7 +174,7 @@ public class MainActivity extends BaseActivity {
         startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY, new ArrayList<>(Arrays.asList(getSourceCurrency())));
     }
 
-    public void downloadCurrency(List<CurrencyPairEntity> currencyList) {
+    public void downloadCurrency(List<String> currencyList) {
         CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
     }
 
@@ -248,12 +251,18 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         updateSourceCurrencyUI();
+
     }
 
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
 
         mCurrencyConversionsAdapter.onPostNetworkUpdate();
+    }
+
+    @Subscribe
+    public void removeItemEvent(RemoveConversionEvent event) {
+        mCurrencyConversionsAdapter.removeItem(event.getPosition());
     }
 
 
@@ -279,7 +288,8 @@ public class MainActivity extends BaseActivity {
 
         if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyCode).commit()) {
             updateSourceCurrencyUI();
-            downloadCurrency(mCurrencyConversionsAdapter.getItems());
+
+            downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
 
         }
     }
@@ -318,15 +328,20 @@ public class MainActivity extends BaseActivity {
             entity = new CurrencyPairEntity();
             entity.setPair(getSourceCurrency() + "/" + currencyCode);
             entity.setRate(0);
+            entity.setCreated_date(new Date());
             getPairDbHelper().insertOrUpdate(entity);
         }
 
-        //Add a created date to show that it's selected
-        entity.setCreated_date(new Date());
-        mCurrencyConversionsAdapter.addItem(entity);
+        ConversionEntity conversionItem = new ConversionEntity();
+        CurrencyEntity currencyEntity = getCurrencyDbHelper().getCurrency(currencyCode);
+        conversionItem.setCurrency_code(currencyEntity);
+        conversionItem.setPosition(mCurrencyConversionsAdapter.getItemCount());
+        getConversionEntityHelper().insertOrUpdate(conversionItem);
+        mCurrencyConversionsAdapter.addItem(conversionItem);
+        convertValue(etInput.getText().toString());
 
         //Update currency at the end
-        downloadCurrency(Arrays.asList(entity));
+        downloadCurrency(Arrays.asList(currencyCode));
 
     }
 }

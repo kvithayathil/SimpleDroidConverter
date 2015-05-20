@@ -22,22 +22,44 @@
         <TextView
             android:id="@+id/tv_currency_name"
             android:text="Great British Pound"
-            android:textSize="24sp"
+            android:textSize="@dimen/conversion_card_title_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/iv_flag"
             android:layout_toRightOf="@+id/iv_flag"
+            android:layout_toLeftOf="@+id/ib_remove"
             android:gravity="center_vertical|left"/>
+
+        <ImageButton
+            android:id="@+id/ib_remove"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_delete_grey600"/>
 
         <TextView
             android:id="@+id/tv_value"
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
+            android:ellipsize="marquee"
+            android:layout_toLeftOf="@+id/tv_currency_code"
+            android:textSize="@dimen/conversion_card_value_size"
             android:text="£25.0000"
             android:gravity="center|start"
             android:layout_below="@+id/iv_flag"/>
+
+        <TextView
+            android:id="@+id/tv_currency_code"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_value"
+            android:gravity="center|start"
+            android:textSize="@dimen/conversion_card_value_size"
+            android:text="GBP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 

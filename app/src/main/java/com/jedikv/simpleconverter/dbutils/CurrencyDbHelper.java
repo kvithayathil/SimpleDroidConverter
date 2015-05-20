@@ -35,6 +35,10 @@ public class CurrencyDbHelper extends BaseDbHelper {
 
     }
 
+    public CurrencyEntity getById(long id) {
+        return getDao().load(id);
+    }
+
     public List<CurrencyEntity> getFilteredCurrencies(List<String> currenciesToHide) {
 
        return getDao().queryBuilder().where(CurrencyEntityDao.Properties.Code.notIn(currenciesToHide)).orderAsc(CurrencyEntityDao.Properties.Name).build().list();

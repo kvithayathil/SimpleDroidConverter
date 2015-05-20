@@ -6,10 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
+import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.ConversionUtils;
@@ -24,6 +27,8 @@ import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
+import converter_db.ConversionEntity;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import timber.log.Timber;
@@ -33,9 +38,10 @@ import timber.log.Timber;
  */
 public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
 
-    private List<CurrencyPairEntity> mCurrencyPairList;
+    private List<ConversionEntity> mConverterList;
     private CurrencyPairDbHelper mCurrencyPairDbHelper;
     private CurrencyDbHelper mCurrencyDbHelper;
+    private ConversionItemDbHelper mConversionDbHelper;
 
     private String mSourceCurrencyCode;
 
@@ -44,9 +50,10 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
     public CurrencyConversionsAdapter(Context context, String sourceCurrency) {
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
-        mCurrencyPairDbHelper = new CurrencyPairDbHelper(App.get(context));
-        mCurrencyDbHelper = new CurrencyDbHelper(App.get(context));
-        mCurrencyPairList = new ArrayList<>();
+        mCurrencyPairDbHelper = new CurrencyPairDbHelper(context);
+        mCurrencyDbHelper = new CurrencyDbHelper(context);
+        mConversionDbHelper = new ConversionItemDbHelper(context);
+        mConverterList = new ArrayList<>();
         mSourceCurrencyCode = sourceCurrency;
 
     }
@@ -54,8 +61,8 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
     public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
 
         mSourceCurrencyCode = currencyCode;
-        mCurrencyPairList.clear();
-        mCurrencyPairList.addAll(mCurrencyPairDbHelper.getCurrencyTargetList(currencyCode + "/"));
+        mConverterList.clear();
+        mConverterList.addAll(mConversionDbHelper.getAll());
 
         //Ensure the value is converted to int to retain float values
         mInputValue = inputValue.multiply(new BigDecimal(10000)).longValue();
@@ -66,8 +73,8 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
     public void onPostNetworkUpdate() {
 
-        mCurrencyPairList.clear();
-        mCurrencyPairList.addAll(mCurrencyPairDbHelper.getCurrencyTargetList(mSourceCurrencyCode + "/"));
+        mConverterList.clear();
+        mConverterList.addAll(mConversionDbHelper.getAll());
         notifyDataSetChanged();
     }
 
@@ -79,9 +86,9 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
         ArrayList<String> codeList = new ArrayList<>();
 
-        for(CurrencyPairEntity entity : mCurrencyPairList) {
+        for(ConversionEntity entity : mConverterList) {
 
-            codeList.add(entity.getPair().substring(4));
+            codeList.add(entity.getCurrency_code().getCode());
         }
 
         return codeList;
@@ -99,38 +106,47 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
     @Override
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
 
-        CurrencyPairEntity pairEntity = mCurrencyPairList.get(position);
-        String code = pairEntity.getPair().substring(4);
+        ConversionEntity conversionEntity = mConverterList.get(position);
+        CurrencyEntity currencyEntity = conversionEntity.getCurrency_code();
 
-        CurrencyEntity currencyEntity = mCurrencyDbHelper.getCurrency(code);
+
+        //Keep the position in sync with the adapter
+        if(conversionEntity.getPosition() != position) {
+            conversionEntity.setPosition(position);
+            mConversionDbHelper.update(conversionEntity);
+        }
+
+        CurrencyPairEntity pairEntity = mCurrencyPairDbHelper.getGetPairByCodes(mSourceCurrencyCode, currencyEntity.getCode());
+
         holder.bind(mInputValue, pairEntity, currencyEntity);
     }
 
     @Override
     public int getItemCount() {
-        return mCurrencyPairList.size();
+        return mConverterList.size();
     }
 
-    public List<CurrencyPairEntity> getItems() {
-        return mCurrencyPairList;
+    public List<ConversionEntity> getItems() {
+        return mConverterList;
     }
 
-    public void addItem(CurrencyPairEntity pairEntity) {
+    public void addItem(ConversionEntity conversionEntity) {
 
-        if(mCurrencyPairList.add(pairEntity)) {
-            notifyItemInserted(mCurrencyPairList.size() - 1);
+        if(mConverterList.add(conversionEntity)) {
+            notifyItemInserted(mConverterList.size() - 1);
         }
     }
 
-    public void addItemAtPosition(int position, CurrencyPairEntity pairEntity) {
+    public void addItemAtPosition(int position, ConversionEntity conversionEntity) {
 
-        mCurrencyPairList.add(position, pairEntity);
+        mConverterList.add(position, conversionEntity);
         notifyItemInserted(position);
     }
 
-    public CurrencyPairEntity removeItem(int position) {
+    public ConversionEntity removeItem(int position) {
 
-         CurrencyPairEntity entity = mCurrencyPairList.remove(position);
+        ConversionEntity entity = mConverterList.remove(position);
+        mConversionDbHelper.deleteItem(entity);
         notifyItemRemoved(position);
         return entity;
     }
@@ -148,6 +164,10 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         AppCompatTextView tvCurrencyName;
         @InjectView(R.id.tv_value)
         AppCompatTextView tvValue;
+        @InjectView(R.id.ib_remove)
+        ImageButton ibRemove;
+        @InjectView(R.id.tv_currency_code)
+        AppCompatTextView tvCurrencyCode;
 
         public CurrencyViewHolder(View v) {
             super(v);
@@ -160,12 +180,11 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         public void bind(long value, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
 
 
-            String code = currencyPairEntity.getPair().substring(4);
-            setFlagDrawable(ivFlag.getContext(), code.substring(0,2).toLowerCase());
+            String code = currencyEntity.getCode();
+            setFlagDrawable(ivFlag.getContext(), code.substring(0, 2).toLowerCase());
 
+            tvCurrencyCode.setText(code);
             tvCurrencyName.setText(currencyEntity.getName());
-            tvValue.setText(currencyEntity.getSymbol() + "value");
-
             setValue(value, currencyPairEntity.getRate());
         }
 
@@ -190,6 +209,14 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
             Timber.d("Result: " + result + " Converted result: " + decimalResult);
 
             tvValue.setText(decimalResult.toString());
+        }
+
+        @OnClick(R.id.ib_remove)
+        public void removeItem() {
+
+            Timber.d("Remove adapter position: " + getAdapterPosition() + " Layout position: " + getLayoutPosition() + " Old position: " + getOldPosition());
+
+            App.getBusInstance().post(new RemoveConversionEvent(getAdapterPosition()));
         }
 
     }

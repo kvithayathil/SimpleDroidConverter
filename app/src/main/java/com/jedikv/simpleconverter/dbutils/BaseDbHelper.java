@@ -16,7 +16,7 @@ public abstract class BaseDbHelper {
     protected Context mContext;
 
     public BaseDbHelper(Context context) {
-        mContext = context;
+        mContext = App.get(context);
     }
 
     protected DaoSession getDaoSession() {

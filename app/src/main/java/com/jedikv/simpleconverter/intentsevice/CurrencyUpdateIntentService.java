@@ -50,17 +50,12 @@ public class CurrencyUpdateIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startService(Context context, List<CurrencyPairEntity> targetCurrencies, String sourceCurrency) {
+    public static void startService(Context context, List<String> targetCurrencies, String sourceCurrency) {
         Intent intent = new Intent(context, CurrencyUpdateIntentService.class);
 
         if(!targetCurrencies.isEmpty() && !TextUtils.isEmpty(sourceCurrency)) {
-            ArrayList<String> codeList = new ArrayList<>();
 
-            for (CurrencyPairEntity entity : targetCurrencies) {
-                codeList.add(entity.getPair().substring(4));
-            }
-
-            intent.putStringArrayListExtra(EXTRA_CURRENCY_TARGETS, codeList);
+            intent.putStringArrayListExtra(EXTRA_CURRENCY_TARGETS, new ArrayList<>(targetCurrencies));
             intent.putExtra(EXTRA_CURRENCY_SOURCE, sourceCurrency);
 
             context.startService(intent);

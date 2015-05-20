@@ -70,6 +70,7 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
         setContentView(R.layout.activity_currency_picker);
         ButterKnife.inject(this);
         setSupportActionBar(toolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView.setScrollViewCallbacks(this);
         recyclerView.setHasFixedSize(true);

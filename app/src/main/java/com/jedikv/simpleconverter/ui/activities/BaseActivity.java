@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.Constants;
@@ -21,6 +22,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private CurrencyDbHelper mCurrencyEntityHelper;
     private CurrencyPairDbHelper mCurrencyPairEntityHelper;
+    private ConversionItemDbHelper mConversionEntityHelper;
 
     @Override
     protected void onStart() {
@@ -40,6 +42,7 @@ public class BaseActivity extends AppCompatActivity {
         Icepick.restoreInstanceState(this, savedInstanceState);
         mCurrencyEntityHelper = new CurrencyDbHelper(this);
         mCurrencyPairEntityHelper = new CurrencyPairDbHelper(this);
+        mConversionEntityHelper = new ConversionItemDbHelper(this);
 
     }
 
@@ -64,4 +67,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected CurrencyPairDbHelper getPairDbHelper() { return mCurrencyPairEntityHelper; }
+
+    public ConversionItemDbHelper getConversionEntityHelper() {
+        return mConversionEntityHelper;
+    }
 }
