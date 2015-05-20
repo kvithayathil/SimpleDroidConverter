@@ -32,6 +32,7 @@ public class AppDaoGenerator {
         Entity entity = schema.addEntity("CurrencyPairEntity");
         entity.addStringProperty("pair").unique().notNull();
         entity.addIdProperty();
+        entity.addDateProperty("created_date");
         entity.addDateProperty("date");
         entity.addIntProperty("rate");
     }

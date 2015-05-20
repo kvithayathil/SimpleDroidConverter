@@ -25,8 +25,9 @@ public class CurrencyPairEntityDao extends AbstractDao<CurrencyPairEntity, Long>
     public static class Properties {
         public final static Property Pair = new Property(0, String.class, "pair", false, "PAIR");
         public final static Property Id = new Property(1, Long.class, "id", true, "_id");
-        public final static Property Date = new Property(2, java.util.Date.class, "date", false, "DATE");
-        public final static Property Rate = new Property(3, Integer.class, "rate", false, "RATE");
+        public final static Property Created_date = new Property(2, java.util.Date.class, "created_date", false, "CREATED_DATE");
+        public final static Property Date = new Property(3, java.util.Date.class, "date", false, "DATE");
+        public final static Property Rate = new Property(4, Integer.class, "rate", false, "RATE");
     };
 
 
@@ -44,8 +45,9 @@ public class CurrencyPairEntityDao extends AbstractDao<CurrencyPairEntity, Long>
         db.execSQL("CREATE TABLE " + constraint + "'CURRENCY_PAIR_ENTITY' (" + //
                 "'PAIR' TEXT NOT NULL UNIQUE ," + // 0: pair
                 "'_id' INTEGER PRIMARY KEY ," + // 1: id
-                "'DATE' INTEGER," + // 2: date
-                "'RATE' INTEGER);"); // 3: rate
+                "'CREATED_DATE' INTEGER," + // 2: created_date
+                "'DATE' INTEGER," + // 3: date
+                "'RATE' INTEGER);"); // 4: rate
     }
 
     /** Drops the underlying database table. */
@@ -65,14 +67,19 @@ public class CurrencyPairEntityDao extends AbstractDao<CurrencyPairEntity, Long>
             stmt.bindLong(2, id);
         }
  
+        java.util.Date created_date = entity.getCreated_date();
+        if (created_date != null) {
+            stmt.bindLong(3, created_date.getTime());
+        }
+ 
         java.util.Date date = entity.getDate();
         if (date != null) {
-            stmt.bindLong(3, date.getTime());
+            stmt.bindLong(4, date.getTime());
         }
  
         Integer rate = entity.getRate();
         if (rate != null) {
-            stmt.bindLong(4, rate);
+            stmt.bindLong(5, rate);
         }
     }
 
@@ -88,8 +95,9 @@ public class CurrencyPairEntityDao extends AbstractDao<CurrencyPairEntity, Long>
         CurrencyPairEntity entity = new CurrencyPairEntity( //
             cursor.getString(offset + 0), // pair
             cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // id
-            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // date
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3) // rate
+            cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)), // created_date
+            cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)), // date
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4) // rate
         );
         return entity;
     }
@@ -99,8 +107,9 @@ public class CurrencyPairEntityDao extends AbstractDao<CurrencyPairEntity, Long>
     public void readEntity(Cursor cursor, CurrencyPairEntity entity, int offset) {
         entity.setPair(cursor.getString(offset + 0));
         entity.setId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setDate(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
-        entity.setRate(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setCreated_date(cursor.isNull(offset + 2) ? null : new java.util.Date(cursor.getLong(offset + 2)));
+        entity.setDate(cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)));
+        entity.setRate(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
      }
     
     /** @inheritdoc */

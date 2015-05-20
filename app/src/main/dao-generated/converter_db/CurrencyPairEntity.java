@@ -12,6 +12,7 @@ public class CurrencyPairEntity {
     /** Not-null value. */
     private String pair;
     private Long id;
+    private java.util.Date created_date;
     private java.util.Date date;
     private Integer rate;
 
@@ -25,9 +26,10 @@ public class CurrencyPairEntity {
         this.id = id;
     }
 
-    public CurrencyPairEntity(String pair, Long id, java.util.Date date, Integer rate) {
+    public CurrencyPairEntity(String pair, Long id, java.util.Date created_date, java.util.Date date, Integer rate) {
         this.pair = pair;
         this.id = id;
+        this.created_date = created_date;
         this.date = date;
         this.rate = rate;
     }
@@ -48,6 +50,14 @@ public class CurrencyPairEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public java.util.Date getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(java.util.Date created_date) {
+        this.created_date = created_date;
     }
 
     public java.util.Date getDate() {

@@ -97,6 +97,7 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
 
         if(searchItem != null) {
             searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            searchView.setQueryHint(getString(R.string.hint_search_currency));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {

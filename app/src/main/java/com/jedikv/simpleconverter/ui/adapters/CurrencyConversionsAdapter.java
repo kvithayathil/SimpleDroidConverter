@@ -42,11 +42,12 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
     private long mInputValue;
 
 
-    public CurrencyConversionsAdapter(Context context) {
+    public CurrencyConversionsAdapter(Context context, String sourceCurrency) {
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         mCurrencyPairDbHelper = new CurrencyPairDbHelper(App.get(context));
         mCurrencyDbHelper = new CurrencyDbHelper(App.get(context));
         mCurrencyPairList = new ArrayList<>();
+        mSourceCurrencyCode = sourceCurrency;
 
     }
 
@@ -61,6 +62,29 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
         Timber.d("Preinput: " + inputValue + " PostInput: " + mInputValue);
         notifyDataSetChanged();
+    }
+
+    public void onPostNetworkUpdate() {
+
+        mCurrencyPairList.clear();
+        mCurrencyPairList.addAll(mCurrencyPairDbHelper.getCurrencyTargetList(mSourceCurrencyCode + "/"));
+        notifyDataSetChanged();
+    }
+
+    public long getInputValue() {
+        return mInputValue;
+    }
+
+    public ArrayList<String> getSelectedCurrencyCodeList() {
+
+        ArrayList<String> codeList = new ArrayList<>();
+
+        for(CurrencyPairEntity entity : mCurrencyPairList) {
+
+            codeList.add(entity.getPair().substring(4));
+        }
+
+        return codeList;
     }
 
     @Override
@@ -86,6 +110,32 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
     public int getItemCount() {
         return mCurrencyPairList.size();
     }
+
+    public List<CurrencyPairEntity> getItems() {
+        return mCurrencyPairList;
+    }
+
+    public void addItem(CurrencyPairEntity pairEntity) {
+
+        if(mCurrencyPairList.add(pairEntity)) {
+            notifyItemInserted(mCurrencyPairList.size() - 1);
+        }
+    }
+
+    public void addItemAtPosition(int position, CurrencyPairEntity pairEntity) {
+
+        mCurrencyPairList.add(position, pairEntity);
+        notifyItemInserted(position);
+    }
+
+    public CurrencyPairEntity removeItem(int position) {
+
+         CurrencyPairEntity entity = mCurrencyPairList.remove(position);
+        notifyItemRemoved(position);
+        return entity;
+    }
+
+
 
     public static class CurrencyViewHolder extends RecyclerView.ViewHolder {
 

@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
+import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.Constants;
+
+import java.util.Currency;
 
 import icepick.Icepick;
 
@@ -17,6 +20,7 @@ import icepick.Icepick;
 public class BaseActivity extends AppCompatActivity {
 
     private CurrencyDbHelper mCurrencyEntityHelper;
+    private CurrencyPairDbHelper mCurrencyPairEntityHelper;
 
     @Override
     protected void onStart() {
@@ -35,6 +39,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
         mCurrencyEntityHelper = new CurrencyDbHelper(this);
+        mCurrencyPairEntityHelper = new CurrencyPairDbHelper(this);
 
     }
 
@@ -57,4 +62,6 @@ public class BaseActivity extends AppCompatActivity {
     protected CurrencyDbHelper getCurrencyDbHelper() {
         return mCurrencyEntityHelper;
     }
+
+    protected CurrencyPairDbHelper getPairDbHelper() { return mCurrencyPairEntityHelper; }
 }
