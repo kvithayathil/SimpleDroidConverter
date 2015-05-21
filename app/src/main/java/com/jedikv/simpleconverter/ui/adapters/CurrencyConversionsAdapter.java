@@ -1,7 +1,9 @@
 package com.jedikv.simpleconverter.ui.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.ConversionUtils;
+import com.makeramen.dragsortadapter.DragSortAdapter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +31,8 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnLongClick;
 import converter_db.ConversionEntity;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
@@ -36,7 +41,7 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 08/05/2015.
  */
-public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
+public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
 
     private List<ConversionEntity> mConverterList;
     private CurrencyPairDbHelper mCurrencyPairDbHelper;
@@ -48,7 +53,8 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
     private long mInputValue;
 
 
-    public CurrencyConversionsAdapter(Context context, String sourceCurrency) {
+    public CurrencyConversionsAdapter(Context context, RecyclerView recyclerView, String sourceCurrency) {
+        super(recyclerView);
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         mCurrencyPairDbHelper = new CurrencyPairDbHelper(context);
         mCurrencyDbHelper = new CurrencyDbHelper(context);
@@ -56,6 +62,35 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         mConverterList = new ArrayList<>();
         mSourceCurrencyCode = sourceCurrency;
 
+        mConverterList.addAll(mConversionDbHelper.getAll());
+    }
+
+    @Override
+    public int getPositionForId(long id) {
+
+        for(int i = 0; i < mConverterList.size(); i++) {
+            if(mConverterList.get(i).getId() == id) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    @Override
+    public boolean move(int fromPosition, int toPosition) {
+        mConverterList.add(toPosition, mConverterList.remove(fromPosition));
+        return true;
+    }
+
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mConverterList.get(position).getId();
     }
 
     public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
@@ -98,7 +133,7 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
     public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_list_card, parent, false);
-        CurrencyViewHolder viewHolder = new CurrencyViewHolder(v);
+        CurrencyViewHolder viewHolder = new CurrencyViewHolder(this, v);
 
         return viewHolder;
     }
@@ -118,7 +153,18 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
         CurrencyPairEntity pairEntity = mCurrencyPairDbHelper.getGetPairByCodes(mSourceCurrencyCode, currencyEntity.getCode());
 
+        if(pairEntity == null) {
+            pairEntity = new CurrencyPairEntity();
+            pairEntity.setRate(0);
+            pairEntity.setPair(mSourceCurrencyCode + "/" + currencyEntity.getCode());
+            long id = mCurrencyPairDbHelper.insertOrUpdate(pairEntity);
+            pairEntity.setId(id);
+        }
+
         holder.bind(mInputValue, pairEntity, currencyEntity);
+
+        holder.cardView.setVisibility(getDraggingId() == conversionEntity.getId() ? View.INVISIBLE : View.VISIBLE);
+        holder.cardView.postInvalidate();
     }
 
     @Override
@@ -151,13 +197,12 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         return entity;
     }
 
-
-
-    public static class CurrencyViewHolder extends RecyclerView.ViewHolder {
+    public static class CurrencyViewHolder extends DragSortAdapter.ViewHolder {
 
         private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
-
+        @InjectView(R.id.card_view)
+        CardView cardView;
         @InjectView(R.id.iv_flag)
         ImageView ivFlag;
         @InjectView(R.id.tv_currency_name)
@@ -169,8 +214,8 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         @InjectView(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
 
-        public CurrencyViewHolder(View v) {
-            super(v);
+        public CurrencyViewHolder(DragSortAdapter adapter, View v) {
+            super(adapter, v);
             ButterKnife.inject(this, v);
             mDecimalFormat.setParseBigDecimal(true);
             mDecimalFormat.setMinimumFractionDigits(4);
@@ -219,6 +264,11 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
             App.getBusInstance().post(new RemoveConversionEvent(getAdapterPosition()));
         }
 
+        @OnLongClick(R.id.card_view)
+        public boolean longClickDrag(@NonNull View view) {
+            startDrag();
+            return true;
+        }
     }
 
 }

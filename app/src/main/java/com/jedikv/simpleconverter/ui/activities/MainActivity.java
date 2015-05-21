@@ -55,6 +55,7 @@ import butterknife.OnFocusChange;
 import converter_db.ConversionEntity;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
+import icepick.Icicle;
 import timber.log.Timber;
 
 
@@ -62,8 +63,6 @@ public class MainActivity extends BaseActivity {
 
     @InjectView(R.id.et_input)
     AppCompatEditText etInput;
-    @InjectView(R.id.btn_update_currency)
-    AppCompatButton btnDownload;
     @InjectView(R.id.tv_currency_code)
     AppCompatTextView tvCurrencyCode;
     @InjectView(R.id.tv_currency_symbol)
@@ -85,7 +84,10 @@ public class MainActivity extends BaseActivity {
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
     private boolean mInputFocus = false;
-    private String mInputedValueString;
+
+    @Icicle
+    String mInputedValueString;
+
     private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
     @Override
@@ -96,8 +98,9 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolBar);
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
+        etInput.setText(mInputedValueString);
 
-        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), getSourceCurrency());
+        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), recyclerView, getSourceCurrency());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mCurrencyConversionsAdapter);
@@ -210,6 +213,7 @@ public class MainActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void convertValue(String entry) {
 
         if(!TextUtils.isEmpty(entry)) {
@@ -218,7 +222,7 @@ public class MainActivity extends BaseActivity {
             mInputedValueString = "0";
         }
         try {
-            BigDecimal enteredValue = (BigDecimal)mDecimalFormat.parse(entry);
+            BigDecimal enteredValue = (BigDecimal)mDecimalFormat.parse(mInputedValueString);
             //etInput.setText(mDecimalFormat.format(enteredValue.doubleValue()));
             mCurrencyConversionsAdapter.updateCurrencyTargets(getSourceCurrency(), enteredValue);
 
@@ -245,6 +249,8 @@ public class MainActivity extends BaseActivity {
 
         editText.setText(mDecimalFormat.format(inputDecimal.doubleValue()));
         editText.clearFocus();
+
+        downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
     }
 
     @Override
@@ -256,8 +262,7 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
-
-        mCurrencyConversionsAdapter.onPostNetworkUpdate();
+        convertValue(etInput.getText().toString());
     }
 
     @Subscribe
@@ -278,6 +283,7 @@ public class MainActivity extends BaseActivity {
         tvCurrencyCode.setText(entity.getCode());
         tvCurrencySymbol.setText(entity.getSymbol());
 
+        convertValue(etInput.getText().toString());
     }
 
     public String getSourceCurrency() {
@@ -288,7 +294,6 @@ public class MainActivity extends BaseActivity {
 
         if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyCode).commit()) {
             updateSourceCurrencyUI();
-
             downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
 
         }

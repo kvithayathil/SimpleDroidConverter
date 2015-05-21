@@ -63,6 +63,16 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
         return mFilteredList.size();
     }
 
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mFilteredList.get(position).getNumericCode();
+    }
+
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @InjectView(R.id.iv_flag)
