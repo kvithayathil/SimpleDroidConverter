@@ -17,6 +17,7 @@ import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
+import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.ConversionUtils;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 
@@ -226,20 +227,12 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
 
             String code = currencyEntity.getCode();
-            setFlagDrawable(ivFlag.getContext(), code.substring(0, 2).toLowerCase());
+            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), code);
+            ivFlag.setImageResource(flagId);
 
             tvCurrencyCode.setText(code);
             tvCurrencyName.setText(currencyEntity.getName());
             setValue(value, currencyPairEntity.getRate());
-        }
-
-        private void setFlagDrawable(Context context, String currencyCode) {
-
-            Timber.d("Country Code: " + currencyCode);
-
-            final int flagId = ConversionUtils.getDrawableResId(context, currencyCode + "_");
-            //context.getResources().getIdentifier(currencyCode+ "_", "drawable", context.getPackageName());
-            ivFlag.setImageResource(flagId);
         }
 
         public void setValue(long inputValue, long rate) {
@@ -249,6 +242,9 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
             BigDecimal intResult = new BigDecimal(result);
             //Revert the value back to the original decimal point position
+
+            Timber.d("Result move point left: " + intResult.movePointLeft(8));
+
             BigDecimal decimalResult = intResult.divide(new BigDecimal(10000 * 10000), 4, RoundingMode.HALF_UP);
 
             Timber.d("Result: " + result + " Converted result: " + decimalResult);

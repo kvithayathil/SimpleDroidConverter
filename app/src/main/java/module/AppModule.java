@@ -1,6 +1,9 @@
 package module;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.jedikv.simpleconverter.App;
 
@@ -23,7 +26,20 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Application providesApplication() {
+    public App providesApplication() {
         return this.mApp;
+    }
+
+
+    @Provides
+    @Singleton
+    public Context providesContext() {
+        return this.mApp;
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences provideSharedPrefs() {
+        return PreferenceManager.getDefaultSharedPreferences(mApp);
     }
 }

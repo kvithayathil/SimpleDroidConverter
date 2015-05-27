@@ -45,7 +45,7 @@ public class App extends Application {
         mAppComponent.inject(this);
     }
 
-    public AppComponent component() {
+    public AppComponent getAppComponent() {
         return mAppComponent;
     }
 

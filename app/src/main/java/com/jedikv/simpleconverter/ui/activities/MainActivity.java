@@ -33,6 +33,7 @@ import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
+import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.Constants;
 import com.jedikv.simpleconverter.utils.ConversionUtils;
 import com.melnykov.fab.FloatingActionButton;
@@ -278,7 +279,7 @@ public class MainActivity extends BaseActivity {
         String countryCode = entity.getCode().substring(0,2).toLowerCase();
         Timber.d("Country code: " + countryCode);
 
-        final int flagId = ConversionUtils.getDrawableResId(this, entity.getCode().substring(0,2).toLowerCase() + "_");
+        final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(this, entity.getCode());
         ibFlag.setImageResource(flagId);
         tvCurrencyCode.setText(entity.getCode());
         tvCurrencySymbol.setText(entity.getSymbol());

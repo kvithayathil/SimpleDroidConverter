@@ -1,6 +1,7 @@
 package com.jedikv.simpleconverter.component;
 
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.ui.activities.BaseActivity;
 
 import javax.inject.Singleton;
 
@@ -15,4 +16,6 @@ import module.AppModule;
 public interface AppComponent {
 
    public void inject(App app);
+
+   public void inject(BaseActivity baseActivity);
 }
