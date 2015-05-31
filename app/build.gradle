@@ -2,6 +2,27 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.github.kt3k.coveralls'
 
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
+
+// Manifest version information!
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 0
+
+//def versionBuild = 1 // bump for dogfood builds, public betas, etc.
+
+//Build variables
+def BOOLEAN = "boolean"
+def STRING = "String"
+def TRUE = "true"
+def FALSE = "false"
+def GIT_SHA = "GIT_SHA"
+def BUILD_TIME = "BUILD_TIME"
+def LOG_HTTP_REQUESTS = "LOG_HTTP_REQUESTS"
+def CRASH_REPORTING = "CRASH_REPORTING"
+
 
 android {
     compileSdkVersion 22
@@ -11,16 +32,38 @@ android {
         applicationId "com.jedikv.simpleconverter"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+
         // for espresso tests
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
+
+        versionCode versionMajor * 100 + versionMinor * 10 + versionPatch //+ versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+
+        buildConfigField STRING, GIT_SHA, "\"${gitSha}\""
+        buildConfigField STRING, BUILD_TIME, "\"${buildTime}\""
+        buildConfigField BOOLEAN, LOG_HTTP_REQUESTS, TRUE
+        buildConfigField BOOLEAN, CRASH_REPORTING, FALSE
     }
     buildTypes {
         release {
+            debuggable false
+            zipAlignEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField BOOLEAN, LOG_HTTP_REQUESTS, FALSE
+
+        }
+
+        debug {
+            versionNameSuffix '-dev'
+            minifyEnabled false
+            zipAlignEnabled true
+            debuggable true
+            buildConfigField BOOLEAN, LOG_HTTP_REQUESTS, TRUE
+
         }
 
         sourceSets {
@@ -42,7 +85,11 @@ android {
 
 
     testOptions {
+        unitTests.all {
+           // jvmArgs '-XX:MaxPermSize=256m' //Or any other
+        }
         unitTests.returnDefaultValues = true
+
     }
 
     compileOptions {
@@ -145,12 +192,32 @@ dependencies {
     //Custom drag/drop recyclerview
     compile 'com.makeramen:dragsortadapter:1.1.0'
 
+    //Open source acknowledgements
+    compile('com.mikepenz:aboutlibraries:5.0.0@aar') {
+        transitive = true
+    }
+
+    //Leaky Canary for memory leak detection
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+
+    //Stetho is a debug bridge for Android applications via chrome
+    compile 'com.facebook.stetho:stetho:1.1.1'
+
+
     //Testing
+
+
 
     // Espresso Instrumentation Testing
     androidTestCompile 'com.android.support:support-annotations:22.1.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
-    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    //androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    androidTestCompile 'com.android.support.test:runner:0.2'
+    //Dependency to use Junit4 rules
+    androidTestCompile 'com.android.support.test:rules:0.2'
+    //Hamcrest matcching
+    androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
 
     // Fixes for Linux and Mac
     testCompile 'org.apache.maven:maven-ant-tasks:2.1.3'
@@ -160,6 +227,7 @@ dependencies {
 
     // Hamcrest Matchers for Junit
     testCompile 'org.hamcrest:hamcrest-integration:1.3'
+
 
     // Mockito
     testCompile 'org.mockito:mockito-core:1.10.19'

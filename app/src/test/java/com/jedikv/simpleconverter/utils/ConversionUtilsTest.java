@@ -42,7 +42,8 @@ public class ConversionUtilsTest {
 
         int rate = 6521;
 
-        BigDecimal resultExpected = new BigDecimal(6.5215);
+        BigDecimal resultExpected = new BigDecimal(6.521);
+        resultExpected = resultExpected.setScale(3, BigDecimal.ROUND_UP);
         BigDecimal resultActual = convertValues(inputValue, rate);
 
         System.out.println("ResultActual: " + resultActual.toPlainString() + " ResultExpected: " + resultExpected.toPlainString());
@@ -52,7 +53,7 @@ public class ConversionUtilsTest {
 
     public BigDecimal convertValues(final String inputValue, final int rate) {
 
-        BigDecimal rateDecimal = new BigDecimal(rate).divide(new BigDecimal(10000));
+        BigDecimal rateDecimal = new BigDecimal(rate).movePointLeft(4);
         System.out.println("Rate decimal: " + rateDecimal);
         BigDecimal inputDecimal = new BigDecimal(inputValue);
 

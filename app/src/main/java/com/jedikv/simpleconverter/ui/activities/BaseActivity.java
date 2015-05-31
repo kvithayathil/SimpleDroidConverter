@@ -18,9 +18,12 @@ import icepick.Icepick;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private CurrencyDbHelper mCurrencyEntityHelper;
-    private CurrencyPairDbHelper mCurrencyPairEntityHelper;
-    private ConversionItemDbHelper mConversionEntityHelper;
+    @Inject
+    protected CurrencyDbHelper mCurrencyEntityHelper;
+    @Inject
+    protected CurrencyPairDbHelper mCurrencyPairEntityHelper;
+    @Inject
+    protected ConversionItemDbHelper mConversionEntityHelper;
 
     @Inject SharedPreferences mSharedPrefs;
 
@@ -43,9 +46,9 @@ public class BaseActivity extends AppCompatActivity {
 
         ((App)getApplication()).getAppComponent().inject(this);
 
-        mCurrencyEntityHelper = new CurrencyDbHelper(this);
-        mCurrencyPairEntityHelper = new CurrencyPairDbHelper(this);
-        mConversionEntityHelper = new ConversionItemDbHelper(this);
+        //mCurrencyEntityHelper = new CurrencyDbHelper(this);
+        //mCurrencyPairEntityHelper = new CurrencyPairDbHelper(this);
+        //mConversionEntityHelper = new ConversionItemDbHelper(this);
 
     }
 

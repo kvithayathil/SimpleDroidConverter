@@ -4,10 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.facebook.stetho.Stetho;
 import com.jedikv.simpleconverter.component.AppComponent;
 import com.jedikv.simpleconverter.component.DaggerAppComponent;
 import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
 import com.jedikv.simpleconverter.utils.OttoBus;
+import com.squareup.leakcanary.LeakCanary;
 import com.squareup.otto.ThreadEnforcer;
 
 import converter_db.DaoMaster;
@@ -30,12 +32,22 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+
         super.onCreate();
         Timber.tag(TAG);
+        LeakCanary.install(this);
+
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                        .build());
+
+        setUpGraph();
+
         mBus = new OttoBus(ThreadEnforcer.MAIN);
         Timber.plant(new Timber.DebugTree());
 
-        setUpGraph();
         setUpDatabase();
     }
 

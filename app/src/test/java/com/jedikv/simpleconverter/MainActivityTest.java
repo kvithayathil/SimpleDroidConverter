@@ -8,6 +8,7 @@ import com.jedikv.simpleconverter.ui.activities.MainActivity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.annotation.Config;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
@@ -19,6 +20,7 @@ import static org.robolectric.Robolectric.buildActivity;
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
 @RunWith(RobolectricGradleTestRunner.class)
+@Config(constants = BuildConfig.class)
 public class MainActivityTest extends TestBase {
 
     @Test

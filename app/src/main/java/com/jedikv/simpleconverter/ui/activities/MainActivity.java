@@ -62,6 +62,8 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @InjectView(R.id.et_input)
     AppCompatEditText etInput;
     @InjectView(R.id.tv_currency_code)
@@ -94,12 +96,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.tag(TAG);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         setSupportActionBar(toolBar);
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
-        etInput.setText(mInputedValueString);
 
         mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), recyclerView, getSourceCurrency());
 
@@ -143,6 +145,15 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+        Timber.d("Cached input value: " + mInputedValueString);
+
+        if(savedInstanceState == null) {
+            mInputedValueString = getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0");
+        }
+
+        convertValue(mInputedValueString);
+
 
         rlContainer.setOnTouchListener(new View.OnTouchListener() {
 
@@ -245,10 +256,11 @@ public class MainActivity extends BaseActivity {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
-        BigDecimal inputInt = new BigDecimal(mCurrencyConversionsAdapter.getInputValue());
-        BigDecimal inputDecimal = inputInt.divide(new BigDecimal(10000));
+        BigDecimal inputInt =  mCurrencyConversionsAdapter.getInputValue();
+        inputInt.setScale(4, BigDecimal.ROUND_HALF_UP);
+        //BigDecimal inputDecimal = inputInt.divide(new BigDecimal(10000));
 
-        editText.setText(mDecimalFormat.format(inputDecimal.doubleValue()));
+        editText.setText(mDecimalFormat.format(inputInt.doubleValue()));
         editText.clearFocus();
 
         downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
@@ -261,6 +273,13 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Cache any input values for re-use when relaunching the application
+        getDefaultSharedPrefs().edit().putString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, etInput.getText().toString()).apply();
+    }
+
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
         convertValue(etInput.getText().toString());
@@ -269,6 +288,11 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void removeItemEvent(RemoveConversionEvent event) {
         mCurrencyConversionsAdapter.removeItem(event.getPosition());
+
+        //Show the fab to address glitch where it won't come back up mid list when deleting any item
+        if(!floatingActionButton.isVisible()) {
+            floatingActionButton.show();
+        }
     }
 
 

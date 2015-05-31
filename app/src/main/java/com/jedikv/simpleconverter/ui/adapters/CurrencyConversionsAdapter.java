@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -45,15 +47,17 @@ import timber.log.Timber;
 public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
 
     private List<ConversionEntity> mConverterList;
+
     private CurrencyPairDbHelper mCurrencyPairDbHelper;
     private CurrencyDbHelper mCurrencyDbHelper;
     private ConversionItemDbHelper mConversionDbHelper;
 
     private String mSourceCurrencyCode;
 
-    private long mInputValue;
+    private BigDecimal mInputValue;
 
 
+    @Inject
     public CurrencyConversionsAdapter(Context context, RecyclerView recyclerView, String sourceCurrency) {
         super(recyclerView);
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
@@ -65,6 +69,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         mConverterList.addAll(mConversionDbHelper.getAll());
     }
+
 
     @Override
     public int getPositionForId(long id) {
@@ -101,7 +106,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         mConverterList.addAll(mConversionDbHelper.getAll());
 
         //Ensure the value is converted to int to retain float values
-        mInputValue = inputValue.multiply(new BigDecimal(10000)).longValue();
+        mInputValue = inputValue;
 
         Timber.d("Preinput: " + inputValue + " PostInput: " + mInputValue);
         notifyDataSetChanged();
@@ -114,7 +119,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         notifyDataSetChanged();
     }
 
-    public long getInputValue() {
+    public BigDecimal getInputValue() {
         return mInputValue;
     }
 
@@ -223,7 +228,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         }
 
 
-        public void bind(long value, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
+        public void bind(BigDecimal inputValue, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
 
 
             String code = currencyEntity.getCode();
@@ -232,24 +237,22 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
             tvCurrencyCode.setText(code);
             tvCurrencyName.setText(currencyEntity.getName());
-            setValue(value, currencyPairEntity.getRate());
+            setValue(inputValue, currencyPairEntity.getRate());
         }
 
-        public void setValue(long inputValue, long rate) {
+        public void setValue(BigDecimal inputValue, int rate) {
 
             Timber.d("Input value: " + inputValue + " rate: " + rate);
-            long result = inputValue * rate;
-
-            BigDecimal intResult = new BigDecimal(result);
+            BigDecimal result = inputValue.multiply(new BigDecimal(rate).movePointLeft(4));
             //Revert the value back to the original decimal point position
+            result.setScale(4, BigDecimal.ROUND_HALF_UP);
+            Timber.d("Result move point left: " + result);
 
-            Timber.d("Result move point left: " + intResult.movePointLeft(8));
+            //BigDecimal decimalResult = intResult.divide(new BigDecimal(10000 * 10000), 4, RoundingMode.HALF_UP);
 
-            BigDecimal decimalResult = intResult.divide(new BigDecimal(10000 * 10000), 4, RoundingMode.HALF_UP);
+            //Timber.d("Result: " + result + " Converted result: " + decimalResult);
 
-            Timber.d("Result: " + result + " Converted result: " + decimalResult);
-
-            tvValue.setText(decimalResult.toString());
+            tvValue.setText(result.toString());
         }
 
         @OnClick(R.id.ib_remove)
