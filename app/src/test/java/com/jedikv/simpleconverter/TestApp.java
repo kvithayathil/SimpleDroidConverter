@@ -1,16 +1,21 @@
 package com.jedikv.simpleconverter;
 
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.ApplicationTestCase;
+import org.robolectric.TestLifecycle;
+import org.robolectric.TestLifecycleApplication;
 
-import com.jedikv.simpleconverter.ui.activities.MainActivity;
+import java.lang.reflect.Method;
+
+import static org.junit.Assert.*;
 
 /**
- * Created by Kurian on 27/05/2015.
+ * Created by Kurian on 01/06/2015.
  */
-public class TestApp extends ApplicationTestCase<App> {
+public class TestApp extends App {
 
-    public TestApp() {
-        super(App.class);
+    @Override
+    public void onCreate() {
+
     }
+
+
 }

@@ -5,8 +5,10 @@ import android.test.ApplicationTestCase;
 
 import com.jedikv.simpleconverter.ui.activities.MainActivity;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -20,20 +22,19 @@ import static org.robolectric.Robolectric.buildActivity;
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class)
 public class MainActivityTest extends TestBase {
+
+    MainActivity mainActivity;
+
+    @Before
+    public void setUp() {
+        mainActivity = Robolectric.buildActivity(MainActivity.class).create().get();
+
+    }
 
     @Test
     public void test_notNull() {
 
-        MainActivity mainActivity = buildActivity(MainActivity.class)
-                .create()
-                .start()
-                .resume()
-                .pause()
-                .destroy()
-                .visible()
-                .get();
         assertThat(mainActivity, not(nullValue()));
     }
 

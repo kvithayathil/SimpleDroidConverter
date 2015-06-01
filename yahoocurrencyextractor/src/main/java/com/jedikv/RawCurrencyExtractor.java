@@ -72,6 +72,14 @@ public class RawCurrencyExtractor {
                             symbol = "$";
                         }
 
+                        if(code.equals("AMD")) {
+                            symbol = "\u058F";
+                        } else if(code.equals("AZN")) {
+                            symbol = "ман";
+                        } else if (code.equals("AFN")) {
+                            symbol = "\u060b";
+                        }
+
                         String currencyDisplayName = instance.getDisplayName(locale);
 
                         if(currencyDisplayName.contains("Franc")) {

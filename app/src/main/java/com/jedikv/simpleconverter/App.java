@@ -35,6 +35,8 @@ public class App extends Application {
 
         super.onCreate();
         Timber.tag(TAG);
+        setUpGraph();
+
         LeakCanary.install(this);
 
         Stetho.initialize(
@@ -43,7 +45,6 @@ public class App extends Application {
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());
 
-        setUpGraph();
 
         mBus = new OttoBus(ThreadEnforcer.MAIN);
         Timber.plant(new Timber.DebugTree());

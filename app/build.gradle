@@ -71,10 +71,14 @@ android {
                 java.srcDirs = ['src/main/java', 'src/main/dao-generated']
             }
 
+
+            /*
             unitTest {
                 java.srcDir file('androidTest')
                 resources.srcDir file('androidTest/resources')
             }
+            */
+
         }
 
 
@@ -247,7 +251,7 @@ dependencies {
     testCompile 'com.squareup:fest-android:1.0.8'
 
     // Robolectric + Support v4
-    testCompile('org.robolectric:shadows-support-v4:3.0-rc3') {
+    testCompile('org.robolectric:robolectric:3.0-rc3') {
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
