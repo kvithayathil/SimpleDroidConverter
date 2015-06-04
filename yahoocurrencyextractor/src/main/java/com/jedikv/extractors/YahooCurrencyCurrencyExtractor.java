@@ -135,11 +135,11 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
 
             //Testing out the unicode conversion
 
-            /*
+
             if(symbolParser.hasUnicodeSymbol(currencyCode)) {
                 symbol = symbolParser.getCurrencyUnicodeSymbol(currencyCode);
             }
-            */
+
 
             return new CurrencyItem(locale, instance, symbol);
 
