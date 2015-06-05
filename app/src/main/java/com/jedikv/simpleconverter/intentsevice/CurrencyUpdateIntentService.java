@@ -26,7 +26,10 @@ import java.util.TimeZone;
 
 import converter_db.CurrencyPairEntity;
 import hirondelle.date4j.DateTime;
+import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import timber.log.Timber;
 
 /**
@@ -124,17 +127,27 @@ public class CurrencyUpdateIntentService extends IntentService {
             String query = generateYQLCurrencyQuery(currencyPair);
 
             Timber.d("Query: " + query);
+            mRestAdapter.create(IYahooCurrencyApi.class).getCurrencyPairs(query, new Callback<YahooDataContainer>() {
+                @Override
+                public void success(YahooDataContainer yahooDataContainer, Response response) {
 
-            YahooDataContainer result = mRestAdapter.create(IYahooCurrencyApi.class).getCurrencyPairs(query);
 
-            if(result != null) {
-                try {
-                    saveCurrencyData(result.getQuery());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    Timber.e(e, e.getMessage());
+                    if (yahooDataContainer != null) {
+                        try {
+                            saveCurrencyData(yahooDataContainer.getQuery());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            Timber.e(e, e.getMessage());
+                        }
+                    }
                 }
-            }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
         }
     }
 
