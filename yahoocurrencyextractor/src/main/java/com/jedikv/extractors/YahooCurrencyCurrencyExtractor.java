@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
@@ -182,14 +183,19 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
 
                     //Exclude any countries in the Eurozone we don't want their old currencies
                     if(!isInEurozone(code)) {
-                        currencyItemList.add(createCurrencyList(code));
+
+                        CurrencyItem item = createCurrencyList(code);
+                        if(item != null) {
+                            currencyItemList.add(item);
+                        }
                     }
                 }
             }
 
             if(!currencyItemList.isEmpty()) {
+
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                PrintWriter writer = new PrintWriter(outputPath, "UTF-8");
+                PrintWriter writer = new PrintWriter(outputPath, "UTF-16");
                 writer.print(gson.toJson(currencyItemList));
                 writer.close();
             }

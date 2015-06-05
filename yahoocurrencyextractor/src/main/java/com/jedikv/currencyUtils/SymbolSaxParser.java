@@ -31,6 +31,7 @@ public class SymbolSaxParser extends DefaultHandler {
     private String tempValue;
     private String currentCurrencyCode;
     private String currentHexCode;
+    private String currentDecCode;
     private Map<String, String> symbolMap;
 
     private Charset utf8Charset = Charset.forName("UTF-8");
@@ -63,7 +64,7 @@ public class SymbolSaxParser extends DefaultHandler {
     }
 
     public String getCurrencyUnicodeSymbol(String currencyCode) {
-        return symbolMap.get(currentCurrencyCode);
+        return symbolMap.get(currencyCode);
 
     }
 
@@ -79,8 +80,9 @@ public class SymbolSaxParser extends DefaultHandler {
 
             currentCurrencyCode = attributes.getValue("code");
             currentHexCode = attributes.getValue("unicode-hex");
+            currentDecCode = attributes.getValue("unicode-decimal");
 
-            System.out.println("Currency code: " + currentCurrencyCode + " - " + currentHexCode);
+            System.out.println("Currency code: " + currentCurrencyCode + " - " + currentDecCode);
         }
     }
 
@@ -94,7 +96,7 @@ public class SymbolSaxParser extends DefaultHandler {
 
         if(qName.equalsIgnoreCase("entry")) {
             //Reached the end of the element so add to the currency symbol map.
-            symbolMap.put(currentCurrencyCode, convertStringToUnicode(currentHexCode));
+            symbolMap.put(currentCurrencyCode, convertStringToUnicode(currentDecCode));
 
             System.out.println("Symbol map size: " + symbolMap.size());
         }
@@ -110,35 +112,10 @@ public class SymbolSaxParser extends DefaultHandler {
 
         while (scanner.hasNext()) {
 
-           stringBuilder.append("\\u");
             String code = scanner.next();
 
-
-            switch (code.length()) {
-
-                case 0:
-                    stringBuilder.append("0000");
-                    break;
-
-                case 1:
-                    stringBuilder.append("000");
-                    break;
-
-                case 2:
-                    stringBuilder.append("00");
-                    break;
-
-                case 3:
-                    stringBuilder.append("0");
-                    break;
-            }
-
-
-            stringBuilder.append(code);
-
-            if(scanner.hasNext()) {
-                stringBuilder.append(",");
-            }
+            char[] symbolChar = Character.toChars(Integer.parseInt(code));
+            stringBuilder.append(symbolChar);
         }
 
         scanner.close();
