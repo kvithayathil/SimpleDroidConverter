@@ -48,7 +48,7 @@
     <entry code="HKD" unicode-decimal="36" unicode-hex="24">Hong Kong Dollar</entry>
     <entry code="HUF" unicode-decimal="70, 116" unicode-hex="46, 74">Hungary Forint</entry>
     <entry code="ISK" unicode-decimal="107, 114" unicode-hex="6b, 72">Iceland Krona</entry>
-    <entry code="INR" unicode-decimal="" unicode-hex="">India Rupee</entry>
+    <entry code="INR" unicode-decimal="8377" unicode-hex="20b9">India Rupee</entry>
     <entry code="IDR" unicode-decimal="82, 112" unicode-hex="52, 70">Indonesia Rupiah</entry>
     <entry code="IRR" unicode-decimal="65020" unicode-hex="fdfc">Iran Rial</entry>
     <entry code="IMP" unicode-decimal="163" unicode-hex="a3">Isle of Man Pound</entry>
@@ -118,4 +118,6 @@
     <entry code="VND" unicode-decimal="8363" unicode-hex="20ab">Viet Nam Dong</entry>
     <entry code="YER" unicode-decimal="65020" unicode-hex="fdfc">Yemen Rial</entry>
     <entry code="ZWD" unicode-decimal="90, 36" unicode-hex="5a, 24">Zimbabwe Dollar</entry>
+    <!-- Additional symbols -->
+    <entry code="RWF" unicode-decimal="70, 82, 119" unicode-hex="46, 52, 77">Rwandan Franc</entry>
 </currency-symbol>

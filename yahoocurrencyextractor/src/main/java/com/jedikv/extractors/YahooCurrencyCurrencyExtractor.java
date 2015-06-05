@@ -14,8 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -29,11 +31,13 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
     private Set<String> eurozoneCodeSet;
     private SymbolSaxParser symbolParser;
 
+    private Set<String> missingSymbolSet;
+
     public YahooCurrencyCurrencyExtractor() {
 
         setUpEuroZoneSet();
         symbolParser = new SymbolSaxParser();
-
+        missingSymbolSet = new HashSet<>();
 
     }
 
@@ -139,6 +143,9 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
 
             if(symbolParser.hasUnicodeSymbol(currencyCode)) {
                 symbol = symbolParser.getCurrencyUnicodeSymbol(currencyCode);
+            } else {
+                System.out.println("MISSING SYMBOL: " + currencyCode);
+                missingSymbolSet.add(currencyCode);
             }
 
 
@@ -195,10 +202,12 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
             if(!currencyItemList.isEmpty()) {
 
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                PrintWriter writer = new PrintWriter(outputPath, "UTF-16");
+                PrintWriter writer = new PrintWriter(outputPath, "UTF-8");
                 writer.print(gson.toJson(currencyItemList));
                 writer.close();
             }
+
+            System.out.println(Arrays.toString(missingSymbolSet.toArray(new String[missingSymbolSet.size()])));
 
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());

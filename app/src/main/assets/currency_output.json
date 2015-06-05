@@ -1,21 +1,21 @@
 [
   {
     "numericCode": 410,
-    "symbol": "￦",
+    "symbol": "₩",
     "name": "South Korean Won",
     "countryName": "South Korea",
     "code": "KRW"
   },
   {
     "numericCode": 704,
-    "symbol": "đ",
+    "symbol": "₫",
     "name": "Vietnamese Dong",
     "countryName": "Vietnam",
     "code": "VND"
   },
   {
     "numericCode": 68,
-    "symbol": "B$",
+    "symbol": "$b",
     "name": "Bolivian Boliviano",
     "countryName": "Bolivia",
     "code": "BOB"
@@ -43,7 +43,7 @@
   },
   {
     "numericCode": 937,
-    "symbol": "Bs.F.",
+    "symbol": "Bs",
     "name": "Venezuelan Bolívar",
     "countryName": "Venezuela",
     "code": "VEF"
@@ -57,14 +57,14 @@
   },
   {
     "numericCode": 352,
-    "symbol": "kr.",
+    "symbol": "kr",
     "name": "Icelandic Króna",
     "countryName": "Iceland",
     "code": "ISK"
   },
   {
     "numericCode": 974,
-    "symbol": "Руб",
+    "symbol": "p.",
     "name": "Belarusian Ruble",
     "countryName": "Belarus",
     "code": "BYR"
@@ -85,7 +85,7 @@
   },
   {
     "numericCode": 388,
-    "symbol": "$",
+    "symbol": "J$",
     "name": "Jamaican Dollar",
     "countryName": "Jamaica",
     "code": "JMD"
@@ -106,7 +106,7 @@
   },
   {
     "numericCode": 72,
-    "symbol": "BWP",
+    "symbol": "P",
     "name": "Botswanan Pula",
     "countryName": "Botswana",
     "code": "BWP"
@@ -120,21 +120,21 @@
   },
   {
     "numericCode": 480,
-    "symbol": "Rs.",
+    "symbol": "₨",
     "name": "Mauritian Rupee",
     "countryName": "Mauritius",
     "code": "MUR"
   },
   {
     "numericCode": 944,
-    "symbol": "AZN",
+    "symbol": "ман",
     "name": "Azerbaijani Manat",
     "countryName": "Azerbaijan",
     "code": "AZN"
   },
   {
     "numericCode": 356,
-    "symbol": "Rs.",
+    "symbol": "₹",
     "name": "Indian Rupee",
     "countryName": "India",
     "code": "INR"
@@ -180,13 +180,6 @@
     "name": "Indonesian Rupiah",
     "countryName": "Indonesia",
     "code": "IDR"
-  },
-  {
-    "numericCode": 372,
-    "symbol": "£",
-    "name": "Irish Pound",
-    "countryName": "Ireland",
-    "code": "IEP"
   },
   {
     "numericCode": 36,
@@ -239,7 +232,7 @@
   },
   {
     "numericCode": 192,
-    "symbol": "CU$",
+    "symbol": "₱",
     "name": "Cuban Peso",
     "countryName": "Cuba",
     "code": "CUP"
@@ -253,7 +246,7 @@
   },
   {
     "numericCode": 566,
-    "symbol": "NGN",
+    "symbol": "₦",
     "name": "Nigerian Naira",
     "countryName": "Nigeria",
     "code": "NGN"
@@ -288,14 +281,14 @@
   },
   {
     "numericCode": 188,
-    "symbol": "C",
+    "symbol": "₡",
     "name": "Costa Rican Colón",
     "countryName": "Costa Rica",
     "code": "CRC"
   },
   {
     "numericCode": 943,
-    "symbol": "MZN",
+    "symbol": "MT",
     "name": "Mozambican Metical",
     "countryName": "Mozambique",
     "code": "MZN"
@@ -309,7 +302,7 @@
   },
   {
     "numericCode": 532,
-    "symbol": "ANG",
+    "symbol": "ƒ",
     "name": "Netherlands Antillean Guilder",
     "countryName": "Netherlands Antilles",
     "code": "ANG"
@@ -337,7 +330,7 @@
   },
   {
     "numericCode": 558,
-    "symbol": "$C",
+    "symbol": "C$",
     "name": "Nicaraguan Córdoba",
     "countryName": "Nicaragua",
     "code": "NIO"
@@ -365,7 +358,7 @@
   },
   {
     "numericCode": 807,
-    "symbol": "Den",
+    "symbol": "ден",
     "name": "Macedonian Denar",
     "countryName": "Macedonia",
     "code": "MKD"
@@ -379,7 +372,7 @@
   },
   {
     "numericCode": 418,
-    "symbol": "LAK",
+    "symbol": "₭",
     "name": "Laotian Kip",
     "countryName": "Laos",
     "code": "LAK"
@@ -400,21 +393,21 @@
   },
   {
     "numericCode": 975,
-    "symbol": "лв.",
+    "symbol": "лв",
     "name": "Bulgarian Lev",
     "countryName": "Bulgaria",
     "code": "BGN"
   },
   {
     "numericCode": 702,
-    "symbol": "S$",
+    "symbol": "$",
     "name": "Singapore Dollar",
     "countryName": "Singapore",
     "code": "SGD"
   },
   {
     "numericCode": 156,
-    "symbol": "￥",
+    "symbol": "¥",
     "name": "Chinese Yuan",
     "countryName": "China",
     "code": "CNY"
@@ -428,14 +421,14 @@
   },
   {
     "numericCode": 780,
-    "symbol": "$",
+    "symbol": "TT$",
     "name": "Trinidad and Tobago Dollar",
     "countryName": "Trinidad and Tobago",
     "code": "TTD"
   },
   {
     "numericCode": 690,
-    "symbol": "Rs.",
+    "symbol": "₨",
     "name": "Seychellois Rupee",
     "countryName": "Seychelles",
     "code": "SCR"
@@ -477,17 +470,10 @@
   },
   {
     "numericCode": 586,
-    "symbol": "Rs.",
+    "symbol": "₨",
     "name": "Pakistani Rupee",
     "countryName": "Pakistan",
     "code": "PKR"
-  },
-  {
-    "numericCode": 380,
-    "symbol": "ITL",
-    "name": "Italian Lira",
-    "countryName": "Italy",
-    "code": "ITL"
   },
   {
     "numericCode": 604,
@@ -504,15 +490,8 @@
     "code": "AED"
   },
   {
-    "numericCode": 428,
-    "symbol": "LVL",
-    "name": "Latvian Lats",
-    "countryName": "Latvia",
-    "code": "LVL"
-  },
-  {
     "numericCode": 980,
-    "symbol": "грн.",
+    "symbol": "₴",
     "name": "Ukrainian Hryvnia",
     "countryName": "Ukraine",
     "code": "UAH"
@@ -523,13 +502,6 @@
     "name": "Liberian Dollar",
     "countryName": "Liberia",
     "code": "LRD"
-  },
-  {
-    "numericCode": 250,
-    "symbol": "Fs",
-    "name": "French Franc",
-    "countryName": "France",
-    "code": "FRF"
   },
   {
     "numericCode": 426,
@@ -547,7 +519,7 @@
   },
   {
     "numericCode": 946,
-    "symbol": "LEI",
+    "symbol": "lei",
     "name": "Romanian Leu",
     "countryName": "Romania",
     "code": "RON"
@@ -589,7 +561,7 @@
   },
   {
     "numericCode": 524,
-    "symbol": "Rs.",
+    "symbol": "₨",
     "name": "Nepalese Rupee",
     "countryName": "Nepal",
     "code": "NPR"
@@ -610,7 +582,7 @@
   },
   {
     "numericCode": 706,
-    "symbol": "SOS",
+    "symbol": "S",
     "name": "Somali Shilling",
     "countryName": "Somalia",
     "code": "SOS"
@@ -624,7 +596,7 @@
   },
   {
     "numericCode": 144,
-    "symbol": "Rs.",
+    "symbol": "₨",
     "name": "Sri Lankan Rupee",
     "countryName": "Sri Lanka",
     "code": "LKR"
@@ -638,14 +610,14 @@
   },
   {
     "numericCode": 392,
-    "symbol": "￥",
+    "symbol": "¥",
     "name": "Japanese Yen",
     "countryName": "Japan",
     "code": "JPY"
   },
   {
     "numericCode": 756,
-    "symbol": "Fs",
+    "symbol": "CHF",
     "name": "Swiss Franc",
     "countryName": "Switzerland",
     "code": "CHF"
@@ -659,21 +631,21 @@
   },
   {
     "numericCode": 152,
-    "symbol": "Ch$",
+    "symbol": "$",
     "name": "Chilean Peso",
     "countryName": "Chile",
     "code": "CLP"
   },
   {
     "numericCode": 364,
-    "symbol": "IRR",
+    "symbol": "﷼",
     "name": "Iranian Rial",
     "countryName": "Iran",
     "code": "IRR"
   },
   {
     "numericCode": 971,
-    "symbol": "AFN",
+    "symbol": "؋",
     "name": "Afghan Afghani",
     "countryName": "Afghanistan",
     "code": "AFN"
@@ -687,7 +659,7 @@
   },
   {
     "numericCode": 222,
-    "symbol": "C",
+    "symbol": "$",
     "name": "Salvadoran Colón",
     "countryName": "El Salvador",
     "code": "SVC"
@@ -701,7 +673,7 @@
   },
   {
     "numericCode": 600,
-    "symbol": "G",
+    "symbol": "Gs",
     "name": "Paraguayan Guarani",
     "countryName": "Paraguay",
     "code": "PYG"
@@ -722,7 +694,7 @@
   },
   {
     "numericCode": 376,
-    "symbol": "ש\"ח",
+    "symbol": "₪",
     "name": "Israeli New Sheqel",
     "countryName": "Israel",
     "code": "ILS"
@@ -736,7 +708,7 @@
   },
   {
     "numericCode": 408,
-    "symbol": "KPW",
+    "symbol": "₩",
     "name": "North Korean Won",
     "countryName": "North Korea",
     "code": "KPW"
@@ -747,13 +719,6 @@
     "name": "Gibraltar Pound",
     "countryName": "Gibraltar",
     "code": "GIP"
-  },
-  {
-    "numericCode": 705,
-    "symbol": "SIT",
-    "name": "Slovenian Tolar",
-    "countryName": "Slovenia",
-    "code": "SIT"
   },
   {
     "numericCode": 96,
@@ -785,17 +750,10 @@
   },
   {
     "numericCode": 84,
-    "symbol": "$",
+    "symbol": "BZ$",
     "name": "Belize Dollar",
     "countryName": "Belize",
     "code": "BZD"
-  },
-  {
-    "numericCode": 276,
-    "symbol": "DEM",
-    "name": "German Mark",
-    "countryName": "Germany",
-    "code": "DEM"
   },
   {
     "numericCode": 400,
@@ -812,22 +770,15 @@
     "code": "RWF"
   },
   {
-    "numericCode": 440,
-    "symbol": "Lt",
-    "name": "Lithuanian Litas",
-    "countryName": "Lithuania",
-    "code": "LTL"
-  },
-  {
     "numericCode": 643,
-    "symbol": "руб.",
+    "symbol": "руб",
     "name": "Russian Ruble",
     "countryName": "Russia",
     "code": "RUB"
   },
   {
     "numericCode": 941,
-    "symbol": "din.",
+    "symbol": "Дин.",
     "name": "Serbian Dinar",
     "countryName": "Serbia",
     "code": "RSD"
@@ -841,7 +792,7 @@
   },
   {
     "numericCode": 590,
-    "symbol": "B",
+    "symbol": "B/.",
     "name": "Panamanian Balboa",
     "countryName": "Panama",
     "code": "PAB"
@@ -883,7 +834,7 @@
   },
   {
     "numericCode": 51,
-    "symbol": "AMD",
+    "symbol": "֏",
     "name": "Armenian Dram",
     "countryName": "Armenia",
     "code": "AMD"
@@ -897,31 +848,24 @@
   },
   {
     "numericCode": 191,
-    "symbol": "Kn",
+    "symbol": "kn",
     "name": "Croatian Kuna",
     "countryName": "Croatia",
     "code": "HRK"
   },
   {
     "numericCode": 116,
-    "symbol": "KHR",
+    "symbol": "៛",
     "name": "Cambodian Riel",
     "countryName": "Cambodia",
     "code": "KHR"
   },
   {
     "numericCode": 608,
-    "symbol": "Php",
+    "symbol": "₱",
     "name": "Philippine Peso",
     "countryName": "Philippines",
     "code": "PHP"
-  },
-  {
-    "numericCode": 196,
-    "symbol": "£",
-    "name": "Cypriot Pound",
-    "countryName": "Cyprus",
-    "code": "CYP"
   },
   {
     "numericCode": 414,
@@ -953,14 +897,14 @@
   },
   {
     "numericCode": 398,
-    "symbol": "KZT",
+    "symbol": "₸",
     "name": "Kazakhstani Tenge",
     "countryName": "Kazakhstan",
     "code": "KZT"
   },
   {
     "numericCode": 949,
-    "symbol": "TL",
+    "symbol": "",
     "name": "Turkish Lira",
     "countryName": "Turkey",
     "code": "TRY"
@@ -981,7 +925,7 @@
   },
   {
     "numericCode": 977,
-    "symbol": "КМ.",
+    "symbol": "KM",
     "name": "Bosnia-Herzegovina Convertible Mark",
     "countryName": "Bosnia and Herzegovina",
     "code": "BAM"
@@ -1030,14 +974,14 @@
   },
   {
     "numericCode": 634,
-    "symbol": "ر.ق.‏",
+    "symbol": "﷼",
     "name": "Qatari Rial",
     "countryName": "Qatar",
     "code": "QAR"
   },
   {
     "numericCode": 512,
-    "symbol": "ر.ع.‏",
+    "symbol": "﷼",
     "name": "Omani Rial",
     "countryName": "Oman",
     "code": "OMR"
@@ -1051,7 +995,7 @@
   },
   {
     "numericCode": 417,
-    "symbol": "KGS",
+    "symbol": "лв",
     "name": "Kyrgystani Som",
     "countryName": "Kyrgyzstan",
     "code": "KGS"
@@ -1086,21 +1030,21 @@
   },
   {
     "numericCode": 886,
-    "symbol": "ر.ي.‏",
+    "symbol": "﷼",
     "name": "Yemeni Rial",
     "countryName": "Yemen",
     "code": "YER"
   },
   {
     "numericCode": 682,
-    "symbol": "ر.س.‏",
+    "symbol": "﷼",
     "name": "Saudi Riyal",
     "countryName": "Saudi Arabia",
     "code": "SAR"
   },
   {
     "numericCode": 858,
-    "symbol": "NU$",
+    "symbol": "$U",
     "name": "Uruguayan Peso",
     "countryName": "Uruguay",
     "code": "UYU"
@@ -1114,7 +1058,7 @@
   },
   {
     "numericCode": 860,
-    "symbol": "UZS",
+    "symbol": "лв",
     "name": "Uzbekistan Som",
     "countryName": "Uzbekistan",
     "code": "UZS"
@@ -1128,21 +1072,21 @@
   },
   {
     "numericCode": 533,
-    "symbol": "AWG",
+    "symbol": "ƒ",
     "name": "Aruban Florin",
     "countryName": "Aruba",
     "code": "AWG"
   },
   {
     "numericCode": 496,
-    "symbol": "MNT",
+    "symbol": "₮",
     "name": "Mongolian Tugrik",
     "countryName": "Mongolia",
     "code": "MNT"
   },
   {
     "numericCode": 344,
-    "symbol": "HK$",
+    "symbol": "$",
     "name": "Hong Kong Dollar",
     "countryName": "Hong Kong",
     "code": "HKD"
