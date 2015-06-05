@@ -4,1098 +4,1569 @@
     "symbol": "₩",
     "name": "South Korean Won",
     "countryName": "South Korea",
-    "code": "KRW"
+    "code": "KRW",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 704,
     "symbol": "₫",
     "name": "Vietnamese Dong",
     "countryName": "Vietnam",
-    "code": "VND"
+    "code": "VND",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 68,
     "symbol": "$b",
     "name": "Bolivian Boliviano",
     "countryName": "Bolivia",
-    "code": "BOB"
+    "code": "BOB",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 446,
-    "symbol": "MOP",
+    "symbol": "P",
     "name": "Macanese Pataca",
     "countryName": "Macao",
-    "code": "MOP"
+    "code": "MOP",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 50,
-    "symbol": "BDT",
+    "symbol": "৳",
     "name": "Bangladeshi Taka",
     "countryName": "Bangladesh",
-    "code": "BDT"
+    "code": "BDT",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 498,
-    "symbol": "MDL",
+    "symbol": "L",
     "name": "Moldovan Leu",
     "countryName": "Moldova",
-    "code": "MDL"
+    "code": "MDL",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 937,
     "symbol": "Bs",
     "name": "Venezuelan Bolívar",
     "countryName": "Venezuela",
-    "code": "VEF"
+    "code": "VEF",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 981,
-    "symbol": "GEL",
+    "symbol": "ლ",
     "name": "Georgian Lari",
     "countryName": "Georgia",
-    "code": "GEL"
+    "code": "GEL",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 352,
     "symbol": "kr",
     "name": "Icelandic Króna",
     "countryName": "Iceland",
-    "code": "ISK"
+    "code": "ISK",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 974,
     "symbol": "p.",
     "name": "Belarusian Ruble",
     "countryName": "Belarus",
-    "code": "BYR"
+    "code": "BYR",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": " "
   },
   {
     "numericCode": 764,
     "symbol": "฿",
     "name": "Thai Baht",
     "countryName": "Thailand",
-    "code": "THB"
+    "code": "THB",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 788,
-    "symbol": "د.ت.‏",
+    "symbol": "د.ت",
     "name": "Tunisian Dinar",
     "countryName": "Tunisia",
-    "code": "TND"
+    "code": "TND",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 388,
     "symbol": "J$",
     "name": "Jamaican Dollar",
     "countryName": "Jamaica",
-    "code": "JMD"
+    "code": "JMD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 208,
     "symbol": "kr",
     "name": "Danish Krone",
     "countryName": "Denmark",
-    "code": "DKK"
+    "code": "DKK",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 968,
     "symbol": "$",
     "name": "Surinamese Dollar",
     "countryName": "Suriname",
-    "code": "SRD"
+    "code": "SRD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 72,
     "symbol": "P",
     "name": "Botswanan Pula",
     "countryName": "Botswana",
-    "code": "BWP"
+    "code": "BWP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 578,
     "symbol": "kr",
     "name": "Norwegian Krone",
     "countryName": "Norway",
-    "code": "NOK"
+    "code": "NOK",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 480,
     "symbol": "₨",
     "name": "Mauritian Rupee",
     "countryName": "Mauritius",
-    "code": "MUR"
+    "code": "MUR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 944,
     "symbol": "ман",
     "name": "Azerbaijani Manat",
     "countryName": "Azerbaijan",
-    "code": "AZN"
+    "code": "AZN",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 356,
     "symbol": "₹",
     "name": "Indian Rupee",
     "countryName": "India",
-    "code": "INR"
+    "code": "INR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 969,
-    "symbol": "MGA",
+    "symbol": "Ar",
     "name": "Malagasy Ariary",
     "countryName": "Madagascar",
-    "code": "MGA"
+    "code": "MGA",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 124,
     "symbol": "$",
     "name": "Canadian Dollar",
     "countryName": "Canada",
-    "code": "CAD"
+    "code": "CAD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 950,
-    "symbol": "Fs",
+    "symbol": "Fr",
     "name": "CFA Franc BEAC",
     "countryName": "XA",
-    "code": "XAF"
+    "code": "XAF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 422,
     "symbol": "£",
     "name": "Lebanese Pound",
     "countryName": "Lebanon",
-    "code": "LBP"
+    "code": "LBP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 960,
-    "symbol": "XDR",
+    "symbol": "SDR",
     "name": "Special Drawing Rights",
     "countryName": "XD",
-    "code": "XDR"
+    "code": "XDR",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 360,
     "symbol": "Rp",
     "name": "Indonesian Rupiah",
     "countryName": "Indonesia",
-    "code": "IDR"
+    "code": "IDR",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 36,
     "symbol": "$",
     "name": "Australian Dollar",
     "countryName": "Australia",
-    "code": "AUD"
+    "code": "AUD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 104,
-    "symbol": "MMK",
+    "symbol": "K",
     "name": "Myanma Kyat",
     "countryName": "Myanmar",
-    "code": "MMK"
+    "code": "MMK",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 434,
-    "symbol": "د.ل.‏",
+    "symbol": "ل.د",
     "name": "Libyan Dinar",
     "countryName": "Libya",
-    "code": "LYD"
+    "code": "LYD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 710,
     "symbol": "R",
     "name": "South African Rand",
     "countryName": "South Africa",
-    "code": "ZAR"
+    "code": "ZAR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 368,
-    "symbol": "د.ع.‏",
+    "symbol": "ع.د",
     "name": "Iraqi Dinar",
     "countryName": "Iraq",
-    "code": "IQD"
+    "code": "IQD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 953,
-    "symbol": "Fs",
+    "symbol": "Fr",
     "name": "CFP Franc",
     "countryName": "XP",
-    "code": "XPF"
+    "code": "XPF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 972,
-    "symbol": "TJS",
+    "symbol": "ЅМ",
     "name": "Tajikistani Somoni",
     "countryName": "Tajikistan",
-    "code": "TJS"
+    "code": "TJS",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 192,
     "symbol": "₱",
     "name": "Cuban Peso",
     "countryName": "Cuba",
-    "code": "CUP"
+    "code": "CUP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 800,
-    "symbol": "UGX",
+    "symbol": "USh",
     "name": "Ugandan Shilling",
     "countryName": "Uganda",
-    "code": "UGX"
+    "code": "UGX",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 566,
     "symbol": "₦",
     "name": "Nigerian Naira",
     "countryName": "Nigeria",
-    "code": "NGN"
+    "code": "NGN",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 598,
-    "symbol": "PGK",
+    "symbol": "K",
     "name": "Papua New Guinean Kina",
     "countryName": "Papua New Guinea",
-    "code": "PGK"
+    "code": "PGK",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 776,
-    "symbol": "TOP",
+    "symbol": "T$",
     "name": "Tongan Paʻanga",
     "countryName": "Tonga",
-    "code": "TOP"
+    "code": "TOP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 404,
-    "symbol": "KES",
+    "symbol": "KSh",
     "name": "Kenyan Shilling",
     "countryName": "Kenya",
-    "code": "KES"
+    "code": "KES",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 934,
-    "symbol": "TMT",
+    "symbol": "T",
     "name": "Turkmenistani Manat",
     "countryName": "Turkmenistan",
-    "code": "TMT"
+    "code": "TMT",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 188,
     "symbol": "₡",
     "name": "Costa Rican Colón",
     "countryName": "Costa Rica",
-    "code": "CRC"
+    "code": "CRC",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 943,
     "symbol": "MT",
     "name": "Mozambican Metical",
     "countryName": "Mozambique",
-    "code": "MZN"
+    "code": "MZN",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 760,
     "symbol": "£",
     "name": "Syrian Pound",
     "countryName": "Syria",
-    "code": "SYP"
+    "code": "SYP",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 532,
     "symbol": "ƒ",
     "name": "Netherlands Antillean Guilder",
     "countryName": "Netherlands Antilles",
-    "code": "ANG"
+    "code": "ANG",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 967,
-    "symbol": "ZMW",
+    "symbol": "ZK",
     "name": "ZMW",
     "countryName": "Zambia",
-    "code": "ZMW"
+    "code": "ZMW",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 986,
     "symbol": "R$",
     "name": "Brazilian Real",
     "countryName": "Brazil",
-    "code": "BRL"
+    "code": "BRL",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 44,
     "symbol": "$",
     "name": "Bahamian Dollar",
     "countryName": "Bahamas",
-    "code": "BSD"
+    "code": "BSD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 558,
     "symbol": "C$",
     "name": "Nicaraguan Córdoba",
     "countryName": "Nicaragua",
-    "code": "NIO"
+    "code": "NIO",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 324,
-    "symbol": "Fs",
+    "symbol": "Fr",
     "name": "Guinean Franc",
     "countryName": "Guinea",
-    "code": "GNF"
+    "code": "GNF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 60,
     "symbol": "$",
     "name": "Bermudan Dollar",
     "countryName": "Bermuda",
-    "code": "BMD"
+    "code": "BMD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 694,
-    "symbol": "SLL",
+    "symbol": "Le",
     "name": "Sierra Leonean Leone",
     "countryName": "Sierra Leone",
-    "code": "SLL"
+    "code": "SLL",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 807,
     "symbol": "ден",
     "name": "Macedonian Denar",
     "countryName": "Macedonia",
-    "code": "MKD"
+    "code": "MKD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 108,
-    "symbol": "Fs",
+    "symbol": "Fr",
     "name": "Burundian Franc",
     "countryName": "Burundi",
-    "code": "BIF"
+    "code": "BIF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 418,
     "symbol": "₭",
     "name": "Laotian Kip",
     "countryName": "Laos",
-    "code": "LAK"
+    "code": "LAK",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 48,
-    "symbol": "د.ب.‏",
+    "symbol": "ب.د",
     "name": "Bahraini Dinar",
     "countryName": "Bahrain",
-    "code": "BHD"
+    "code": "BHD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 654,
     "symbol": "£",
     "name": "Saint Helena Pound",
     "countryName": "Saint Helena",
-    "code": "SHP"
+    "code": "SHP",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 975,
     "symbol": "лв",
     "name": "Bulgarian Lev",
     "countryName": "Bulgaria",
-    "code": "BGN"
+    "code": "BGN",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 702,
     "symbol": "$",
     "name": "Singapore Dollar",
     "countryName": "Singapore",
-    "code": "SGD"
+    "code": "SGD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 156,
     "symbol": "¥",
     "name": "Chinese Yuan",
     "countryName": "China",
-    "code": "CNY"
+    "code": "CNY",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 978,
     "symbol": "€",
     "name": "Euro",
     "countryName": "EU",
-    "code": "EUR"
+    "code": "EUR",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 780,
     "symbol": "TT$",
     "name": "Trinidad and Tobago Dollar",
     "countryName": "Trinidad and Tobago",
-    "code": "TTD"
+    "code": "TTD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 690,
     "symbol": "₨",
     "name": "Seychellois Rupee",
     "countryName": "Seychelles",
-    "code": "SCR"
+    "code": "SCR",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 52,
     "symbol": "$",
     "name": "Barbadian Dollar",
     "countryName": "Barbados",
-    "code": "BBD"
+    "code": "BBD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 90,
     "symbol": "$",
     "name": "Solomon Islands Dollar",
     "countryName": "Solomon Islands",
-    "code": "SBD"
+    "code": "SBD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 504,
-    "symbol": "د.م.‏",
+    "symbol": "د.م.",
     "name": "Moroccan Dirham",
     "countryName": "Morocco",
-    "code": "MAD"
+    "code": "MAD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 320,
     "symbol": "Q",
     "name": "Guatemalan Quetzal",
     "countryName": "Guatemala",
-    "code": "GTQ"
+    "code": "GTQ",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 454,
-    "symbol": "MWK",
+    "symbol": "MK",
     "name": "Malawian Kwacha",
     "countryName": "Malawi",
-    "code": "MWK"
+    "code": "MWK",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 586,
     "symbol": "₨",
     "name": "Pakistani Rupee",
     "countryName": "Pakistan",
-    "code": "PKR"
+    "code": "PKR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 604,
     "symbol": "S/.",
     "name": "Peruvian Nuevo Sol",
     "countryName": "Peru",
-    "code": "PEN"
+    "code": "PEN",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 784,
-    "symbol": "د.إ.‏",
+    "symbol": "د.إ",
     "name": "United Arab Emirates Dirham",
     "countryName": "United Arab Emirates",
-    "code": "AED"
+    "code": "AED",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 980,
     "symbol": "₴",
     "name": "Ukrainian Hryvnia",
     "countryName": "Ukraine",
-    "code": "UAH"
+    "code": "UAH",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 430,
     "symbol": "$",
     "name": "Liberian Dollar",
     "countryName": "Liberia",
-    "code": "LRD"
+    "code": "LRD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 426,
-    "symbol": "LSL",
+    "symbol": "L",
     "name": "Lesotho Loti",
     "countryName": "Lesotho",
-    "code": "LSL"
+    "code": "LSL",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 752,
     "symbol": "kr",
     "name": "Swedish Krona",
     "countryName": "Sweden",
-    "code": "SEK"
+    "code": "SEK",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": " "
   },
   {
     "numericCode": 946,
     "symbol": "lei",
     "name": "Romanian Leu",
     "countryName": "Romania",
-    "code": "RON"
+    "code": "RON",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 952,
-    "symbol": "Fs",
+    "symbol": "K",
     "name": "CFA Franc BCEAO",
     "countryName": "XO",
-    "code": "XOF"
+    "code": "XOF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 170,
     "symbol": "$",
     "name": "Colombian Peso",
     "countryName": "Colombia",
-    "code": "COP"
+    "code": "COP",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 976,
-    "symbol": "Fs",
+    "symbol": "FC",
     "name": "Congolese Franc",
     "countryName": "The Democratic Republic Of Congo",
-    "code": "CDF"
+    "code": "CDF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 840,
     "symbol": "$",
     "name": "US Dollar",
     "countryName": "United States",
-    "code": "USD"
+    "code": "USD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 834,
-    "symbol": "TZS",
+    "symbol": "Sh",
     "name": "Tanzanian Shilling",
     "countryName": "Tanzania",
-    "code": "TZS"
+    "code": "TZS",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 524,
     "symbol": "₨",
     "name": "Nepalese Rupee",
     "countryName": "Nepal",
-    "code": "NPR"
+    "code": "NPR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 936,
-    "symbol": "GHS",
+    "symbol": "₵",
     "name": "Ghanaian Cedi",
     "countryName": "Ghana",
-    "code": "GHS"
+    "code": "GHS",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 932,
     "symbol": "$",
     "name": "Zimbabwean Dollar (2009)",
     "countryName": "Zimbabwe",
-    "code": "ZWL"
+    "code": "ZWL",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 706,
     "symbol": "S",
     "name": "Somali Shilling",
     "countryName": "Somalia",
-    "code": "SOS"
+    "code": "SOS",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 12,
-    "symbol": "د.ج.‏",
+    "symbol": "د.ج",
     "name": "Algerian Dinar",
     "countryName": "Algeria",
-    "code": "DZD"
+    "code": "DZD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 144,
     "symbol": "₨",
     "name": "Sri Lankan Rupee",
     "countryName": "Sri Lanka",
-    "code": "LKR"
+    "code": "LKR",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 238,
     "symbol": "£",
     "name": "Falkland Islands Pound",
     "countryName": "Falkland Islands",
-    "code": "FKP"
+    "code": "FKP",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 392,
     "symbol": "¥",
     "name": "Japanese Yen",
     "countryName": "Japan",
-    "code": "JPY"
+    "code": "JPY",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 756,
     "symbol": "CHF",
     "name": "Swiss Franc",
     "countryName": "Switzerland",
-    "code": "CHF"
+    "code": "CHF",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 136,
     "symbol": "$",
     "name": "Cayman Islands Dollar",
     "countryName": "Cayman Islands",
-    "code": "KYD"
+    "code": "KYD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 152,
     "symbol": "$",
     "name": "Chilean Peso",
     "countryName": "Chile",
-    "code": "CLP"
+    "code": "CLP",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 364,
     "symbol": "﷼",
     "name": "Iranian Rial",
     "countryName": "Iran",
-    "code": "IRR"
+    "code": "IRR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 971,
     "symbol": "؋",
     "name": "Afghan Afghani",
     "countryName": "Afghanistan",
-    "code": "AFN"
+    "code": "AFN",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 262,
-    "symbol": "Fs",
+    "symbol": "Fdj",
     "name": "Djiboutian Franc",
     "countryName": "Djibouti",
-    "code": "DJF"
+    "code": "DJF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 222,
     "symbol": "$",
     "name": "Salvadoran Colón",
     "countryName": "El Salvador",
-    "code": "SVC"
+    "code": "SVC",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 985,
     "symbol": "zł",
     "name": "Polish Zloty",
     "countryName": "Poland",
-    "code": "PLN"
+    "code": "PLN",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": " "
   },
   {
     "numericCode": 600,
     "symbol": "Gs",
     "name": "Paraguayan Guarani",
     "countryName": "Paraguay",
-    "code": "PYG"
+    "code": "PYG",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 232,
-    "symbol": "ERN",
+    "symbol": "Nfk",
     "name": "Eritrean Nakfa",
     "countryName": "Eritrea",
-    "code": "ERN"
+    "code": "ERN",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 230,
-    "symbol": "ETB",
+    "symbol": "Br",
     "name": "Ethiopian Birr",
     "countryName": "Ethiopia",
-    "code": "ETB"
+    "code": "ETB",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 376,
     "symbol": "₪",
     "name": "Israeli New Sheqel",
     "countryName": "Israel",
-    "code": "ILS"
+    "code": "ILS",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 901,
     "symbol": "NT$",
     "name": "New Taiwan Dollar",
     "countryName": "Taiwan",
-    "code": "TWD"
+    "code": "TWD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 408,
     "symbol": "₩",
     "name": "North Korean Won",
     "countryName": "North Korea",
-    "code": "KPW"
+    "code": "KPW",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 292,
     "symbol": "£",
     "name": "Gibraltar Pound",
     "countryName": "Gibraltar",
-    "code": "GIP"
+    "code": "GIP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 96,
     "symbol": "$",
     "name": "Brunei Dollar",
     "countryName": "Brunei",
-    "code": "BND"
+    "code": "BND",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 340,
     "symbol": "L",
     "name": "Honduran Lempira",
     "countryName": "Honduras",
-    "code": "HNL"
+    "code": "HNL",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 203,
     "symbol": "Kč",
     "name": "Czech Republic Koruna",
     "countryName": "Czech Republic",
-    "code": "CZK"
+    "code": "CZK",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 348,
     "symbol": "Ft",
     "name": "Hungarian Forint",
     "countryName": "Hungary",
-    "code": "HUF"
+    "code": "HUF",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 84,
     "symbol": "BZ$",
     "name": "Belize Dollar",
     "countryName": "Belize",
-    "code": "BZD"
+    "code": "BZD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 400,
-    "symbol": "د.أ.‏",
+    "symbol": "د.ا",
     "name": "Jordanian Dinar",
     "countryName": "Jordan",
-    "code": "JOD"
+    "code": "JOD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 646,
     "symbol": "FRw",
     "name": "Rwandan Franc",
     "countryName": "Rwanda",
-    "code": "RWF"
+    "code": "RWF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 643,
     "symbol": "руб",
     "name": "Russian Ruble",
     "countryName": "Russia",
-    "code": "RUB"
+    "code": "RUB",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 941,
     "symbol": "Дин.",
     "name": "Serbian Dinar",
     "countryName": "Serbia",
-    "code": "RSD"
+    "code": "RSD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 882,
-    "symbol": "WST",
+    "symbol": "T",
     "name": "Samoan Tala",
     "countryName": "Samoa",
-    "code": "WST"
+    "code": "WST",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 590,
     "symbol": "B/.",
     "name": "Panamanian Balboa",
     "countryName": "Panama",
-    "code": "PAB"
+    "code": "PAB",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 516,
     "symbol": "$",
     "name": "Namibian Dollar",
     "countryName": "Namibia",
-    "code": "NAD"
+    "code": "NAD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 214,
     "symbol": "RD$",
     "name": "Dominican Peso",
     "countryName": "Dominican Republic",
-    "code": "DOP"
+    "code": "DOP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 8,
     "symbol": "Lek",
     "name": "Albanian Lek",
     "countryName": "Albania",
-    "code": "ALL"
+    "code": "ALL",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 332,
-    "symbol": "HTG",
+    "symbol": "G",
     "name": "Haitian Gourde",
     "countryName": "Haiti",
-    "code": "HTG"
+    "code": "HTG",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 174,
-    "symbol": "Fs",
+    "symbol": "Fr",
     "name": "Comorian Franc",
     "countryName": "Comoros",
-    "code": "KMF"
+    "code": "KMF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 51,
-    "symbol": "֏",
+    "symbol": "դր.",
     "name": "Armenian Dram",
     "countryName": "Armenia",
-    "code": "AMD"
+    "code": "AMD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 478,
-    "symbol": "MRO",
+    "symbol": "UM",
     "name": "Mauritanian Ouguiya",
     "countryName": "Mauritania",
-    "code": "MRO"
+    "code": "MRO",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 191,
     "symbol": "kn",
     "name": "Croatian Kuna",
     "countryName": "Croatia",
-    "code": "HRK"
+    "code": "HRK",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 116,
     "symbol": "៛",
     "name": "Cambodian Riel",
     "countryName": "Cambodia",
-    "code": "KHR"
+    "code": "KHR",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 608,
     "symbol": "₱",
     "name": "Philippine Peso",
     "countryName": "Philippines",
-    "code": "PHP"
+    "code": "PHP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 414,
-    "symbol": "د.ك.‏",
+    "symbol": "د.ك",
     "name": "Kuwaiti Dinar",
     "countryName": "Kuwait",
-    "code": "KWD"
+    "code": "KWD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 951,
     "symbol": "$",
     "name": "East Caribbean Dollar",
     "countryName": "XC",
-    "code": "XCD"
+    "code": "XCD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 938,
     "symbol": "£",
     "name": "Sudanese Pound",
     "countryName": "Sudan",
-    "code": "SDG"
+    "code": "SDG",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 990,
-    "symbol": "CLF",
+    "symbol": "UF",
     "name": "Chilean Unit of Account (UF)",
     "countryName": "Chile",
-    "code": "CLF"
+    "code": "CLF",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 398,
     "symbol": "₸",
     "name": "Kazakhstani Tenge",
     "countryName": "Kazakhstan",
-    "code": "KZT"
+    "code": "KZT",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 949,
-    "symbol": "",
+    "symbol": "₺",
     "name": "Turkish Lira",
     "countryName": "Turkey",
-    "code": "TRY"
+    "code": "TRY",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 554,
     "symbol": "$",
     "name": "New Zealand Dollar",
     "countryName": "New Zealand",
-    "code": "NZD"
+    "code": "NZD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 242,
     "symbol": "$",
     "name": "Fijian Dollar",
     "countryName": "Fiji",
-    "code": "FJD"
+    "code": "FJD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 977,
     "symbol": "KM",
     "name": "Bosnia-Herzegovina Convertible Mark",
     "countryName": "Bosnia and Herzegovina",
-    "code": "BAM"
+    "code": "BAM",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 64,
-    "symbol": "BTN",
+    "symbol": "Nu.",
     "name": "Bhutanese Ngultrum",
     "countryName": "Bhutan",
-    "code": "BTN"
+    "code": "BTN",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 678,
-    "symbol": "STD",
+    "symbol": "Db",
     "name": "São Tomé and Príncipe Dobra",
     "countryName": "Sao Tome And Principe",
-    "code": "STD"
+    "code": "STD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 548,
-    "symbol": "VUV",
+    "symbol": "Vt",
     "name": "Vanuatu Vatu",
     "countryName": "Vanuatu",
-    "code": "VUV"
+    "code": "VUV",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 462,
-    "symbol": "MVR",
+    "symbol": "Rf",
     "name": "Maldivian Rufiyaa",
     "countryName": "Maldives",
-    "code": "MVR"
+    "code": "MVR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 973,
-    "symbol": "AOA",
+    "symbol": "Kz",
     "name": "Angolan Kwanza",
     "countryName": "Angola",
-    "code": "AOA"
+    "code": "AOA",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 818,
     "symbol": "£",
     "name": "Egyptian Pound",
     "countryName": "Egypt",
-    "code": "EGP"
+    "code": "EGP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 634,
     "symbol": "﷼",
     "name": "Qatari Rial",
     "countryName": "Qatar",
-    "code": "QAR"
+    "code": "QAR",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 512,
     "symbol": "﷼",
     "name": "Omani Rial",
     "countryName": "Oman",
-    "code": "OMR"
+    "code": "OMR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 132,
-    "symbol": "CVE",
+    "symbol": "$",
     "name": "Cape Verdean Escudo",
     "countryName": "Cape Verde",
-    "code": "CVE"
+    "code": "CVE",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 417,
     "symbol": "лв",
     "name": "Kyrgystani Som",
     "countryName": "Kyrgyzstan",
-    "code": "KGS"
+    "code": "KGS",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 484,
     "symbol": "$",
     "name": "Mexican Peso",
     "countryName": "Mexico",
-    "code": "MXN"
+    "code": "MXN",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 458,
     "symbol": "RM",
     "name": "Malaysian Ringgit",
     "countryName": "Malaysia",
-    "code": "MYR"
+    "code": "MYR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 328,
     "symbol": "$",
     "name": "Guyanaese Dollar",
     "countryName": "Guyana",
-    "code": "GYD"
+    "code": "GYD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 748,
-    "symbol": "SZL",
+    "symbol": "E",
     "name": "Swazi Lilangeni",
     "countryName": "Swaziland",
-    "code": "SZL"
+    "code": "SZL",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 886,
     "symbol": "﷼",
     "name": "Yemeni Rial",
     "countryName": "Yemen",
-    "code": "YER"
+    "code": "YER",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 682,
     "symbol": "﷼",
     "name": "Saudi Riyal",
     "countryName": "Saudi Arabia",
-    "code": "SAR"
+    "code": "SAR",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 858,
     "symbol": "$U",
     "name": "Uruguayan Peso",
     "countryName": "Uruguay",
-    "code": "UYU"
+    "code": "UYU",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   },
   {
     "numericCode": 826,
     "symbol": "£",
     "name": "British Pound Sterling",
     "countryName": "United Kingdom",
-    "code": "GBP"
+    "code": "GBP",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 860,
     "symbol": "лв",
     "name": "Uzbekistan Som",
     "countryName": "Uzbekistan",
-    "code": "UZS"
+    "code": "UZS",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 270,
-    "symbol": "GMD",
+    "symbol": "D",
     "name": "Gambian Dalasi",
     "countryName": "Gambia",
-    "code": "GMD"
+    "code": "GMD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 533,
     "symbol": "ƒ",
     "name": "Aruban Florin",
     "countryName": "Aruba",
-    "code": "AWG"
+    "code": "AWG",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 496,
     "symbol": "₮",
     "name": "Mongolian Tugrik",
     "countryName": "Mongolia",
-    "code": "MNT"
+    "code": "MNT",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 344,
     "symbol": "$",
     "name": "Hong Kong Dollar",
     "countryName": "Hong Kong",
-    "code": "HKD"
+    "code": "HKD",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 32,
     "symbol": "$",
     "name": "Argentine Peso",
     "countryName": "Argentina",
-    "code": "ARS"
+    "code": "ARS",
+    "showAtEnd": false,
+    "decimalmark": ",",
+    "thousandsSeparator": "."
   }
 ]

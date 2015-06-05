@@ -16,6 +16,9 @@ public class CurrencyItem {
     private String name;
     private String countryName;
     private String code;
+    private boolean showAtEnd;
+    private String decimalmark = ".";
+    private String thousandsSeparator = ",";
 
     public CurrencyItem(Locale locale, Currency currency, String symbol) {
         this.symbol = symbol;
@@ -57,5 +60,29 @@ public class CurrencyItem {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public boolean isShowAtEnd() {
+        return showAtEnd;
+    }
+
+    public void setShowAtEnd(boolean showAtEnd) {
+        this.showAtEnd = showAtEnd;
+    }
+
+    public String getDecimalmark() {
+        return decimalmark;
+    }
+
+    public void setDecimalmark(String decimalmark) {
+        this.decimalmark = decimalmark;
+    }
+
+    public String getThousandsSeparator() {
+        return thousandsSeparator;
+    }
+
+    public void setThousandsSeparator(String thousandsSeparator) {
+        this.thousandsSeparator = thousandsSeparator;
     }
 }

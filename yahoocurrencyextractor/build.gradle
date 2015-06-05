@@ -8,6 +8,10 @@ project(':yahoocurrencyextractor') {
     def outputDirPath = "../yahoocurrencyextractor/gen-output/currency_output.json"
     def inputDirPath = "../yahoocurrencyextractor/resources/currency_data.txt"
 
+    //For reference
+    def symbolListXml = "../yahoocurrencyextractor/resources/symbol_list.xml"
+    def symbolDataJson = "../yahoocurrencyextractor/resources/symbol_data.json"
+
     //"../app/src/main/assets/currency_output.json"
 
     dependencies {

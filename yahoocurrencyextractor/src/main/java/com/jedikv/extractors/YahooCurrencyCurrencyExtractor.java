@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jedikv.CurrencyItem;
 import com.jedikv.currencyUtils.CurrencyUtils;
+import com.jedikv.currencyUtils.SymbolDataParser;
 import com.jedikv.currencyUtils.SymbolSaxParser;
 import com.jedikv.interfaces.ICurrencyExtractor;
 
@@ -30,6 +31,7 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
 
     private Set<String> eurozoneCodeSet;
     private SymbolSaxParser symbolParser;
+    private SymbolDataParser symbolDataParser;
 
     private Set<String> missingSymbolSet;
 
@@ -37,6 +39,7 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
 
         setUpEuroZoneSet();
         symbolParser = new SymbolSaxParser();
+        symbolDataParser = new SymbolDataParser();
         missingSymbolSet = new HashSet<>();
 
     }
@@ -148,7 +151,6 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
                 missingSymbolSet.add(currencyCode);
             }
 
-
             return new CurrencyItem(locale, instance, symbol);
 
         } catch (IllegalArgumentException e) {
@@ -192,6 +194,13 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
                     if(!isInEurozone(code)) {
 
                         CurrencyItem item = createCurrencyList(code);
+                        SymbolDataParser.CurrencyEntity entity = symbolDataParser.getCurreny(code);
+                        if(entity != null) {
+                            item.setShowAtEnd(!entity.isSymbolFirst());
+                            item.setDecimalmark(entity.getDecimalMark());
+                            item.setThousandsSeparator(entity.getThousandsSeparator());
+                        }
+
                         if(item != null) {
                             currencyItemList.add(item);
                         }

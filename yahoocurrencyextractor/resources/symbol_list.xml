@@ -118,6 +118,64 @@
     <entry code="VND" unicode-decimal="8363" unicode-hex="20ab">Viet Nam Dong</entry>
     <entry code="YER" unicode-decimal="65020" unicode-hex="fdfc">Yemen Rial</entry>
     <entry code="ZWD" unicode-decimal="90, 36" unicode-hex="5a, 24">Zimbabwe Dollar</entry>
-    <!-- Additional symbols -->
+    <!-- Additional symbols extracted from https://github.com/RubyMoney/money/blob/03c2034e7674097d536f084f40c57770411550a9/config/currency_iso.json-->
     <entry code="RWF" unicode-decimal="70, 82, 119" unicode-hex="46, 52, 77">Rwandan Franc</entry>
+    <entry code="DJF" unicode-decimal="70, 100, 106" unicode-hex="46, 64, 6A">Djiboutian Franc</entry>
+    <entry code="STD" unicode-decimal="68, 98" unicode-hex="44, 62">São Tomé &amp; Príncipe Dobra</entry>
+    <entry code="CDF" unicode-decimal="70, 67" unicode-hex="46, 43">Congolese Franc</entry>
+    <entry code="ZMW" unicode-decimal="90, 75" unicode-hex="5a, 4b">Zambian Kwacha</entry>
+    <entry code="UGX" unicode-decimal="85, 83, 104" unicode-hex="55, 53, 68">Ugandan Shilling</entry>
+    <entry code="TND" unicode-decimal="1583, 46, 1578" unicode-hex="d8, af, 2e, d8, aa">Tunisian Dinar</entry>
+    <entry code="TZS" unicode-decimal="83, 104" unicode-hex="53, 68">Tanzanian Shilling</entry>
+    <entry code="SLL" unicode-decimal="76, 101" unicode-hex="4c, 65">Sierra Leonean Leone</entry>
+    <entry code="GHS" unicode-decimal="8373" unicode-hex="e2, 82, b5">Ghanaian Cedi</entry>
+    <entry code="MDL" unicode-decimal="76" unicode-hex="4c">Moldovan Leu</entry>
+    <entry code="AMD" unicode-decimal="1380, 1408, 46" unicode-hex="d5, a4, d6, 80, 2d">Armenian Dram</entry>
+    <entry code="TJS" unicode-decimal="1029, 1052" unicode-hex="d0, 85, d0, 9c"></entry>
+    <entry code="ERN" unicode-decimal="78, 102, 107" unicode-hex="4e, 66, 6b"></entry>
+    <entry code="SZL" unicode-decimal="69" unicode-hex="45"></entry>
+    <entry code="MVR" unicode-decimal="82, 102" unicode-hex="52, 66"></entry>
+    <entry code="MRO" unicode-decimal="85, 77" unicode-hex="55, 4d"></entry>
+    <entry code="XPF" unicode-decimal="70, 114" unicode-hex="46, 72"></entry>
+    <entry code="BDT" unicode-decimal="2547" unicode-hex="e0, a7, b3"></entry>
+    <entry code="AOA" unicode-decimal="75, 122" unicode-hex="4b, 7a"></entry>
+    <entry code="LYD" unicode-decimal="1604, 46, 1583" unicode-hex="d9, 84, 2e, d8, af"></entry>
+    <entry code="KWD" unicode-decimal="1583, 46, 1603" unicode-hex="d8, af, 2e, d9, 83"></entry>
+    <entry code="IQD" unicode-decimal="1593, 46, 1583" unicode-hex="d8, b9, 2e, d8, af"></entry>
+    <entry code="BIF" unicode-decimal="70, 114" unicode-hex="46, 72"></entry>
+    <entry code="JOD" unicode-decimal="1583, 46, 1575" unicode-hex="d8, af, 2e, d8, a7"></entry>
+    <entry code="GMD" unicode-decimal="68" unicode-hex="44"></entry>
+    <entry code="MWK" unicode-decimal="77, 75" unicode-hex="4d, 4b"></entry>
+    <entry code="AED" unicode-decimal="1583, 46, 1573" unicode-hex="d8, af, 2e, d8, a5"></entry>
+    <entry code="LSL" unicode-decimal="76" unicode-hex="4c"></entry>
+    <entry code="KMF" unicode-decimal="70, 114" unicode-hex="46, 72"></entry>
+    <entry code="MGA" unicode-decimal="65, 114" unicode-hex="41, 72"></entry>
+    <entry code="XDR" unicode-decimal="83, 68, 82" unicode-hex="53, 44, 52"></entry>
+    <entry code="MMK" unicode-decimal="" unicode-hex=""></entry>
+    <entry code="XOF" unicode-decimal="75" unicode-hex="4b"></entry>
+    <entry code="ZWL" unicode-decimal="36" unicode-hex="24"></entry>
+    <entry code="MOP" unicode-decimal="80" unicode-hex="50"></entry>
+    <entry code="GEL" unicode-decimal="4314" unicode-hex="e1, 83, 9a"></entry>
+    <entry code="DZD" unicode-decimal="1583, 46, 1580" unicode-hex="d8, af, 2e, d8, ac"></entry>
+    <entry code="MAD" unicode-decimal="1583, 46, 1605, 46" unicode-hex="d8, af, 2e, d9, 85, 2e"></entry>
+    <entry code="ETB" unicode-decimal="66, 114" unicode-hex="42, 72"></entry>
+    <entry code="CVE" unicode-decimal="36" unicode-hex="24"></entry>
+    <entry code="TOP" unicode-decimal="84, 36" unicode-hex="54, 24"></entry>
+    <entry code="PGK" unicode-decimal="75" unicode-hex="4b"></entry>
+    <entry code="VUV" unicode-decimal="86, 116" unicode-hex="56, 74"></entry>
+    <entry code="SDG" unicode-decimal="163" unicode-hex="c2, a3"></entry>
+    <entry code="KES" unicode-decimal="75, 83, 104" unicode-hex="4b, 53, 68"></entry>
+    <entry code="WST" unicode-decimal="84" unicode-hex="54"></entry>
+    <entry code="TMT" unicode-decimal="84" unicode-hex="54"></entry>
+    <entry code="HTG" unicode-decimal="71" unicode-hex="47"></entry>
+    <entry code="XAF" unicode-decimal="70, 114" unicode-hex="46, 72"></entry>
+    <entry code="CLF" unicode-decimal="85, 70" unicode-hex="55, 46"></entry>
+    <entry code="BTN" unicode-decimal="78, 117, 46" unicode-hex="4e, 75, 2e"></entry>
+    <entry code="GNF" unicode-decimal="70, 114" unicode-hex="46, 72"></entry>
+    <entry code="BHD" unicode-decimal="1576, 46, 1583" unicode-hex="d8, a8, 2e, d8, af"></entry>
+    <entry code="MMK" unicode-decimal="75" unicode-hex="4b"></entry>
+    <entry code="TRY" unicode-decimal="8378" unicode-hex="e2, 82, ba"></entry>
+
+
+
 </currency-symbol>

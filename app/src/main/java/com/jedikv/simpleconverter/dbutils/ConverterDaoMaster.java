@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.Constants;
 
 import java.io.BufferedReader;
@@ -60,13 +61,18 @@ public class ConverterDaoMaster extends DaoMaster.OpenHelper {
         SQLiteStatement statement = db.compileStatement(sql);
         db.beginTransaction();
         for (CurrencyEntity entity : entityList) {
-            statement.clearBindings();
-            statement.bindString(1, entity.getSymbol());
-            statement.bindString(2, entity.getName());
-            statement.bindString(3, entity.getCountryName());
-            statement.bindLong(4, entity.getNumericCode());
-            statement.bindString(5, entity.getCode());
-            statement.execute();
+
+            //Currently only add currencies with an associated flag
+            if(AndroidUtils.getDrawableResIdByCurrencyCode(mContext, entity.getCode()) > 0) {
+
+                statement.clearBindings();
+                statement.bindString(1, entity.getSymbol());
+                statement.bindString(2, entity.getName());
+                statement.bindString(3, entity.getCountryName());
+                statement.bindLong(4, entity.getNumericCode());
+                statement.bindString(5, entity.getCode());
+                statement.execute();
+            }
         }
 
         /*
