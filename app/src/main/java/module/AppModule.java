@@ -1,8 +1,14 @@
 package module;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
+import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
+import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 
 import javax.inject.Singleton;
 
@@ -23,7 +29,40 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Application providesApplication() {
+    public App providesApplication() {
         return this.mApp;
     }
+
+
+    @Provides
+    @Singleton
+    public Context providesContext() {
+        return this.mApp;
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences provideSharedPrefs() {
+        return PreferenceManager.getDefaultSharedPreferences(mApp);
+    }
+
+    @Provides
+    @Singleton
+    ConversionItemDbHelper provideConversionItemDbHelper() {
+        return new ConversionItemDbHelper(this.mApp);
+    }
+
+    @Provides
+    @Singleton
+    CurrencyPairDbHelper provideCurrencyPairDbHelper() {
+        return new CurrencyPairDbHelper(this.mApp);
+    }
+
+    @Provides
+    @Singleton
+    CurrencyDbHelper provideCurrencyDbHelper() {
+        return new CurrencyDbHelper(this.mApp);
+    }
+
+
 }

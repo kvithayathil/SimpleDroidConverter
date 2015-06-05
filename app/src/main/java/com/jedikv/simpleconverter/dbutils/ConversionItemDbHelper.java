@@ -39,8 +39,9 @@ public class ConversionItemDbHelper extends BaseDbHelper {
     }
 
     public List<ConversionEntity> getAll() {
-        return  getDao().loadAll();
+        return  getDao().queryBuilder().list();
     }
+
 
     public void deleteAll() {
         getDao().deleteAll();

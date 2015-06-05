@@ -1,5 +1,27 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.github.kt3k.coveralls'
+
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
+
+
+// Manifest version information!
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 0
+
+//def versionBuild = 1 // bump for dogfood builds, public betas, etc.
+
+//Build variables
+def BOOLEAN = "boolean"
+def STRING = "String"
+def TRUE = "true"
+def FALSE = "false"
+def GIT_SHA = "GIT_SHA"
+def BUILD_TIME = "BUILD_TIME"
+def LOG_HTTP_REQUESTS = "LOG_HTTP_REQUESTS"
+def CRASH_REPORTING = "CRASH_REPORTING"
 
 
 android {
@@ -8,23 +30,72 @@ android {
 
     defaultConfig {
         applicationId "com.jedikv.simpleconverter"
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+
+        // for espresso tests
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+
+
+        versionCode versionMajor * 100 + versionMinor * 10 + versionPatch //+ versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+
+        buildConfigField STRING, GIT_SHA, "\"${gitSha}\""
+        buildConfigField STRING, BUILD_TIME, "\"${buildTime}\""
+        buildConfigField BOOLEAN, LOG_HTTP_REQUESTS, TRUE
+        buildConfigField BOOLEAN, CRASH_REPORTING, FALSE
     }
     buildTypes {
         release {
+            debuggable false
+            zipAlignEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField BOOLEAN, LOG_HTTP_REQUESTS, FALSE
+
+        }
+
+        debug {
+            versionNameSuffix '-dev'
+            minifyEnabled false
+            zipAlignEnabled true
+            debuggable true
+            buildConfigField BOOLEAN, LOG_HTTP_REQUESTS, TRUE
+
         }
 
         sourceSets {
             main {
                 java.srcDirs = ['src/main/java', 'src/main/dao-generated']
             }
+
+
+            /*
+            unitTest {
+                java.srcDir file('androidTest')
+                resources.srcDir file('androidTest/resources')
+            }
+            */
+
+        }
+
+
+        lintOptions {
+            abortOnError false
         }
     }
+
+
+    testOptions {
+        unitTests.all {
+           // jvmArgs '-XX:MaxPermSize=256m' //Or any other
+        }
+        unitTests.returnDefaultValues = true
+
+    }
+
     compileOptions {
         encoding "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -47,14 +118,47 @@ android {
     }
 }
 
+
+// Running the APK on your Android Device
+android.applicationVariants.all { variant ->
+    if (variant.install) {
+        tasks.create(name: "run${variant.name.capitalize()}", type: Exec,
+                dependsOn: variant.install) {
+            group = 'Run'
+            description "Installs and Runs the APK for ${variant.description}."
+            def getMainActivity = { file ->
+                new XmlSlurper().parse(file).application.activity.find {
+                    it.'intent-filter'.find { filter ->
+                        return filter.action.find {
+                            it.'@android:name'.text() == 'android.intent.action.MAIN'
+                        } \
+                             && filter.category.find {
+                            it.'@android:name'.text() == 'android.intent.category.LAUNCHER'
+                        }
+                    }
+                }.'@android:name'
+            }
+            doFirst {
+                def activityClass =
+                        getMainActivity(variant.outputs.processManifest.manifestOutputFile)
+                commandLine android.adbExe, 'shell', 'am', 'start', '-n',
+                        "${variant.applicationId}/${activityClass}"
+
+                // or without the XML hacking: commandLine android.adbExe, 'shell', 'monkey', '-p', variant.applicationId, '1'
+            }
+        }
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //Android support libraries
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v4:22.1.1'
-    compile 'com.android.support:appcompat-v7:22.1.1'
+    compile 'com.android.support:support-v13:22.1.1'
     compile 'com.android.support:cardview-v7:22.1.1'
     compile 'com.android.support:recyclerview-v7:22.1.1'
+
+
 
     //Butterknife
     compile 'com.jakewharton:butterknife:5.1.1'
@@ -86,11 +190,102 @@ dependencies {
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.1'
 
 
-    androidTestCompile 'junit:junit:4.12'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-
     //Floating action button
     compile 'com.melnykov:floatingactionbutton:1.3.0'
 
+    //Custom drag/drop recyclerview
+    compile 'com.makeramen:dragsortadapter:1.1.0'
+
+    //Open source acknowledgements
+    compile('com.mikepenz:aboutlibraries:5.0.0@aar') {
+        transitive = true
+    }
+
+    //Leaky Canary for memory leak detection
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+
+    //Stetho is a debug bridge for Android applications via chrome
+    compile 'com.facebook.stetho:stetho:1.1.1'
+
+
+    //Testing
+
+
+
+    // Espresso Instrumentation Testing
+    androidTestCompile 'com.android.support:support-annotations:22.1.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
+    //androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    androidTestCompile 'com.android.support.test:runner:0.2'
+    //Dependency to use Junit4 rules
+    androidTestCompile 'com.android.support.test:rules:0.2'
+    //Hamcrest matcching
+    androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
+
+    // Fixes for Linux and Mac
+    testCompile 'org.apache.maven:maven-ant-tasks:2.1.3'
+
+    // Junit
+    testCompile 'junit:junit:4.12'
+
+    // Hamcrest Matchers for Junit
+    testCompile 'org.hamcrest:hamcrest-integration:1.3'
+
+
+    // Mockito
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
+    // EasyMock
+    testCompile 'org.easymock:easymock:3.3.1'
+
+    // PowerMock
+    testCompile 'org.powermock:powermock-core:1.6.2'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.2'
+
+    // PowerMock + EasyMock extension
+    testCompile 'org.powermock:powermock-api-easymock:1.6.2'
+
+    //Fest
+    testCompile 'org.easytesting:fest:1.0.16'
+    testCompile 'com.squareup:fest-android:1.0.8'
+
+    // Robolectric + Support v4
+    testCompile('org.robolectric:robolectric:3.0-rc3') {
+        exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
+
+
+}
+
+// JaCoCo Test Reports, thanks to Nenick
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebug']) {
+    group = 'Reporting'
+    description = 'Generate Jacoco coverage reports after running tests.'
+
+    reports {
+        xml {
+            enabled true // coveralls
+            destination "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        }
+
+        html {
+            enabled true
+            destination "${project.buildDir}/reports/jacoco/test/html"
+        }
+    }
+
+    // use hidden configuration, for details look into JacocoPlugin.groovy
+    jacocoClasspath = project.configurations['androidJacocoAnt']
+
+    // exclude auto-generated classes and tests
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*',
+                      'android/**/*.*']
+    def debugTree = fileTree(dir: "${project.buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: project.projectDir, includes: ['**/*.exec', '**/*.ec'])
 }

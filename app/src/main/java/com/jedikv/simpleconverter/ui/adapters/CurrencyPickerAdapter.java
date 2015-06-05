@@ -15,6 +15,7 @@ import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
+import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.ConversionUtils;
 
 import java.util.ArrayList;
@@ -63,6 +64,16 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
         return mFilteredList.size();
     }
 
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mFilteredList.get(position).getNumericCode();
+    }
+
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @InjectView(R.id.iv_flag)
@@ -86,7 +97,7 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
             mCurrencyCode = currencyEntity.getCode();
 
-            final int flagId = ConversionUtils.getDrawableResId(ivFlag.getContext(), currencyEntity.getCode().substring(0,2).toLowerCase() + "_");
+            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), mCurrencyCode);
 
             if(TextUtils.equals(currencyEntity.getCode(), "XCD")) {
                 Timber.d("XCD: " + flagId);

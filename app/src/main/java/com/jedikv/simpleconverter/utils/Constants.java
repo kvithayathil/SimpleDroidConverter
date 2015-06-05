@@ -14,4 +14,6 @@ public class Constants {
 
 
     public static final String PREFS_CURRENTLY_SELECTED_CURRENCY = "prefs_currently_selected";
+
+    public static final String PREFS_CACHED_SAVED_INPUT_VALUE = "prefs_cached_input_value";
 }
