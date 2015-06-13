@@ -2,10 +2,7 @@ package com.jedikv.simpleconverter.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,14 +25,12 @@ import android.widget.TextView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
-import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
-import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.Constants;
-import com.jedikv.simpleconverter.utils.ConversionUtils;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
@@ -87,6 +82,7 @@ public class MainActivity extends BaseActivity {
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
     private boolean mInputFocus = false;
+    private YahooCurrencyDownloadService downloadService;
 
     @Icicle
     String mInputedValueString;
@@ -102,6 +98,8 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolBar);
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
+
+        downloadService = new YahooCurrencyDownloadService();
 
         mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), recyclerView, getSourceCurrency());
 
@@ -190,7 +188,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void downloadCurrency(List<String> currencyList) {
-        CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
+       // CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
+        downloadService.executeRequest(App.get(this), currencyList, getSourceCurrency());
     }
 
     private void startCurrencyPicker(int requestCode, ArrayList<String> currencyArray) {
