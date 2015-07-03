@@ -31,8 +31,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnLongClick;
@@ -207,22 +207,22 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
-        @InjectView(R.id.card_view)
+        @Bind(R.id.card_view)
         CardView cardView;
-        @InjectView(R.id.iv_flag)
+        @Bind(R.id.iv_flag)
         ImageView ivFlag;
-        @InjectView(R.id.tv_currency_name)
+        @Bind(R.id.tv_currency_name)
         AppCompatTextView tvCurrencyName;
-        @InjectView(R.id.tv_value)
+        @Bind(R.id.tv_value)
         AppCompatTextView tvValue;
-        @InjectView(R.id.ib_remove)
+        @Bind(R.id.ib_remove)
         ImageButton ibRemove;
-        @InjectView(R.id.tv_currency_code)
+        @Bind(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
 
         public CurrencyViewHolder(DragSortAdapter adapter, View v) {
             super(adapter, v);
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
             mDecimalFormat.setParseBigDecimal(true);
             mDecimalFormat.setMinimumFractionDigits(4);
         }

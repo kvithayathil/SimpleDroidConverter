@@ -34,8 +34,8 @@ import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import icepick.Icicle;
 import timber.log.Timber;
 
@@ -55,9 +55,9 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
 
     // The elevation of the toolbar when content is scrolled behind
     private static final float TOOLBAR_ELEVATION = 14f;
-    @InjectView(R.id.list)
+    @Bind(R.id.list)
     ObservableRecyclerView recyclerView;
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolBar;
 
     private SearchView searchView;
@@ -68,7 +68,7 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_currency_picker);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -20,12 +20,8 @@ import java.util.List;
 import converter_db.CurrencyPairEntity;
 import hirondelle.date4j.DateTime;
 import retrofit.RestAdapter;
-import rx.Observable;
 import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**

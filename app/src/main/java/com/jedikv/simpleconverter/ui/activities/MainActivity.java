@@ -44,8 +44,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import converter_db.ConversionEntity;
@@ -59,22 +59,22 @@ public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    @InjectView(R.id.et_input)
+    @Bind(R.id.et_input)
     AppCompatEditText etInput;
-    @InjectView(R.id.tv_currency_code)
+    @Bind(R.id.tv_currency_code)
     AppCompatTextView tvCurrencyCode;
-    @InjectView(R.id.tv_currency_symbol)
+    @Bind(R.id.tv_currency_symbol)
     AppCompatTextView tvCurrencySymbol;
-    @InjectView(R.id.rl_container)
+    @Bind(R.id.rl_container)
     RelativeLayout rlContainer;
-    @InjectView(R.id.list)
+    @Bind(R.id.list)
     RecyclerView recyclerView;
-    @InjectView(R.id.fab)
+    @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
-    @InjectView(R.id.ib_flag)
+    @Bind(R.id.ib_flag)
     ImageButton ibFlag;
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolBar;
 
     private boolean mIsWatching = true;
@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Timber.tag(TAG);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
