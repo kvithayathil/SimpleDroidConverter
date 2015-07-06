@@ -16,7 +16,6 @@ import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
-import com.jedikv.simpleconverter.utils.ConversionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +33,11 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
     private final List<CurrencyEntity> mCurrencyList;
     private List<CurrencyEntity> mFilteredList;
     private CurrencyFilter mCurrencyFilter;
+    private CurrencyDbHelper currencyDbHelper;
 
     public CurrencyPickerAdapter(Context context, List<String> currencyCodesToFilter) {
-
-        mCurrencyList = new CurrencyDbHelper(context).getFilteredCurrencies(currencyCodesToFilter);
+        currencyDbHelper = new CurrencyDbHelper(context);
+        mCurrencyList = currencyDbHelper.getFilteredCurrencies(currencyCodesToFilter);
         mFilteredList = mCurrencyList;
 
         getFilter();
@@ -85,7 +85,7 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
         @Bind(R.id.tv_currency_symbol)
         AppCompatTextView tvCurrencySymbol;
 
-        private String mCurrencyCode;
+        private CurrencyEntity currencyEntity;
 
         public CurrencyItemViewHolder(View v) {
             super(v);
@@ -95,9 +95,9 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
         public void bind(CurrencyEntity currencyEntity) {
 
-            mCurrencyCode = currencyEntity.getCode();
+            this.currencyEntity = currencyEntity;
 
-            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), mCurrencyCode);
+            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), currencyEntity.getCode());
 
             if(TextUtils.equals(currencyEntity.getCode(), "XCD")) {
                 Timber.d("XCD: " + flagId);
@@ -119,7 +119,8 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
         @Override
         public void onClick(View v) {
-            App.getBusInstance().post(new AddCurrencyEvent(mCurrencyCode));
+
+            App.getBusInstance().post(new AddCurrencyEvent(currencyEntity));
         }
 
     }

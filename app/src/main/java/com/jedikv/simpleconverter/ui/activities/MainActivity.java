@@ -44,11 +44,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-import converter_db.ConversionEntity;
+import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import icepick.Icicle;
@@ -82,7 +84,7 @@ public class MainActivity extends BaseActivity {
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
     private boolean mInputFocus = false;
-    private YahooCurrencyDownloadService downloadService;
+
 
     @Icicle
     String mInputedValueString;
@@ -95,18 +97,19 @@ public class MainActivity extends BaseActivity {
         Timber.tag(TAG);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         setSupportActionBar(toolBar);
+
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
-
-        downloadService = new YahooCurrencyDownloadService();
-
         mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), recyclerView, getSourceCurrency());
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mCurrencyConversionsAdapter);
 
         floatingActionButton.attachToRecyclerView(recyclerView);
+
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -189,7 +192,7 @@ public class MainActivity extends BaseActivity {
 
     public void downloadCurrency(List<String> currencyList) {
        // CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
-        downloadService.executeRequest(App.get(this), currencyList, getSourceCurrency());
+        currencyDownloadService.executeRequest(currencyList, getSourceCurrency());
     }
 
     private void startCurrencyPicker(int requestCode, ArrayList<String> currencyArray) {
@@ -314,9 +317,11 @@ public class MainActivity extends BaseActivity {
         return getDefaultSharedPrefs().getString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, getString(R.string.default_source_currency));
     }
 
-    public void updateSourceCurrency(String currencyCode) {
+    public void updateSourceCurrency(long currencyCode) {
 
-        if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyCode).commit()) {
+        CurrencyEntity currencyEntity = mCurrencyEntityHelper.getById(currencyCode);
+
+        if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyEntity.getCode()).commit()) {
             updateSourceCurrencyUI();
             downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
 
@@ -329,7 +334,7 @@ public class MainActivity extends BaseActivity {
 
         if(resultCode == CurrencyPickerActivity.RESULT_CODE_SUCCESS) {
 
-            String currencyCode = data.getStringExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE);
+            long currencyCode = data.getLongExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, -1);
             Timber.d("Result currency code: " + currencyCode);
             switch (requestCode) {
 
@@ -347,30 +352,33 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void addCurrencyToList(String currencyCode) {
+    private void addCurrencyToList(long currencyCode) {
 
-        CurrencyPairEntity entity = getPairDbHelper().getGetPairByCodes(getSourceCurrency(), currencyCode);
+        CurrencyEntity sourceCurrencyEntity = getCurrencyDbHelper().getCurrency(getSourceCurrency());
+        CurrencyEntity targetCurrencyEntity = getCurrencyDbHelper().getById(currencyCode);
+
+        CurrencyPairEntity entity = getPairDbHelper().getCurrencyPair(sourceCurrencyEntity.getNumericCode(), currencyCode);
 
         if(entity == null) {
 
             //Create a dummy pair for now till it's updated over the web
             entity = new CurrencyPairEntity();
-            entity.setPair(getSourceCurrency() + "/" + currencyCode);
+            entity.setSource_id(sourceCurrencyEntity);
+            entity.setTarget_id(targetCurrencyEntity);
             entity.setRate(0);
             entity.setCreated_date(new Date());
             getPairDbHelper().insertOrUpdate(entity);
         }
 
-        ConversionEntity conversionItem = new ConversionEntity();
-        CurrencyEntity currencyEntity = getCurrencyDbHelper().getCurrency(currencyCode);
-        conversionItem.setCurrency_code(currencyEntity);
+        ConversionItem conversionItem = new ConversionItem();
+        conversionItem.setCurrencyPairEntity(entity);
         conversionItem.setPosition(mCurrencyConversionsAdapter.getItemCount());
         getConversionEntityHelper().insertOrUpdate(conversionItem);
         mCurrencyConversionsAdapter.addItem(conversionItem);
         convertValue(etInput.getText().toString());
 
         //Update currency at the end
-        downloadCurrency(Arrays.asList(currencyCode));
+        downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
     }
 }

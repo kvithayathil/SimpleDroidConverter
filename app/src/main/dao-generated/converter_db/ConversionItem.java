@@ -8,44 +8,44 @@ import de.greenrobot.dao.DaoException;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table CONVERSION_ENTITY.
+ * Entity mapped to table CONVERSION_ITEM.
  */
-public class ConversionEntity {
+public class ConversionItem {
 
     private Long id;
-    private Long currency_id;
+    private long pair_id;
     private Integer position;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
 
     /** Used for active entity operations. */
-    private transient ConversionEntityDao myDao;
+    private transient ConversionItemDao myDao;
 
-    private CurrencyEntity currency_code;
-    private Long currency_code__resolvedKey;
+    private CurrencyPairEntity currencyPairEntity;
+    private Long currencyPairEntity__resolvedKey;
 
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    public ConversionEntity() {
+    public ConversionItem() {
     }
 
-    public ConversionEntity(Long id) {
+    public ConversionItem(Long id) {
         this.id = id;
     }
 
-    public ConversionEntity(Long id, Long currency_id, Integer position) {
+    public ConversionItem(Long id, long pair_id, Integer position) {
         this.id = id;
-        this.currency_id = currency_id;
+        this.pair_id = pair_id;
         this.position = position;
     }
 
     /** called by internal mechanisms, do not call yourself. */
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getConversionEntityDao() : null;
+        myDao = daoSession != null ? daoSession.getConversionItemDao() : null;
     }
 
     public Long getId() {
@@ -56,12 +56,12 @@ public class ConversionEntity {
         this.id = id;
     }
 
-    public Long getCurrency_id() {
-        return currency_id;
+    public long getPair_id() {
+        return pair_id;
     }
 
-    public void setCurrency_id(Long currency_id) {
-        this.currency_id = currency_id;
+    public void setPair_id(long pair_id) {
+        this.pair_id = pair_id;
     }
 
     public Integer getPosition() {
@@ -73,27 +73,30 @@ public class ConversionEntity {
     }
 
     /** To-one relationship, resolved on first access. */
-    public CurrencyEntity getCurrency_code() {
-        Long __key = this.currency_id;
-        if (currency_code__resolvedKey == null || !currency_code__resolvedKey.equals(__key)) {
+    public CurrencyPairEntity getCurrencyPairEntity() {
+        long __key = this.pair_id;
+        if (currencyPairEntity__resolvedKey == null || !currencyPairEntity__resolvedKey.equals(__key)) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            CurrencyEntityDao targetDao = daoSession.getCurrencyEntityDao();
-            CurrencyEntity currency_codeNew = targetDao.load(__key);
+            CurrencyPairEntityDao targetDao = daoSession.getCurrencyPairEntityDao();
+            CurrencyPairEntity currencyPairEntityNew = targetDao.load(__key);
             synchronized (this) {
-                currency_code = currency_codeNew;
-            	currency_code__resolvedKey = __key;
+                currencyPairEntity = currencyPairEntityNew;
+            	currencyPairEntity__resolvedKey = __key;
             }
         }
-        return currency_code;
+        return currencyPairEntity;
     }
 
-    public void setCurrency_code(CurrencyEntity currency_code) {
+    public void setCurrencyPairEntity(CurrencyPairEntity currencyPairEntity) {
+        if (currencyPairEntity == null) {
+            throw new DaoException("To-one property 'pair_id' has not-null constraint; cannot set to-one to null");
+        }
         synchronized (this) {
-            this.currency_code = currency_code;
-            currency_id = currency_code == null ? null : currency_code.getNumericCode();
-            currency_code__resolvedKey = currency_id;
+            this.currencyPairEntity = currencyPairEntity;
+            pair_id = currencyPairEntity.getId();
+            currencyPairEntity__resolvedKey = pair_id;
         }
     }
 

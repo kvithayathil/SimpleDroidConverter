@@ -6,6 +6,7 @@ import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.api.responses.YahooCurrencyRate;
 import com.jedikv.simpleconverter.api.responses.YahooDataContainer;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
+import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.YahooApiUtils;
 
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import hirondelle.date4j.DateTime;
 import retrofit.RestAdapter;
@@ -32,16 +36,23 @@ public class YahooCurrencyDownloadService {
     private static final String TAG = YahooCurrencyDownloadService.class.getSimpleName();
 
     private IYahooCurrencyApi api;
-    private RestAdapter restAdapter;
 
-    public YahooCurrencyDownloadService() {
+    CurrencyDbHelper currencyDbHelper;
+    CurrencyPairDbHelper currencyPairDbHelper;
+
+
+    @Inject
+    public YahooCurrencyDownloadService(RestAdapter restAdapter, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         Timber.tag(TAG);
-        restAdapter = YahooCurrencyRestAdapter.getInstance();
+
+        this.currencyDbHelper = currencyDbHelper;
+        this.currencyPairDbHelper = currencyPairDbHelper;
+
         api = restAdapter.create(IYahooCurrencyApi.class);
 
     }
 
-    public void executeRequest(final Context context, List<String> targetCurrencies, String sourceCurrency) {
+    public void executeRequest(List<String> targetCurrencies, String sourceCurrency) {
 
         List<String> currencyPair = YahooApiUtils.createReverseFromPairs(targetCurrencies, sourceCurrency);
         String query = YahooApiUtils.generateYQLCurrencyQuery(currencyPair);
@@ -74,12 +85,11 @@ public class YahooCurrencyDownloadService {
             @Override
             public void onNext(List<CurrencyPairEntity> currencyPairEntityList) {
                 try {
-                    saveCurrencyData(context, currencyPairEntityList);
+                    saveCurrencyData(currencyPairEntityList);
                 } catch (ParseException e) {
                     e.printStackTrace();
                     Timber.e(e, e.getMessage());
                 }
-
             }
         });
     }
@@ -88,7 +98,6 @@ public class YahooCurrencyDownloadService {
 
         DateTime timestamp = new DateTime(result.getCreated());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = dateFormat.parse("2013-12-4");
 
         List<YahooCurrencyRate> rates = result.getResults().getRate();
 
@@ -96,9 +105,22 @@ public class YahooCurrencyDownloadService {
 
         for(YahooCurrencyRate rate : rates) {
 
+            // rate format - Source/Target e.g. USD/GBP to get USD to GBP conversion
+
             CurrencyPairEntity entity = new CurrencyPairEntity();
-            entity.setDate(date);
-            entity.setPair(rate.getName());
+            entity.setLast_updated(new Date());
+
+            String source = rate.getId().substring(0,3);
+            String target = rate.getId().substring(3);
+
+            Timber.d("Source: " + source + " Target: " + target);
+
+            CurrencyEntity sourceEntity = currencyDbHelper.getCurrency(source);
+            CurrencyEntity targetEntity = currencyDbHelper.getCurrency(target);
+
+            entity.setSource_id(sourceEntity);
+            entity.setTarget_id(targetEntity);
+            entity.setCreated_date(new Date());
             BigDecimal decimalRate = new BigDecimal(rate.getRate());
 
             Timber.d("BigDecimalRate: " + decimalRate.toPlainString() + " Rate String: " + rate.getRate());
@@ -115,10 +137,9 @@ public class YahooCurrencyDownloadService {
      * Save to local database
      * @param result the yahoo currency result
      */
-    private void saveCurrencyData(Context context, List<CurrencyPairEntity> currencyPairEntityList) throws ParseException {
+    private void saveCurrencyData(List<CurrencyPairEntity> currencyPairEntityList) throws ParseException {
 
-        CurrencyPairDbHelper helper = new CurrencyPairDbHelper(context);
-        helper.bulkInsertOrUpdate(currencyPairEntityList);
+        currencyPairDbHelper.bulkInsertOrUpdate(currencyPairEntityList);
 
         App.getBusInstance().post(new CurrencyUpdateEvent());
     }

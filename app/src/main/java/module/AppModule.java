@@ -63,6 +63,4 @@ public class AppModule {
     CurrencyDbHelper provideCurrencyDbHelper() {
         return new CurrencyDbHelper(this.mApp);
     }
-
-
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.jedikv.simpleconverter.App;
 
-import converter_db.CurrencyPairEntityDao;
 import converter_db.DaoSession;
 import de.greenrobot.dao.AbstractDao;
 
@@ -23,5 +22,5 @@ public abstract class BaseDbHelper {
         return App.get(mContext).daoSession();
     }
 
-    public abstract <T extends AbstractDao> T getDao();
+    public abstract <T extends AbstractDao<T, Long>> T getDao();
 }

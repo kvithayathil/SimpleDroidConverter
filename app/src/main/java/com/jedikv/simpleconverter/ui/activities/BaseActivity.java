@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
@@ -26,6 +27,9 @@ public class BaseActivity extends AppCompatActivity {
     protected ConversionItemDbHelper mConversionEntityHelper;
 
     @Inject SharedPreferences mSharedPrefs;
+
+    @Inject
+    YahooCurrencyDownloadService currencyDownloadService;
 
     @Override
     protected void onStart() {

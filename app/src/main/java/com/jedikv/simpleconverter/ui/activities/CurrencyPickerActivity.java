@@ -1,42 +1,32 @@
 package com.jedikv.simpleconverter.ui.activities;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
-
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyPickerAdapter;
-import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import icepick.Icicle;
+import converter_db.CurrencyEntity;
 import timber.log.Timber;
 
 /**
@@ -204,8 +194,12 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
     @Subscribe
     public void onCurrencyPicked(AddCurrencyEvent event) {
 
+        CurrencyEntity currencyEntity = event.getCurrency();
+
+        Timber.d("Currency Code: " + currencyEntity.getCode() + " Symbol: " + currencyEntity.getName());
+
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(EXTRA_SELECTED_CURRENCY_CODE, event.getCurrencyCode());
+        resultIntent.putExtra(EXTRA_SELECTED_CURRENCY_CODE, currencyEntity.getNumericCode());
         setResult(RESULT_CODE_SUCCESS, resultIntent);
         finish();
     }

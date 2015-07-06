@@ -2,14 +2,14 @@ package com.jedikv.simpleconverter.dbutils;
 
 import android.content.Context;
 
-import com.jedikv.simpleconverter.App;
-
 import java.util.List;
+import java.util.TimeZone;
 
-import converter_db.CurrencyEntityDao;
 import converter_db.CurrencyPairEntity;
 import converter_db.CurrencyPairEntityDao;
-import de.greenrobot.dao.AbstractDao;
+import de.greenrobot.dao.query.QueryBuilder;
+import hirondelle.date4j.DateTime;
+import timber.log.Timber;
 
 /**
  * Created by Kurian on 03/05/2015.
@@ -18,6 +18,7 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     public CurrencyPairDbHelper(Context context) {
         super(context);
+        Timber.tag(CurrencyPairDbHelper.class.getSimpleName());
     }
 
     public long insertOrUpdate(CurrencyPairEntity entity) {
@@ -35,23 +36,41 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     }
 
-    public List<CurrencyPairEntity> getCurrencyTargetList(String sourceCurrencyCode) {
+    public CurrencyPairEntity getCurrencyPair(long sourceId, long targetId) {
 
-        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Pair.like(sourceCurrencyCode+"%")).orderAsc(CurrencyPairEntityDao.Properties.Created_date).build().list();
+        Timber.d("Source Id: " + sourceId + " TargetId: " + targetId);
+
+        QueryBuilder<CurrencyPairEntity> queryBuilder = getDao().queryBuilder();
+        queryBuilder.where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId), CurrencyPairEntityDao.Properties.Target_currency.eq(targetId));
+        return queryBuilder.build().unique();
     }
 
-    public CurrencyPairEntity getGetPairByCodes(String sourceCurrency, String targetCurrency) {
+    public List<CurrencyPairEntity> getCurrencyPairBySource(long sourceId) {
 
-        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Pair.eq(sourceCurrency.toUpperCase() + "/" + targetCurrency.toUpperCase())).build().unique();
+        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId)).list();
+
+    }
+
+    public List<CurrencyPairEntity> getPairsToBeUpdated(long sourceId) {
+
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+
+        DateTime today = DateTime.now(utc);
+        DateTime yesterday = today.minusDays(1);
+
+        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId), CurrencyPairEntityDao.Properties.Last_updated.le((yesterday.getMilliseconds(utc)))).build().list();
+
+    }
+
+    public List<CurrencyPairEntity> getCurrencyPairByTarget(long sourceId) {
+
+        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Target_currency.eq(sourceId)).list();
     }
 
     public void deleteAll() {
         getDao().deleteAll();
     }
 
-    public void deleteByPair(String code) {
-
-    }
 
     @Override
     public CurrencyPairEntityDao getDao() {

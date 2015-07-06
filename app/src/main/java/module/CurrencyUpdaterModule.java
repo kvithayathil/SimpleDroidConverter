@@ -1,7 +1,14 @@
 package module;
 
+import android.content.Context;
+
 import com.jedikv.simpleconverter.api.IYahooCurrencyApi;
+import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.api.YahooCurrencyRestAdapter;
+import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
+import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,14 +20,15 @@ import retrofit.RestAdapter;
 @Module
 public class CurrencyUpdaterModule {
 
-
-
-    @Provides public IYahooCurrencyApi provideYahooCurrencyApi(RestAdapter restAdapter) {
-        return restAdapter.create(IYahooCurrencyApi.class);
+    @Provides
+    @Singleton
+    public RestAdapter provideYahooCurrencyRestAdapter() {
+        return new YahooCurrencyRestAdapter().getRestAdapter();
     }
 
     @Provides
-    public RestAdapter provideYahooCurrencyRestAdapter() {
-        return YahooCurrencyRestAdapter.getInstance();
+    @Singleton
+    public YahooCurrencyDownloadService provideYahooCurrencyDownloadService(RestAdapter restAdapter, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+        return new YahooCurrencyDownloadService(restAdapter, currencyDbHelper, currencyPairDbHelper);
     }
 }

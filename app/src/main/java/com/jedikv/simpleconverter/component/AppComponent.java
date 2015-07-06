@@ -9,12 +9,13 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import module.AppModule;
+import module.CurrencyUpdaterModule;
 
 /**
  * Created by Kurian on 03/05/2015.
  */
 @Singleton
-@Component(modules = {AppModule.class})
+@Component(modules = {AppModule.class, CurrencyUpdaterModule.class})
 public interface AppComponent {
 
    public void inject(App app);

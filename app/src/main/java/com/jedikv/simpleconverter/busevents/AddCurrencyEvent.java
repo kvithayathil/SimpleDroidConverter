@@ -1,18 +1,20 @@
 package com.jedikv.simpleconverter.busevents;
 
+import converter_db.CurrencyEntity;
+
 /**
  * Created by KV_87 on 17/05/15.
  */
 public class AddCurrencyEvent {
 
-    private final String mCurrencyCode;
+    private final CurrencyEntity mCurrency;
 
-    public AddCurrencyEvent(String currencyCode) {
+    public AddCurrencyEvent(CurrencyEntity selectedCurrency) {
 
-        mCurrencyCode = currencyCode;
+        mCurrency = selectedCurrency;
     }
 
-    public String getCurrencyCode() {
-        return mCurrencyCode;
+    public CurrencyEntity getCurrency() {
+        return mCurrency;
     }
 }
