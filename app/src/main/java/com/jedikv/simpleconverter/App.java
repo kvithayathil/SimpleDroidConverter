@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.facebook.stetho.Stetho;
-import com.jedikv.simpleconverter.component.AppComponent;
-import com.jedikv.simpleconverter.component.DaggerAppComponent;
+import com.jedikv.simpleconverter.injection.component.AppComponent;
+import com.jedikv.simpleconverter.injection.component.DaggerAppComponent;
 import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
 import com.jedikv.simpleconverter.utils.OttoBus;
 import com.squareup.leakcanary.LeakCanary;
@@ -16,7 +16,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import converter_db.DaoMaster;
 import converter_db.DaoSession;
-import module.AppModule;
+import com.jedikv.simpleconverter.injection.module.AppModule;
 import timber.log.Timber;
 
 /**

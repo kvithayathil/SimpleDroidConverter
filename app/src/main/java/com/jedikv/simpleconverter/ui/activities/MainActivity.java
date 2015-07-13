@@ -192,7 +192,9 @@ public class MainActivity extends BaseActivity {
 
     public void downloadCurrency(List<String> currencyList) {
        // CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
-        currencyDownloadService.executeRequest(currencyList, getSourceCurrency());
+        if(!currencyList.isEmpty()) {
+            currencyDownloadService.executeRequest(currencyList, getSourceCurrency());
+        }
     }
 
     private void startCurrencyPicker(int requestCode, ArrayList<String> currencyArray) {
@@ -361,19 +363,22 @@ public class MainActivity extends BaseActivity {
 
         if(entity == null) {
 
+            Timber.d("New currency pair entry");
             //Create a dummy pair for now till it's updated over the web
             entity = new CurrencyPairEntity();
             entity.setSource_id(sourceCurrencyEntity);
             entity.setTarget_id(targetCurrencyEntity);
             entity.setRate(0);
             entity.setCreated_date(new Date());
-            getPairDbHelper().insertOrUpdate(entity);
+            long id = getPairDbHelper().insertOrUpdate(entity);
+            entity.setId(id);
         }
 
         ConversionItem conversionItem = new ConversionItem();
         conversionItem.setCurrencyPairEntity(entity);
         conversionItem.setPosition(mCurrencyConversionsAdapter.getItemCount());
-        getConversionEntityHelper().insertOrUpdate(conversionItem);
+        long conversionId = getConversionEntityHelper().insertOrUpdate(conversionItem);
+        conversionItem.setId(conversionId);
         mCurrencyConversionsAdapter.addItem(conversionItem);
         convertValue(etInput.getText().toString());
 

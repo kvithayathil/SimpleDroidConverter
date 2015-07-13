@@ -1,4 +1,4 @@
-package com.jedikv.simpleconverter.component;
+package com.jedikv.simpleconverter.injection.component;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.ui.activities.BaseActivity;
@@ -8,8 +8,8 @@ import com.jedikv.simpleconverter.ui.activities.MainActivity;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import module.AppModule;
-import module.CurrencyUpdaterModule;
+import com.jedikv.simpleconverter.injection.module.AppModule;
+import com.jedikv.simpleconverter.injection.module.CurrencyUpdaterModule;
 
 /**
  * Created by Kurian on 03/05/2015.

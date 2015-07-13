@@ -55,43 +55,52 @@ public class YahooCurrencyDownloadService {
     public void executeRequest(List<String> targetCurrencies, String sourceCurrency) {
 
         List<String> currencyPair = YahooApiUtils.createReverseFromPairs(targetCurrencies, sourceCurrency);
-        String query = YahooApiUtils.generateYQLCurrencyQuery(currencyPair);
+        Timber.d("Currency Pair Size: " + currencyPair.size());
 
-        api.getCurrencyPairs(query).map(new Func1<YahooDataContainer, List<CurrencyPairEntity>>() {
-            @Override
-            public List<CurrencyPairEntity> call(YahooDataContainer yahooDataContainer) {
-                try {
 
-                    List<CurrencyPairEntity> list = generateCurrencyPairList(yahooDataContainer.getQuery());
+        if(!currencyPair.isEmpty()) {
 
-                    return list;
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    return null;
+
+            String query = YahooApiUtils.generateYQLCurrencyQuery(currencyPair);
+
+
+            api.getCurrencyPairs(query).map(new Func1<YahooDataContainer, List<CurrencyPairEntity>>() {
+                @Override
+                public List<CurrencyPairEntity> call(YahooDataContainer yahooDataContainer) {
+                    try {
+
+                        List<CurrencyPairEntity> list = generateCurrencyPairList(yahooDataContainer.getQuery());
+
+                        return list;
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
                 }
-            }
-        }).subscribe(new Subscriber<List<CurrencyPairEntity>>() {
-            @Override
-            public void onCompleted() {
-                Timber.d("Request success!");
-                App.getBusInstance().post(new CurrencyUpdateEvent());
-            }
+            }).subscribe(new Subscriber<List<CurrencyPairEntity>>() {
+                @Override
+                public void onCompleted() {
+                    Timber.d("Request success!");
+                    App.getBusInstance().post(new CurrencyUpdateEvent());
+                }
 
-            @Override
-            public void onError(Throwable e) {
-                Timber.e(e, e.getMessage());
-            }
-
-            @Override
-            public void onNext(List<CurrencyPairEntity> currencyPairEntityList) {
-                try {
-                    saveCurrencyData(currencyPairEntityList);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                @Override
+                public void onError(Throwable e) {
                     Timber.e(e, e.getMessage());
                 }
-            }
-        });
+
+                @Override
+                public void onNext(List<CurrencyPairEntity> currencyPairEntityList) {
+                    try {
+                        saveCurrencyData(currencyPairEntityList);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        Timber.e(e, e.getMessage());
+                    }
+                }
+            });
+
+        }
     }
 
     private List<CurrencyPairEntity> generateCurrencyPairList(YahooDataContainer.YahooCurrencyQueryResult result) throws ParseException{
@@ -140,8 +149,6 @@ public class YahooCurrencyDownloadService {
     private void saveCurrencyData(List<CurrencyPairEntity> currencyPairEntityList) throws ParseException {
 
         currencyPairDbHelper.bulkInsertOrUpdate(currencyPairEntityList);
-
-        App.getBusInstance().post(new CurrencyUpdateEvent());
     }
 
     private IYahooCurrencyApi getApi() {

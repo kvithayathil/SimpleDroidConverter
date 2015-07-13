@@ -32,6 +32,8 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
     }
 
     public void bulkInsertOrUpdate(List<CurrencyPairEntity> entities) {
+
+
         getDao().insertOrReplaceInTx(entities);
 
     }
@@ -50,6 +52,12 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
         return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId)).list();
 
     }
+
+    public CurrencyPairEntity queryById(long id) {
+
+        return getDao().loadDeep(id);
+    }
+
 
     public List<CurrencyPairEntity> getPairsToBeUpdated(long sourceId) {
 

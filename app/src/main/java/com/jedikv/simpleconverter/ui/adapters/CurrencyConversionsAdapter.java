@@ -49,6 +49,8 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
     private CurrencyDbHelper mCurrencyDbHelper;
     private ConversionItemDbHelper mConversionDbHelper;
 
+    private CurrencyEntity sourceCurrencyEntity;
+
     private String mSourceCurrencyCode;
 
     private BigDecimal mInputValue;
@@ -62,7 +64,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         mCurrencyDbHelper = new CurrencyDbHelper(context);
         mConversionDbHelper = new ConversionItemDbHelper(context);
         mConverterList = new ArrayList<>();
-        mSourceCurrencyCode = sourceCurrency;
+        sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(sourceCurrency);
 
         mConverterList.addAll(mConversionDbHelper.getAll());
     }
@@ -99,6 +101,10 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
     public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
 
         mSourceCurrencyCode = currencyCode;
+
+        sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(currencyCode);
+
+
         mConverterList.clear();
         mConverterList.addAll(mConversionDbHelper.getAll());
 
@@ -124,9 +130,12 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         ArrayList<String> codeList = new ArrayList<>();
 
-        for(ConversionItem entity : mConverterList) {
+        //
+        List<CurrencyPairEntity> pairEntityList = mCurrencyPairDbHelper.getPairsToBeUpdated(sourceCurrencyEntity.getNumericCode());
 
-           CurrencyEntity currencyEntity = entity.getCurrencyPairEntity().getSource_id();
+        for(CurrencyPairEntity entity : pairEntityList) {
+
+           CurrencyEntity currencyEntity = entity.getTarget_id();
             codeList.add(currencyEntity.getCode());
         }
 
@@ -146,7 +155,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
 
         ConversionItem conversionEntity = mConverterList.get(position);
-        CurrencyPairEntity pairEntity = conversionEntity.getCurrencyPairEntity();
+        CurrencyPairEntity pairEntity = mCurrencyPairDbHelper.queryById(conversionEntity.getPair_id());
         CurrencyEntity currencyEntity = pairEntity.getTarget_id();
 
 

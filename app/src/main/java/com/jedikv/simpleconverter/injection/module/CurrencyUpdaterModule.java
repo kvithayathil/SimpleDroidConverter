@@ -1,8 +1,5 @@
-package module;
+package com.jedikv.simpleconverter.injection.module;
 
-import android.content.Context;
-
-import com.jedikv.simpleconverter.api.IYahooCurrencyApi;
 import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.api.YahooCurrencyRestAdapter;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
