@@ -17,36 +17,29 @@ import retrofit.converter.GsonConverter;
  */
 public class YahooCurrencyRestAdapter {
 
-    private static RestAdapter mInstance;
+    private RestAdapter instance;
 
-    private YahooCurrencyRestAdapter() {
+    public YahooCurrencyRestAdapter() {
 
-    }
+        final OkHttpClient client = new OkHttpClient();
 
-    public static RestAdapter getInstance() {
-
-        //Custom converter for yahoo currency response
-        //Gson gson = new GsonBuilder().registerTypeAdapter(ExchangePairResponse.class, new CurrencyPairResponseDeserializer()).create();
-
-        if(mInstance == null) {
-
-            final OkHttpClient client = new OkHttpClient();
-
-            //Show http logs only in debug builds
-            RestAdapter.LogLevel logLevel;
-            if(BuildConfig.LOG_HTTP_REQUESTS) {
-                logLevel = RestAdapter.LogLevel.FULL;
-            } else {
-                logLevel = RestAdapter.LogLevel.NONE;
-            }
-
-            mInstance = new RestAdapter.Builder()
-                    .setEndpoint(Constants.YAHOO_CURRENCY_URL)
-                    .setLogLevel(logLevel)
-                    .setClient(new OkClient(client))
-                    .build();
+        //Show http logs only in debug builds
+        RestAdapter.LogLevel logLevel;
+        if(BuildConfig.LOG_HTTP_REQUESTS) {
+            logLevel = RestAdapter.LogLevel.FULL;
+        } else {
+            logLevel = RestAdapter.LogLevel.NONE;
         }
 
-        return mInstance;
+        instance = new RestAdapter.Builder()
+                .setEndpoint(Constants.YAHOO_CURRENCY_URL)
+                .setLogLevel(logLevel)
+                .setClient(new OkClient(client))
+                .build();
+    }
+
+    public RestAdapter getRestAdapter() {
+
+        return instance;
     }
 }

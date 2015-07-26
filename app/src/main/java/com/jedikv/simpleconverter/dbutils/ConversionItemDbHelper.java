@@ -4,10 +4,8 @@ import android.content.Context;
 
 import java.util.List;
 
-import converter_db.ConversionEntity;
-import converter_db.ConversionEntityDao;
-import converter_db.CurrencyEntity;
-import converter_db.CurrencyEntityDao;
+import converter_db.ConversionItem;
+import converter_db.ConversionItemDao;
 
 /**
  * Created by Kurian on 03/05/2015.
@@ -18,27 +16,27 @@ public class ConversionItemDbHelper extends BaseDbHelper {
         super(context);
     }
 
-    public long insertOrUpdate(ConversionEntity entity) {
+    public long insertOrUpdate(ConversionItem entity) {
 
         return getDaoSession().insertOrReplace(entity);
     }
 
-    public void bulkUpdate(List<ConversionEntity> entities) {
+    public void bulkUpdate(List<ConversionItem> entities) {
         getDao().updateInTx(entities);
 
     }
 
-    public void bulkInsertOrUpdate(List<ConversionEntity> entities) {
+    public void bulkInsertOrUpdate(List<ConversionItem> entities) {
         getDao().insertOrReplaceInTx(entities);
 
     }
 
-    public void update(ConversionEntity entity) {
+    public void update(ConversionItem entity) {
 
         getDaoSession().update(entity);
     }
 
-    public List<ConversionEntity> getAll() {
+    public List<ConversionItem> getAll() {
         return  getDao().queryBuilder().list();
     }
 
@@ -47,12 +45,12 @@ public class ConversionItemDbHelper extends BaseDbHelper {
         getDao().deleteAll();
     }
 
-    public void deleteItem(ConversionEntity entity) {
+    public void deleteItem(ConversionItem entity) {
         getDao().delete(entity);
     }
 
     @Override
-    public ConversionEntityDao getDao() {
-        return getDaoSession().getConversionEntityDao();
+    public ConversionItemDao getDao() {
+        return getDaoSession().getConversionItemDao();
     }
 }

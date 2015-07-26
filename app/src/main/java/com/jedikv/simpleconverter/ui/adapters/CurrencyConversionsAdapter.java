@@ -18,11 +18,9 @@ import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
-import com.jedikv.simpleconverter.utils.ConversionUtils;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -31,12 +29,11 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 import butterknife.OnLongClick;
-import converter_db.ConversionEntity;
+import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import timber.log.Timber;
@@ -46,11 +43,13 @@ import timber.log.Timber;
  */
 public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
 
-    private List<ConversionEntity> mConverterList;
+    private List<ConversionItem> mConverterList;
 
     private CurrencyPairDbHelper mCurrencyPairDbHelper;
     private CurrencyDbHelper mCurrencyDbHelper;
     private ConversionItemDbHelper mConversionDbHelper;
+
+    private CurrencyEntity sourceCurrencyEntity;
 
     private String mSourceCurrencyCode;
 
@@ -65,7 +64,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         mCurrencyDbHelper = new CurrencyDbHelper(context);
         mConversionDbHelper = new ConversionItemDbHelper(context);
         mConverterList = new ArrayList<>();
-        mSourceCurrencyCode = sourceCurrency;
+        sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(sourceCurrency);
 
         mConverterList.addAll(mConversionDbHelper.getAll());
     }
@@ -102,8 +101,10 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
     public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
 
         mSourceCurrencyCode = currencyCode;
-        mConverterList.clear();
-        mConverterList.addAll(mConversionDbHelper.getAll());
+
+        sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(currencyCode);
+        //Clear the dao session cache so that it can be re-queried onBind
+        mConversionDbHelper.clearCache();
 
         //Ensure the value is converted to int to retain float values
         mInputValue = inputValue;
@@ -112,12 +113,6 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         notifyDataSetChanged();
     }
 
-    public void onPostNetworkUpdate() {
-
-        mConverterList.clear();
-        mConverterList.addAll(mConversionDbHelper.getAll());
-        notifyDataSetChanged();
-    }
 
     public BigDecimal getInputValue() {
         return mInputValue;
@@ -127,9 +122,13 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         ArrayList<String> codeList = new ArrayList<>();
 
-        for(ConversionEntity entity : mConverterList) {
 
-            codeList.add(entity.getCurrency_code().getCode());
+        List<CurrencyPairEntity> pairEntityList = mCurrencyPairDbHelper.getPairsToBeUpdated(sourceCurrencyEntity.getNumericCode());
+
+        for(CurrencyPairEntity entity : pairEntityList) {
+
+           CurrencyEntity currencyEntity = entity.getTarget_id();
+            codeList.add(currencyEntity.getCode());
         }
 
         return codeList;
@@ -147,8 +146,11 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
     @Override
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
 
-        ConversionEntity conversionEntity = mConverterList.get(position);
-        CurrencyEntity currencyEntity = conversionEntity.getCurrency_code();
+        Timber.d("onBind at position: " + position);
+
+        ConversionItem conversionEntity = mConverterList.get(position);
+        CurrencyPairEntity pairEntity = mCurrencyPairDbHelper.queryById(conversionEntity.getPair_id());
+        CurrencyEntity currencyEntity = pairEntity.getTarget_id();
 
 
         //Keep the position in sync with the adapter
@@ -157,15 +159,6 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
             mConversionDbHelper.update(conversionEntity);
         }
 
-        CurrencyPairEntity pairEntity = mCurrencyPairDbHelper.getGetPairByCodes(mSourceCurrencyCode, currencyEntity.getCode());
-
-        if(pairEntity == null) {
-            pairEntity = new CurrencyPairEntity();
-            pairEntity.setRate(0);
-            pairEntity.setPair(mSourceCurrencyCode + "/" + currencyEntity.getCode());
-            long id = mCurrencyPairDbHelper.insertOrUpdate(pairEntity);
-            pairEntity.setId(id);
-        }
 
         holder.bind(mInputValue, pairEntity, currencyEntity);
 
@@ -178,26 +171,26 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         return mConverterList.size();
     }
 
-    public List<ConversionEntity> getItems() {
+    public List<ConversionItem> getItems() {
         return mConverterList;
     }
 
-    public void addItem(ConversionEntity conversionEntity) {
+    public void addItem(ConversionItem conversionEntity) {
 
         if(mConverterList.add(conversionEntity)) {
-            notifyItemInserted(mConverterList.size() - 1);
+            notifyItemInserted(conversionEntity.getPosition());
         }
     }
 
-    public void addItemAtPosition(int position, ConversionEntity conversionEntity) {
+    public void addItemAtPosition(int position, ConversionItem conversionEntity) {
 
         mConverterList.add(position, conversionEntity);
         notifyItemInserted(position);
     }
 
-    public ConversionEntity removeItem(int position) {
+    public ConversionItem removeItem(int position) {
 
-        ConversionEntity entity = mConverterList.remove(position);
+        ConversionItem entity = mConverterList.remove(position);
         mConversionDbHelper.deleteItem(entity);
         notifyItemRemoved(position);
         return entity;
@@ -207,29 +200,28 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
-        @InjectView(R.id.card_view)
+        @Bind(R.id.card_view)
         CardView cardView;
-        @InjectView(R.id.iv_flag)
+        @Bind(R.id.iv_flag)
         ImageView ivFlag;
-        @InjectView(R.id.tv_currency_name)
+        @Bind(R.id.tv_currency_name)
         AppCompatTextView tvCurrencyName;
-        @InjectView(R.id.tv_value)
+        @Bind(R.id.tv_value)
         AppCompatTextView tvValue;
-        @InjectView(R.id.ib_remove)
+        @Bind(R.id.ib_remove)
         ImageButton ibRemove;
-        @InjectView(R.id.tv_currency_code)
+        @Bind(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
 
         public CurrencyViewHolder(DragSortAdapter adapter, View v) {
             super(adapter, v);
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
             mDecimalFormat.setParseBigDecimal(true);
             mDecimalFormat.setMinimumFractionDigits(4);
         }
 
 
         public void bind(BigDecimal inputValue, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
-
 
             String code = currencyEntity.getCode();
             final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), code);

@@ -151,70 +151,61 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     //Android support libraries
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v13:22.1.1'
-    compile 'com.android.support:cardview-v7:22.1.1'
-    compile 'com.android.support:recyclerview-v7:22.1.1'
-
-
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:cardview-v7:22.2.0'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:design:22.2.0'
 
     //Butterknife
-    compile 'com.jakewharton:butterknife:5.1.1'
+    compile 'com.jakewharton:butterknife:7.0.0'
     //Otto Event bus
-    compile 'com.squareup:otto:1.3.5'
+    compile 'com.squareup:otto:1.3.8'
     //Gson JSON parser
     compile 'com.google.code.gson:gson:2.3.1'
-
     //Dagger 2.0
-    compile 'com.google.dagger:dagger:2.0'
-    compile 'com.google.dagger:dagger-compiler:2.0'
+    compile 'com.google.dagger:dagger:2.0.1'
+    compile 'com.google.dagger:dagger-compiler:2.0.1'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-
     //Greendao ORM database
     compile 'de.greenrobot:greendao:1.3.7'
     //Date4J date parser
     compile 'com.darwinsys:hirondelle-date4j:1.5.1'
     //Timber logging library
-    compile 'com.jakewharton.timber:timber:3.0.2'
+    compile 'com.jakewharton.timber:timber:3.1.0'
     //Icepick
     compile 'com.github.frankiesardo:icepick-processor:2.3.6'
     compile 'com.github.frankiesardo:icepick:2.3.6'
     //Okhttp & Retrofit
-    compile 'com.squareup.okhttp:okhttp:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.3.0'
-
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
     //Observable Scrollview
-    compile 'com.github.ksoichiro:android-observablescrollview:1.5.1'
+    compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
+    //RxAndroid
+    compile 'io.reactivex:rxjava:1.0.12'
+    //compile 'io.reactivex:rxandroid:0.24.0'
+    compile 'net.danlew:android.joda:2.8.1'
 
 
     //Floating action button
     compile 'com.melnykov:floatingactionbutton:1.3.0'
-
     //Custom drag/drop recyclerview
-    compile 'com.makeramen:dragsortadapter:1.1.0'
-
+    compile 'com.makeramen:dragsortadapter:1.3.0'
     //Open source acknowledgements
     compile('com.mikepenz:aboutlibraries:5.0.0@aar') {
         transitive = true
     }
-
     //Leaky Canary for memory leak detection
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
-
     //Stetho is a debug bridge for Android applications via chrome
     compile 'com.facebook.stetho:stetho:1.1.1'
-
-
     //Testing
 
-
-
     // Espresso Instrumentation Testing
-    androidTestCompile 'com.android.support:support-annotations:22.1.1'
+    androidTestCompile 'com.android.support:support-annotations:22.2.0'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
     //androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
     androidTestCompile 'com.android.support.test:runner:0.2'
@@ -222,41 +213,29 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.2'
     //Hamcrest matcching
     androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
-
     // Fixes for Linux and Mac
     testCompile 'org.apache.maven:maven-ant-tasks:2.1.3'
-
     // Junit
     testCompile 'junit:junit:4.12'
-
     // Hamcrest Matchers for Junit
     testCompile 'org.hamcrest:hamcrest-integration:1.3'
-
-
     // Mockito
     testCompile 'org.mockito:mockito-core:1.10.19'
-
     // EasyMock
     testCompile 'org.easymock:easymock:3.3.1'
-
     // PowerMock
     testCompile 'org.powermock:powermock-core:1.6.2'
     testCompile 'org.powermock:powermock-module-junit4:1.6.2'
-
     // PowerMock + EasyMock extension
     testCompile 'org.powermock:powermock-api-easymock:1.6.2'
-
     //Fest
     testCompile 'org.easytesting:fest:1.0.16'
     testCompile 'com.squareup:fest-android:1.0.8'
-
     // Robolectric + Support v4
     testCompile('org.robolectric:robolectric:3.0-rc3') {
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-
-
 }
 
 // JaCoCo Test Reports, thanks to Nenick

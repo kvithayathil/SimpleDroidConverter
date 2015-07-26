@@ -16,13 +16,12 @@ import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
-import com.jedikv.simpleconverter.utils.ConversionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import converter_db.CurrencyEntity;
 import timber.log.Timber;
 
@@ -34,10 +33,11 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
     private final List<CurrencyEntity> mCurrencyList;
     private List<CurrencyEntity> mFilteredList;
     private CurrencyFilter mCurrencyFilter;
+    private CurrencyDbHelper currencyDbHelper;
 
     public CurrencyPickerAdapter(Context context, List<String> currencyCodesToFilter) {
-
-        mCurrencyList = new CurrencyDbHelper(context).getFilteredCurrencies(currencyCodesToFilter);
+        currencyDbHelper = new CurrencyDbHelper(context);
+        mCurrencyList = currencyDbHelper.getFilteredCurrencies(currencyCodesToFilter);
         mFilteredList = mCurrencyList;
 
         getFilter();
@@ -76,28 +76,28 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @InjectView(R.id.iv_flag)
+        @Bind(R.id.iv_flag)
         ImageView ivFlag;
-        @InjectView(R.id.tv_currency_code)
+        @Bind(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
-        @InjectView(R.id.tv_currency_name)
+        @Bind(R.id.tv_currency_name)
         AppCompatTextView tvCurrencyName;
-        @InjectView(R.id.tv_currency_symbol)
+        @Bind(R.id.tv_currency_symbol)
         AppCompatTextView tvCurrencySymbol;
 
-        private String mCurrencyCode;
+        private CurrencyEntity currencyEntity;
 
         public CurrencyItemViewHolder(View v) {
             super(v);
-            ButterKnife.inject(this, v);
+            ButterKnife.bind(this, v);
             v.setOnClickListener(this);
         }
 
         public void bind(CurrencyEntity currencyEntity) {
 
-            mCurrencyCode = currencyEntity.getCode();
+            this.currencyEntity = currencyEntity;
 
-            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), mCurrencyCode);
+            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), currencyEntity.getCode());
 
             if(TextUtils.equals(currencyEntity.getCode(), "XCD")) {
                 Timber.d("XCD: " + flagId);
@@ -119,7 +119,8 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
         @Override
         public void onClick(View v) {
-            App.getBusInstance().post(new AddCurrencyEvent(mCurrencyCode));
+
+            App.getBusInstance().post(new AddCurrencyEvent(currencyEntity));
         }
 
     }

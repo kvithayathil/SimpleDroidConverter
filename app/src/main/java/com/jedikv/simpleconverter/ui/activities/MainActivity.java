@@ -2,10 +2,7 @@ package com.jedikv.simpleconverter.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,14 +25,12 @@ import android.widget.TextView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
-import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
-import com.jedikv.simpleconverter.intentsevice.CurrencyUpdateIntentService;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.Constants;
-import com.jedikv.simpleconverter.utils.ConversionUtils;
 import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
@@ -49,14 +44,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-import converter_db.ConversionEntity;
+import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import icepick.Icicle;
+import rx.Subscriber;
 import timber.log.Timber;
 
 
@@ -64,22 +62,22 @@ public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    @InjectView(R.id.et_input)
+    @Bind(R.id.et_input)
     AppCompatEditText etInput;
-    @InjectView(R.id.tv_currency_code)
+    @Bind(R.id.tv_currency_code)
     AppCompatTextView tvCurrencyCode;
-    @InjectView(R.id.tv_currency_symbol)
+    @Bind(R.id.tv_currency_symbol)
     AppCompatTextView tvCurrencySymbol;
-    @InjectView(R.id.rl_container)
+    @Bind(R.id.rl_container)
     RelativeLayout rlContainer;
-    @InjectView(R.id.list)
+    @Bind(R.id.list)
     RecyclerView recyclerView;
-    @InjectView(R.id.fab)
+    @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
-    @InjectView(R.id.ib_flag)
+    @Bind(R.id.ib_flag)
     ImageButton ibFlag;
 
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolBar;
 
     private boolean mIsWatching = true;
@@ -87,6 +85,7 @@ public class MainActivity extends BaseActivity {
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
     private boolean mInputFocus = false;
+
 
     @Icicle
     String mInputedValueString;
@@ -98,17 +97,20 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         Timber.tag(TAG);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolBar);
+
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
-
         mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), recyclerView, getSourceCurrency());
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mCurrencyConversionsAdapter);
 
         floatingActionButton.attachToRecyclerView(recyclerView);
+
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -190,7 +192,10 @@ public class MainActivity extends BaseActivity {
     }
 
     public void downloadCurrency(List<String> currencyList) {
-        CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
+       // CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
+        if(!currencyList.isEmpty()) {
+            currencyDownloadService.executeRequest(currencyList, getSourceCurrency());
+        }
     }
 
     private void startCurrencyPicker(int requestCode, ArrayList<String> currencyArray) {
@@ -315,9 +320,11 @@ public class MainActivity extends BaseActivity {
         return getDefaultSharedPrefs().getString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, getString(R.string.default_source_currency));
     }
 
-    public void updateSourceCurrency(String currencyCode) {
+    public void updateSourceCurrency(long currencyCode) {
 
-        if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyCode).commit()) {
+        CurrencyEntity currencyEntity = mCurrencyEntityHelper.getById(currencyCode);
+
+        if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyEntity.getCode()).commit()) {
             updateSourceCurrencyUI();
             downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
 
@@ -330,7 +337,7 @@ public class MainActivity extends BaseActivity {
 
         if(resultCode == CurrencyPickerActivity.RESULT_CODE_SUCCESS) {
 
-            String currencyCode = data.getStringExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE);
+            long currencyCode = data.getLongExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, -1);
             Timber.d("Result currency code: " + currencyCode);
             switch (requestCode) {
 
@@ -348,30 +355,36 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void addCurrencyToList(String currencyCode) {
+    private void addCurrencyToList(long currencyCode) {
 
-        CurrencyPairEntity entity = getPairDbHelper().getGetPairByCodes(getSourceCurrency(), currencyCode);
+        CurrencyEntity sourceCurrencyEntity = getCurrencyDbHelper().getCurrency(getSourceCurrency());
+        CurrencyEntity targetCurrencyEntity = getCurrencyDbHelper().getById(currencyCode);
+
+        CurrencyPairEntity entity = getPairDbHelper().getCurrencyPair(sourceCurrencyEntity.getNumericCode(), currencyCode);
 
         if(entity == null) {
 
+            Timber.d("New currency pair entry");
             //Create a dummy pair for now till it's updated over the web
             entity = new CurrencyPairEntity();
-            entity.setPair(getSourceCurrency() + "/" + currencyCode);
+            entity.setSource_id(sourceCurrencyEntity);
+            entity.setTarget_id(targetCurrencyEntity);
             entity.setRate(0);
             entity.setCreated_date(new Date());
-            getPairDbHelper().insertOrUpdate(entity);
+            long id = getPairDbHelper().insertOrUpdate(entity);
+            entity.setId(id);
         }
 
-        ConversionEntity conversionItem = new ConversionEntity();
-        CurrencyEntity currencyEntity = getCurrencyDbHelper().getCurrency(currencyCode);
-        conversionItem.setCurrency_code(currencyEntity);
+        ConversionItem conversionItem = new ConversionItem();
+        conversionItem.setCurrencyPairEntity(entity);
         conversionItem.setPosition(mCurrencyConversionsAdapter.getItemCount());
-        getConversionEntityHelper().insertOrUpdate(conversionItem);
+        long conversionId = getConversionEntityHelper().insertOrUpdate(conversionItem);
+        conversionItem.setId(conversionId);
         mCurrencyConversionsAdapter.addItem(conversionItem);
         convertValue(etInput.getText().toString());
 
         //Update currency at the end
-        downloadCurrency(Arrays.asList(currencyCode));
+        downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
     }
 }

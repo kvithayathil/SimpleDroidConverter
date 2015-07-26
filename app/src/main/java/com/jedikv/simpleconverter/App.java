@@ -5,16 +5,18 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.facebook.stetho.Stetho;
-import com.jedikv.simpleconverter.component.AppComponent;
-import com.jedikv.simpleconverter.component.DaggerAppComponent;
+import com.jedikv.simpleconverter.injection.component.AppComponent;
+import com.jedikv.simpleconverter.injection.component.DaggerAppComponent;
 import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
 import com.jedikv.simpleconverter.utils.OttoBus;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.otto.ThreadEnforcer;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import converter_db.DaoMaster;
 import converter_db.DaoSession;
-import module.AppModule;
+import com.jedikv.simpleconverter.injection.module.AppModule;
 import timber.log.Timber;
 
 /**
@@ -35,9 +37,8 @@ public class App extends Application {
 
         super.onCreate();
         Timber.tag(TAG);
-        setUpGraph();
-
         LeakCanary.install(this);
+
 
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
@@ -45,6 +46,10 @@ public class App extends Application {
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());
 
+
+        setUpGraph();
+
+        JodaTimeAndroid.init(this);
 
         mBus = new OttoBus(ThreadEnforcer.MAIN);
         Timber.plant(new Timber.DebugTree());
