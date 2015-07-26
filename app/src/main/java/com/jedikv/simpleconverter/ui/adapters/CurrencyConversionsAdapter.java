@@ -1,6 +1,7 @@
 package com.jedikv.simpleconverter.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
@@ -17,13 +18,15 @@ import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
+import com.jedikv.simpleconverter.ui.adapters.gestures.ItemTouchHelperAdapter;
+import com.jedikv.simpleconverter.ui.adapters.gestures.ItemTouchHelperViewHolder;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
-import com.makeramen.dragsortadapter.DragSortAdapter;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,7 +44,7 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 08/05/2015.
  */
-public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversionsAdapter.CurrencyViewHolder> {
+public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyConversionsAdapter.CurrencyViewHolder> implements ItemTouchHelperAdapter {
 
     private List<ConversionItem> mConverterList;
 
@@ -58,7 +61,6 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
     @Inject
     public CurrencyConversionsAdapter(Context context, RecyclerView recyclerView, String sourceCurrency) {
-        super(recyclerView);
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         mCurrencyPairDbHelper = new CurrencyPairDbHelper(context);
         mCurrencyDbHelper = new CurrencyDbHelper(context);
@@ -69,24 +71,6 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         mConverterList.addAll(mConversionDbHelper.getAll());
     }
 
-
-    @Override
-    public int getPositionForId(long id) {
-
-        for(int i = 0; i < mConverterList.size(); i++) {
-            if(mConverterList.get(i).getId() == id) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    @Override
-    public boolean move(int fromPosition, int toPosition) {
-        mConverterList.add(toPosition, mConverterList.remove(fromPosition));
-        return true;
-    }
 
     @Override
     public void setHasStableIds(boolean hasStableIds) {
@@ -138,7 +122,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
     public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_list_card, parent, false);
-        CurrencyViewHolder viewHolder = new CurrencyViewHolder(this, v);
+        CurrencyViewHolder viewHolder = new CurrencyViewHolder(v);
 
         return viewHolder;
     }
@@ -162,8 +146,6 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         holder.bind(mInputValue, pairEntity, currencyEntity);
 
-        holder.cardView.setVisibility(getDraggingId() == conversionEntity.getId() ? View.INVISIBLE : View.VISIBLE);
-        holder.cardView.postInvalidate();
     }
 
     @Override
@@ -196,7 +178,22 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         return entity;
     }
 
-    public static class CurrencyViewHolder extends DragSortAdapter.ViewHolder {
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(mConverterList, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        ConversionItem item = mConverterList.remove(position);
+        mConversionDbHelper.deleteItem(item);
+        notifyItemRemoved(position);
+
+
+    }
+
+    public static class CurrencyViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
 
         private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
@@ -213,8 +210,8 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         @Bind(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
 
-        public CurrencyViewHolder(DragSortAdapter adapter, View v) {
-            super(adapter, v);
+        public CurrencyViewHolder(View v) {
+            super(v);
             ButterKnife.bind(this, v);
             mDecimalFormat.setParseBigDecimal(true);
             mDecimalFormat.setMinimumFractionDigits(4);
@@ -257,8 +254,17 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         @OnLongClick(R.id.card_view)
         public boolean longClickDrag(@NonNull View view) {
-            startDrag();
             return true;
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.parseColor("#d2d2d2"));
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(Color.WHITE);
         }
     }
 

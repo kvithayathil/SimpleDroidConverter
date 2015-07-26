@@ -191,8 +191,6 @@ dependencies {
 
     //Floating action button
     compile 'com.melnykov:floatingactionbutton:1.3.0'
-    //Custom drag/drop recyclerview
-    compile 'com.makeramen:dragsortadapter:1.3.0'
     //Open source acknowledgements
     compile('com.mikepenz:aboutlibraries:5.0.0@aar') {
         transitive = true

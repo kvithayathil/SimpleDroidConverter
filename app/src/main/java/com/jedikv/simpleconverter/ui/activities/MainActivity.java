@@ -8,6 +8,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,10 +26,10 @@ import android.widget.TextView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
-import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
+import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.Constants;
 import com.melnykov.fab.FloatingActionButton;
@@ -44,8 +45,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,7 +53,6 @@ import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import icepick.Icicle;
-import rx.Subscriber;
 import timber.log.Timber;
 
 
@@ -108,6 +106,8 @@ public class MainActivity extends BaseActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mCurrencyConversionsAdapter);
+
+        setUpTouchGestures();
 
         floatingActionButton.attachToRecyclerView(recyclerView);
 
@@ -189,6 +189,13 @@ public class MainActivity extends BaseActivity {
     public void changeSourceCurrency() {
 
         startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY, new ArrayList<>(Arrays.asList(getSourceCurrency())));
+    }
+
+    private void setUpTouchGestures() {
+
+        ItemTouchHelper.Callback callback = new CurrencyTouchItemCallback(mCurrencyConversionsAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
     }
 
     public void downloadCurrency(List<String> currencyList) {
@@ -303,6 +310,7 @@ public class MainActivity extends BaseActivity {
 
     private void updateSourceCurrencyUI() {
 
+        etInput.setText(getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.0000"));
         CurrencyEntity entity = getCurrencyDbHelper().getCurrency(getSourceCurrency());
 
         String countryCode = entity.getCode().substring(0,2).toLowerCase();
@@ -387,4 +395,24 @@ public class MainActivity extends BaseActivity {
         downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
     }
+
+    private ItemTouchHelper mIth = new ItemTouchHelper(
+            new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+                    ItemTouchHelper.LEFT) {
+                public boolean onMove(RecyclerView recyclerView,
+                                               RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    final int fromPos = viewHolder.getAdapterPosition();
+                    final int toPos = viewHolder.getAdapterPosition();
+                    // move item in `fromPos` to `toPos` in adapter.
+                    return true;// true if moved, false otherwise
+                }
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                    // remove from adapter
+
+
+                }
+
+
+            });
+
 }
