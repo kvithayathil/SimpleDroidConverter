@@ -54,6 +54,7 @@ import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
 import icepick.Icicle;
+import rx.Subscriber;
 import timber.log.Timber;
 
 

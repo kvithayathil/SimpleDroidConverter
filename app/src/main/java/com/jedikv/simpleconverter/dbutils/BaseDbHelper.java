@@ -22,5 +22,9 @@ public abstract class BaseDbHelper {
         return App.get(mContext).daoSession();
     }
 
+    public void clearCache() {
+        getDaoSession().clear();
+    }
+
     public abstract <T extends AbstractDao<T, Long>> T getDao();
 }

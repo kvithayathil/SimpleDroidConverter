@@ -103,10 +103,8 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         mSourceCurrencyCode = currencyCode;
 
         sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(currencyCode);
-
-
-        mConverterList.clear();
-        mConverterList.addAll(mConversionDbHelper.getAll());
+        //Clear the dao session cache so that it can be re-queried onBind
+        mConversionDbHelper.clearCache();
 
         //Ensure the value is converted to int to retain float values
         mInputValue = inputValue;
@@ -115,12 +113,6 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
         notifyDataSetChanged();
     }
 
-    public void onPostNetworkUpdate() {
-
-        mConverterList.clear();
-        mConverterList.addAll(mConversionDbHelper.getAll());
-        notifyDataSetChanged();
-    }
 
     public BigDecimal getInputValue() {
         return mInputValue;
@@ -130,7 +122,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
         ArrayList<String> codeList = new ArrayList<>();
 
-        //
+
         List<CurrencyPairEntity> pairEntityList = mCurrencyPairDbHelper.getPairsToBeUpdated(sourceCurrencyEntity.getNumericCode());
 
         for(CurrencyPairEntity entity : pairEntityList) {
@@ -153,6 +145,8 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
 
     @Override
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
+
+        Timber.d("onBind at position: " + position);
 
         ConversionItem conversionEntity = mConverterList.get(position);
         CurrencyPairEntity pairEntity = mCurrencyPairDbHelper.queryById(conversionEntity.getPair_id());
@@ -184,7 +178,7 @@ public class CurrencyConversionsAdapter extends DragSortAdapter<CurrencyConversi
     public void addItem(ConversionItem conversionEntity) {
 
         if(mConverterList.add(conversionEntity)) {
-            notifyItemInserted(mConverterList.size() - 1);
+            notifyItemInserted(conversionEntity.getPosition());
         }
     }
 

@@ -1,7 +1,10 @@
 package com.jedikv.simpleconverter.dbutils;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -58,6 +61,28 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
         return getDao().loadDeep(id);
     }
 
+
+    /**
+     * Try and update a currencyPair by
+     * @param entity currency pair entity to update
+     * @return
+     */
+    public long updateCurrencyPair(CurrencyPairEntity entity) {
+
+        SQLiteDatabase db = getDaoSession().getDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CurrencyPairEntityDao.Properties.Last_updated.columnName, System.currentTimeMillis());
+        contentValues.put(CurrencyPairEntityDao.Properties.Rate.columnName, entity.getRate());
+        String where = CurrencyPairEntityDao.Properties.Source_currency.columnName + " = ? AND " + CurrencyPairEntityDao.Properties.Target_currency.columnName + " = ?";
+        return db.update(CurrencyPairEntityDao.TABLENAME, contentValues, where, new String[]{String.valueOf(entity.getSource_currency()), String.valueOf(entity.getTarget_currency())});
+    }
+
+    public CurrencyPairEntity getCurrencyPairFromIdPair(long sourceId, long targetId) {
+
+        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId), CurrencyPairEntityDao.Properties.Target_currency.eq(targetId)).build().unique();
+
+    }
 
     public List<CurrencyPairEntity> getPairsToBeUpdated(long sourceId) {
 

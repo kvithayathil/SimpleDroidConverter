@@ -1,7 +1,5 @@
 package com.jedikv.simpleconverter.api;
 
-import android.content.Context;
-
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.api.responses.YahooCurrencyRate;
 import com.jedikv.simpleconverter.api.responses.YahooDataContainer;
@@ -11,19 +9,13 @@ import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.YahooApiUtils;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
-import hirondelle.date4j.DateTime;
-import retrofit.RestAdapter;
+import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
@@ -42,42 +34,54 @@ public class YahooCurrencyDownloadService {
 
 
     @Inject
-    public YahooCurrencyDownloadService(RestAdapter restAdapter, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+    public YahooCurrencyDownloadService(IYahooCurrencyApi api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         Timber.tag(TAG);
 
         this.currencyDbHelper = currencyDbHelper;
         this.currencyPairDbHelper = currencyPairDbHelper;
 
-        api = restAdapter.create(IYahooCurrencyApi.class);
+        this.api = api;
 
     }
 
     public void executeRequest(List<String> targetCurrencies, String sourceCurrency) {
 
-        List<String> currencyPair = YahooApiUtils.createReverseFromPairs(targetCurrencies, sourceCurrency);
+        final List<String> currencyPair = YahooApiUtils.createReverseFromPairs(targetCurrencies, sourceCurrency);
         Timber.d("Currency Pair Size: " + currencyPair.size());
 
-
+        //Don't bother hitting the server if there's nothing there :)
         if(!currencyPair.isEmpty()) {
-
 
             String query = YahooApiUtils.generateYQLCurrencyQuery(currencyPair);
 
-
-            api.getCurrencyPairs(query).map(new Func1<YahooDataContainer, List<CurrencyPairEntity>>() {
+            api.getCurrencyPairs(query).flatMap(new Func1<YahooDataContainer, Observable<YahooCurrencyRate>>() {
                 @Override
-                public List<CurrencyPairEntity> call(YahooDataContainer yahooDataContainer) {
-                    try {
+                public Observable<YahooCurrencyRate> call(YahooDataContainer yahooDataContainer) {
+                    return Observable.from(yahooDataContainer.getQuery().getResults().getRate());
+                }
+            }).flatMap(new Func1<YahooCurrencyRate, Observable<CurrencyPairEntity>>() {
+                @Override
+                public Observable<CurrencyPairEntity> call(YahooCurrencyRate yahooCurrencyRate) {
+                    return Observable.just(createCurrencyPairEntity(yahooCurrencyRate));
+                }
+            }).map(new Func1<CurrencyPairEntity, Long>() {
+                @Override
+                public Long call(CurrencyPairEntity currencyPairEntity) {
 
-                        List<CurrencyPairEntity> list = generateCurrencyPairList(yahooDataContainer.getQuery());
+                    //Check whether to update or create a new entry and return the id of the entry
+                    if(currencyPairDbHelper.updateCurrencyPair(currencyPairEntity) > 0) {
 
-                        return list;
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return null;
+                        Timber.d("Entry updated");
+                        return currencyPairDbHelper.getCurrencyPairFromIdPair(currencyPairEntity.getSource_currency(), currencyPairEntity.getTarget_currency()).getId();
+
+                    } else {
+
+                        long id = currencyPairDbHelper.insertOrUpdate(currencyPairEntity);
+                        Timber.d("Entry created with ID: " + id);
+                        return id;
                     }
                 }
-            }).subscribe(new Subscriber<List<CurrencyPairEntity>>() {
+            }).subscribe(new Subscriber<Long>() {
                 @Override
                 public void onCompleted() {
                     Timber.d("Request success!");
@@ -90,68 +94,40 @@ public class YahooCurrencyDownloadService {
                 }
 
                 @Override
-                public void onNext(List<CurrencyPairEntity> currencyPairEntityList) {
-                    try {
-                        saveCurrencyData(currencyPairEntityList);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        Timber.e(e, e.getMessage());
-                    }
+                public void onNext(Long id) {
+                    Timber.d("Currency Entity: " +  id + " updated.");
                 }
             });
 
         }
-    }
 
-    private List<CurrencyPairEntity> generateCurrencyPairList(YahooDataContainer.YahooCurrencyQueryResult result) throws ParseException{
-
-        DateTime timestamp = new DateTime(result.getCreated());
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        List<YahooCurrencyRate> rates = result.getResults().getRate();
-
-        List<CurrencyPairEntity> entities = new ArrayList<>();
-
-        for(YahooCurrencyRate rate : rates) {
-
-            // rate format - Source/Target e.g. USD/GBP to get USD to GBP conversion
-
-            CurrencyPairEntity entity = new CurrencyPairEntity();
-            entity.setLast_updated(new Date());
-
-            String source = rate.getId().substring(0,3);
-            String target = rate.getId().substring(3);
-
-            Timber.d("Source: " + source + " Target: " + target);
-
-            CurrencyEntity sourceEntity = currencyDbHelper.getCurrency(source);
-            CurrencyEntity targetEntity = currencyDbHelper.getCurrency(target);
-
-            entity.setSource_id(sourceEntity);
-            entity.setTarget_id(targetEntity);
-            entity.setCreated_date(new Date());
-            BigDecimal decimalRate = new BigDecimal(rate.getRate());
-
-            Timber.d("BigDecimalRate: " + decimalRate.toPlainString() + " Rate String: " + rate.getRate());
-
-            //Set the rate to a full integer to prevent any rounding errors from floats/doubles
-            entity.setRate(decimalRate.multiply(new BigDecimal(10000)).intValue());
-            entities.add(entity);
-        }
-
-        return entities;
     }
 
     /**
-     * Save to local database
-     * @param result the yahoo currency result
+     * Convert the yahoo rate to the local rate entity
+     * @param rate
+     * @return
      */
-    private void saveCurrencyData(List<CurrencyPairEntity> currencyPairEntityList) throws ParseException {
+    private CurrencyPairEntity createCurrencyPairEntity(YahooCurrencyRate rate) {
 
-        currencyPairDbHelper.bulkInsertOrUpdate(currencyPairEntityList);
-    }
+        String source = rate.getId().substring(0, 3);
+        String target = rate.getId().substring(3);
 
-    private IYahooCurrencyApi getApi() {
-        return api;
+        Timber.d("Source:  " + source + " Target: " + target);
+
+        CurrencyPairEntity entity = new CurrencyPairEntity();
+        entity.setLast_updated(new Date());
+        entity.setCreated_date(new Date());
+        entity.setSource_id(currencyDbHelper.getCurrency(source));
+        entity.setTarget_id(currencyDbHelper.getCurrency(target));
+
+        BigDecimal decimalRate = new BigDecimal(rate.getRate());
+
+        Timber.d("BigDecimalRate: " + decimalRate.toPlainString() + " Rate String: " + rate.getRate());
+
+        //Set the rate to a full integer to prevent any rounding errors from floats/doubles
+        entity.setRate(decimalRate.multiply(new BigDecimal(10000)).intValue());
+
+        return entity;
     }
 }
