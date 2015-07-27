@@ -3,6 +3,10 @@ package com.jedikv.simpleconverter.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -32,7 +37,6 @@ import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.Constants;
-import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
 import java.math.BigDecimal;
@@ -109,7 +113,6 @@ public class MainActivity extends BaseActivity {
 
         setUpTouchGestures();
 
-        floatingActionButton.attachToRecyclerView(recyclerView);
 
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -302,9 +305,7 @@ public class MainActivity extends BaseActivity {
         mCurrencyConversionsAdapter.removeItem(event.getPosition());
 
         //Show the fab to address glitch where it won't come back up mid list when deleting any item
-        if(!floatingActionButton.isVisible()) {
             floatingActionButton.show();
-        }
     }
 
 
@@ -396,23 +397,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private ItemTouchHelper mIth = new ItemTouchHelper(
-            new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                    ItemTouchHelper.LEFT) {
-                public boolean onMove(RecyclerView recyclerView,
-                                               RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                    final int fromPos = viewHolder.getAdapterPosition();
-                    final int toPos = viewHolder.getAdapterPosition();
-                    // move item in `fromPos` to `toPos` in adapter.
-                    return true;// true if moved, false otherwise
-                }
-                public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                    // remove from adapter
 
 
-                }
-
-
-            });
 
 }
