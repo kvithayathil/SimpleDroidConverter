@@ -111,6 +111,7 @@
         android:src="@drawable/ic_action_content_add"
         app:layout_anchor="@id/coordinatorLayout"
         app:elevation="6dp"
+        app:backgroundTint="@color/colorPrimary"
         app:borderWidth="0dp"
         app:layout_behavior="com.jedikv.simpleconverter.ui.ScrollAwareFABBehavior"
         app:pressedTranslationZ="12dp"
