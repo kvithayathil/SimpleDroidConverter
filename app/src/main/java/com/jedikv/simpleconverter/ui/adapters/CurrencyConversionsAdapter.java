@@ -3,6 +3,8 @@ package com.jedikv.simpleconverter.ui.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -58,9 +60,11 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
     private BigDecimal mInputValue;
 
+    CoordinatorLayout parent;
+
 
     @Inject
-    public CurrencyConversionsAdapter(Context context, RecyclerView recyclerView, String sourceCurrency) {
+    public CurrencyConversionsAdapter(Context context, CoordinatorLayout parent, String sourceCurrency) {
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         mCurrencyPairDbHelper = new CurrencyPairDbHelper(context);
         mCurrencyDbHelper = new CurrencyDbHelper(context);
@@ -69,6 +73,8 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(sourceCurrency);
 
         mConverterList.addAll(mConversionDbHelper.getAll());
+
+        this.parent = parent;
     }
 
 
@@ -172,9 +178,19 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
     public ConversionItem removeItem(int position) {
 
-        ConversionItem entity = mConverterList.remove(position);
+        final ConversionItem entity = mConverterList.remove(position);
+        entity.setPosition(position);
         mConversionDbHelper.deleteItem(entity);
         notifyItemRemoved(position);
+
+        Snackbar.make(parent, R.string.snack_bar_deleted, Snackbar.LENGTH_LONG).setAction(R.string.snack_bar_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mConversionDbHelper.insertOrUpdate(entity);
+                addItemAtPosition(entity.getPosition(), entity);
+            }
+        }).show();
+
         return entity;
     }
 
@@ -186,10 +202,7 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
     @Override
     public void onItemDismiss(int position) {
-        ConversionItem item = mConverterList.remove(position);
-        mConversionDbHelper.deleteItem(item);
-        notifyItemRemoved(position);
-
+        App.getBusInstance().post(new RemoveConversionEvent(position));
 
     }
 

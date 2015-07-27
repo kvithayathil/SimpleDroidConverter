@@ -78,6 +78,8 @@ public class MainActivity extends BaseActivity {
     FloatingActionButton floatingActionButton;
     @Bind(R.id.ib_flag)
     ImageButton ibFlag;
+    @Bind(R.id.coordinatorLayout)
+    CoordinatorLayout parent;
 
     @Bind(R.id.toolbar)
     Toolbar toolBar;
@@ -105,7 +107,7 @@ public class MainActivity extends BaseActivity {
 
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
-        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), recyclerView, getSourceCurrency());
+        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), parent, getSourceCurrency());
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
