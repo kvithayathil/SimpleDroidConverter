@@ -45,7 +45,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|right|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_action_content_add"
         app:layout_anchor="@id/coordinatorLayout"
@@ -54,6 +54,6 @@
         app:borderWidth="0dp"
         app:layout_behavior="com.jedikv.simpleconverter.ui.ScrollAwareFABBehavior"
         app:pressedTranslationZ="12dp"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end|right" />
 
 </android.support.design.widget.CoordinatorLayout>

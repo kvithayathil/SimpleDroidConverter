@@ -170,8 +170,7 @@ public class MainActivity extends BaseActivity {
 
     private void setUpTouchGestures() {
 
-        ItemTouchHelper.Callback callback = new CurrencyTouchItemCallback(mCurrencyConversionsAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new CurrencyTouchItemCallback(mCurrencyConversionsAdapter));
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
