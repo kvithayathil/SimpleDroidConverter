@@ -1,9 +1,12 @@
 package com.jedikv.simpleconverter.ui.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,10 +68,8 @@ public class MainActivity extends BaseActivity {
     RecyclerView recyclerView;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
-
     @Bind(R.id.coordinatorLayout)
     CoordinatorLayout parent;
-
     @Bind(R.id.toolbar)
     Toolbar toolBar;
 
@@ -74,6 +78,8 @@ public class MainActivity extends BaseActivity {
 
     @Icicle
     String mInputedValueString;
+
+    private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
     private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
@@ -257,9 +263,6 @@ public class MainActivity extends BaseActivity {
     public void removeItemEvent(RemoveConversionEvent event) {
         currencyInputView.dismissKeyboard();
         mCurrencyConversionsAdapter.removeItem(event.getPosition());
-
-        //Show the fab to address glitch where it won't come back up mid list when deleting any item
-            floatingActionButton.show();
     }
 
 
@@ -342,8 +345,5 @@ public class MainActivity extends BaseActivity {
         downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
     }
-
-
-
 
 }

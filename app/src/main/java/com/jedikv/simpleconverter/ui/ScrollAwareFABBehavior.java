@@ -31,21 +31,30 @@ import android.view.animation.Interpolator;
 
 import com.jedikv.simpleconverter.R;
 
+import timber.log.Timber;
+
 /**
  * Managing the animation of the FAB during scrolling
  * Taken from <a href="https://github.com/balaji-k13/cheesesquare">https://github.com/balaji-k13/cheesesquare</a>
  */
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
+
+    public static final String TAG = ScrollAwareFABBehavior.class.getSimpleName();
+
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
     private boolean mIsAnimatingOut = false;
+    private boolean isPointerDown;
 
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
+        Timber.d(TAG);
     }
 
     @Override
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final FloatingActionButton child,
                                        final View directTargetChild, final View target, final int nestedScrollAxes) {
+        Timber.d("onStartNestedScroll");
+
         // Ensure we react to vertical scrolling
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
                 || super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
@@ -56,13 +65,41 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
                                final View target, final int dxConsumed, final int dyConsumed,
                                final int dxUnconsumed, final int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-        if (dyConsumed > 0 && !this.mIsAnimatingOut && child.getVisibility() == View.VISIBLE) {
+        /*
+        if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
             // User scrolled down and the FAB is currently visible -> hide the FAB
-            animateOut(child);
+            child.hide();
+            //animateOut(child);
         } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
             // User scrolled up and the FAB is currently not visible -> show the FAB
-            animateIn(child);
-        }
+            child.hide();
+            //animateIn(child);
+        }*/
+            child.hide();
+
+    }
+
+    @Override
+    public boolean onNestedFling(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, float velocityX, float velocityY, boolean consumed) {
+        Timber.d("onNestedFling");
+
+        return super.onNestedFling(coordinatorLayout, child, target, velocityX, velocityY, consumed);
+    }
+
+    @Override
+    public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target) {
+        super.onStopNestedScroll(coordinatorLayout, child, target);
+        Timber.d("onStopNestedScroll");
+
+        child.show();
+    }
+
+
+
+    @Override
+    public void onDependentViewRemoved(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
+        Timber.d("onDependentViewRemoved");
+        super.onDependentViewRemoved(parent, child, dependency);
     }
 
     // Same animation that FloatingActionButton.Behavior uses to hide the FAB when the AppBarLayout exits
@@ -119,4 +156,6 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
             button.startAnimation(anim);
         }
     }
+
+
 }

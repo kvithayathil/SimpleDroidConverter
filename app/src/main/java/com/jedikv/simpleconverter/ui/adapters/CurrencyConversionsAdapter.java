@@ -272,12 +272,12 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
         @Override
         public void onItemSelected() {
-            itemView.setBackgroundColor(Color.parseColor("#d2d2d2"));
+            ((CardView)itemView).setCardBackgroundColor(Color.parseColor("#d2d2d2"));
         }
 
         @Override
         public void onItemClear() {
-            itemView.setBackgroundColor(Color.WHITE);
+            ((CardView)itemView).setCardBackgroundColor(Color.WHITE);
         }
     }
 
