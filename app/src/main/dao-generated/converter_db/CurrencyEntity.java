@@ -5,7 +5,7 @@ package converter_db;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table CURRENCY_ENTITY.
+ * Entity mapped to table "CURRENCY_ENTITY".
  */
 public class CurrencyEntity {
 
