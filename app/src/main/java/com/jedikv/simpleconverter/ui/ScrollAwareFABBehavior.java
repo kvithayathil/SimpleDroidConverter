@@ -65,17 +65,18 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
                                final View target, final int dxConsumed, final int dyConsumed,
                                final int dxUnconsumed, final int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-        /*
+        Timber.d("onNestedScroll");
+
+
         if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
             // User scrolled down and the FAB is currently visible -> hide the FAB
             child.hide();
             //animateOut(child);
-        } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
+        } else if (dyConsumed < 0 && child.getVisibility() == View.VISIBLE) {
             // User scrolled up and the FAB is currently not visible -> show the FAB
             child.hide();
             //animateIn(child);
-        }*/
-            child.hide();
+        }
 
     }
 
@@ -88,10 +89,14 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
     @Override
     public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target) {
+
+        if(child.getVisibility() != View.VISIBLE) {
+            child.show();
+        }
+
         super.onStopNestedScroll(coordinatorLayout, child, target);
         Timber.d("onStopNestedScroll");
 
-        child.show();
     }
 
 
@@ -99,6 +104,10 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     @Override
     public void onDependentViewRemoved(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
         Timber.d("onDependentViewRemoved");
+
+        if(child.getVisibility() != View.VISIBLE) {
+            child.show();
+        }
         super.onDependentViewRemoved(parent, child, dependency);
     }
 

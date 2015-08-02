@@ -341,6 +341,7 @@ public class MainActivity extends BaseActivity {
         mCurrencyConversionsAdapter.addItem(conversionItem);
         convertValue(currencyInputView.getInputValue());
 
+
         //Update currency at the end
         downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
