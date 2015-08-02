@@ -7,21 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyPickerAdapter;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewHelper;
 import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
@@ -32,7 +26,7 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 13/05/2015.
  */
-public class CurrencyPickerActivity extends BaseActivity implements ObservableScrollViewCallbacks {
+public class CurrencyPickerActivity extends BaseActivity {
 
     public static final int REQUEST_CODE_ADD_CURRENCY = 1000;
     public static final int REQUEST_CODE_CHANGE_CURRENCY = 2000;
@@ -46,7 +40,7 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
     // The elevation of the toolbar when content is scrolled behind
     private static final float TOOLBAR_ELEVATION = 14f;
     @Bind(R.id.list)
-    ObservableRecyclerView recyclerView;
+    RecyclerView recyclerView;
     @Bind(R.id.toolbar)
     Toolbar toolBar;
 
@@ -62,7 +56,7 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView.setScrollViewCallbacks(this);
+        //recyclerView.setScrollViewCallbacks(this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -126,70 +120,6 @@ public class CurrencyPickerActivity extends BaseActivity implements ObservableSc
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean toolbarIsShown() {
-        return ViewHelper.getTranslationY(toolBar) == 0;
-    }
-
-
-    private boolean toolbarIsHidden() {
-        return ViewHelper.getTranslationY(toolBar) == -toolBar.getHeight();
-    }
-
-
-    private void showToolbar() {
-        moveToolbar(0);
-    }
-
-
-    private void hideToolbar() {
-        moveToolbar(-toolBar.getHeight());
-    }
-
-    @Override
-    public void onScrollChanged(int i, boolean b, boolean b1) {
-
-    }
-
-    @Override
-    public void onDownMotionEvent() {
-
-    }
-
-    @Override
-    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-
-        Timber.d("onUpOrCancelMotionEvent: " + scrollState);
-
-        if(scrollState == ScrollState.UP) {
-            if(toolbarIsShown()) {
-                hideToolbar();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-
-            if(toolbarIsHidden()) {
-                showToolbar();
-            }
-        }
-    }
-
-    private void moveToolbar(float toTranslationY) {
-        if (ViewHelper.getTranslationY(toolBar) == toTranslationY) {
-            return;
-        }
-        ValueAnimator animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(toolBar), toTranslationY).setDuration(200);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float translationY = (float) animation.getAnimatedValue();
-                ViewHelper.setTranslationY(toolBar, translationY);
-                ViewHelper.setTranslationY((View) recyclerView, translationY);
-                FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) ((View) recyclerView).getLayoutParams();
-                lp.height = (int) -translationY + getScreenHeight() - lp.topMargin;
-                ((View) recyclerView).requestLayout();
-            }
-        });
-        animator.start();
-    }
 
     @Subscribe
     public void onCurrencyPicked(AddCurrencyEvent event) {
