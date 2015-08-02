@@ -25,58 +25,11 @@
         android:layout_below="@+id/toolbar"
         android:id="@+id/card_input">
 
-        <LinearLayout
-            android:layout_gravity="center_vertical"
+        <com.jedikv.simpleconverter.ui.views.CurrencyInputView
+            android:id="@+id/currency_input"
+            android:layout_margin="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:id="@+id/ib_flag"
-                android:src="@drawable/do_"
-                android:scaleType="fitCenter"
-                android:background="@null"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/toolbar"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_currency_symbol"
-                android:layout_alignTop="@+id/ib_flag"
-                android:layout_marginLeft="8dp"
-                android:gravity="center_vertical"
-                android:layout_alignBottom="@+id/ib_flag"
-                android:text="$"
-                android:layout_toRightOf="@+id/ib_flag"/>
-
-            <EditText
-                android:id="@+id/et_input"
-                android:hint="@string/hint_currency_input"
-                android:layout_toRightOf="@+id/tv_currency_symbol"
-                android:layout_toLeftOf="@+id/tv_currency_code"
-                android:layout_below="@+id/toolbar"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/tv_currency_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="GBP"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/ib_flag"
-                android:gravity="center_vertical"
-                android:layout_alignBottom="@+id/et_input"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"/>
 
 </android.support.v7.widget.CardView>
 
@@ -86,20 +39,6 @@
         android:layout_below="@+id/card_input"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-        <!--
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_action_content_add"
-        app:fab_colorNormal="@color/fab_primary"
-        app:fab_colorPressed="@color/fab_primary_pressed"
-        app:fab_colorRipple="@color/fab_ripple" />
-        -->
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
