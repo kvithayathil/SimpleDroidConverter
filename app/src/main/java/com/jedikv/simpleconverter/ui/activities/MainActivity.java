@@ -1,10 +1,9 @@
 package com.jedikv.simpleconverter.ui.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,9 +17,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,9 +26,8 @@ import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
-import com.jedikv.simpleconverter.utils.AndroidUtils;
+import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
 import com.jedikv.simpleconverter.utils.Constants;
-import com.melnykov.fab.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
 import java.math.BigDecimal;
@@ -48,7 +43,6 @@ import java.util.Locale;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnFocusChange;
 import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
 import converter_db.CurrencyPairEntity;
@@ -60,30 +54,23 @@ public class MainActivity extends BaseActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    @Bind(R.id.et_input)
-    AppCompatEditText etInput;
-    @Bind(R.id.tv_currency_code)
-    AppCompatTextView tvCurrencyCode;
-    @Bind(R.id.tv_currency_symbol)
-    AppCompatTextView tvCurrencySymbol;
+    @Bind(R.id.currency_input)
+    CurrencyInputView currencyInputView;
     @Bind(R.id.rl_container)
     RelativeLayout rlContainer;
     @Bind(R.id.list)
     RecyclerView recyclerView;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
-    @Bind(R.id.ib_flag)
-    ImageButton ibFlag;
+
+    @Bind(R.id.coordinatorLayout)
+    CoordinatorLayout parent;
 
     @Bind(R.id.toolbar)
     Toolbar toolBar;
 
-    private boolean mIsWatching = true;
 
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
-
-    private boolean mInputFocus = false;
-
 
     @Icicle
     String mInputedValueString;
@@ -101,7 +88,7 @@ public class MainActivity extends BaseActivity {
 
         mDecimalFormat.setParseBigDecimal(true);
         mDecimalFormat.setMinimumFractionDigits(4);
-        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), recyclerView, getSourceCurrency());
+        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), parent, getSourceCurrency());
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -109,26 +96,31 @@ public class MainActivity extends BaseActivity {
 
         setUpTouchGestures();
 
-        floatingActionButton.attachToRecyclerView(recyclerView);
 
 
-        etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        currencyInputView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    convertValue(etInput.getText().toString());
-                    dismissScreenKeyboard(etInput);
-                    return true;
+                switch (actionId) {
+                    case EditorInfo.IME_ACTION_DONE:
+                    case EditorInfo.IME_NULL:
+                    case KeyEvent.KEYCODE_ENTER:
+                        currencyInputView.dismissKeyboard();
+                        convertValue(currencyInputView.getInputValue());
+                        downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+                        return true;
+
+                    default:
+                        return false;
                 }
 
-                return false;
             }
         });
 
 
-        etInput.addTextChangedListener(new TextWatcher() {
+        currencyInputView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -141,42 +133,27 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //Only do live updates when the edittext is focused
-                if (mIsWatching) {
                     convertValue(s.toString());
-                }
             }
         });
 
+
+        mInputedValueString = getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.00");
         Timber.d("Cached input value: " + mInputedValueString);
 
-        if(savedInstanceState == null) {
-            mInputedValueString = getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0");
-        }
-
-        convertValue(mInputedValueString);
+        currencyInputView.setValue(mInputedValueString);
 
 
         rlContainer.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                dismissScreenKeyboard(etInput);
+                currencyInputView.dismissKeyboard();
+                downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
                 return true;
             }
         });
 
-    }
-
-    @OnFocusChange(R.id.et_input)
-    public void onInputFocus(boolean focused) {
-
-        Timber.d("On input focus: " + focused);
-        mIsWatching = focused;
-        if(!focused) {
-            convertValue(etInput.getText().toString());
-            dismissScreenKeyboard(etInput);
-        }
     }
 
     @OnClick(R.id.fab)
@@ -193,8 +170,7 @@ public class MainActivity extends BaseActivity {
 
     private void setUpTouchGestures() {
 
-        ItemTouchHelper.Callback callback = new CurrencyTouchItemCallback(mCurrencyConversionsAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new CurrencyTouchItemCallback(mCurrencyConversionsAdapter));
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
@@ -247,7 +223,6 @@ public class MainActivity extends BaseActivity {
         }
         try {
             BigDecimal enteredValue = (BigDecimal)mDecimalFormat.parse(mInputedValueString);
-            //etInput.setText(mDecimalFormat.format(enteredValue.doubleValue()));
             mCurrencyConversionsAdapter.updateCurrencyTargets(getSourceCurrency(), enteredValue);
 
         } catch (NumberFormatException e) {
@@ -257,25 +232,6 @@ public class MainActivity extends BaseActivity {
             Timber.e(e, e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Dismiss the on screen keyboard and clear focus from an edittext
-     * @param editText
-     */
-    private void dismissScreenKeyboard(EditText editText) {
-        mIsWatching = false;
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-
-        BigDecimal inputInt =  mCurrencyConversionsAdapter.getInputValue();
-        inputInt.setScale(4, BigDecimal.ROUND_HALF_UP);
-        //BigDecimal inputDecimal = inputInt.divide(new BigDecimal(10000));
-
-        editText.setText(mDecimalFormat.format(inputInt.doubleValue()));
-        editText.clearFocus();
-
-        downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
     }
 
     @Override
@@ -289,39 +245,30 @@ public class MainActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         //Cache any input values for re-use when relaunching the application
-        getDefaultSharedPrefs().edit().putString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, etInput.getText().toString()).apply();
+        getDefaultSharedPrefs().edit().putString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, currencyInputView.getInputValue()).apply();
     }
 
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
-        convertValue(etInput.getText().toString());
+        convertValue(currencyInputView.getInputValue());
     }
 
     @Subscribe
     public void removeItemEvent(RemoveConversionEvent event) {
+        currencyInputView.dismissKeyboard();
         mCurrencyConversionsAdapter.removeItem(event.getPosition());
 
         //Show the fab to address glitch where it won't come back up mid list when deleting any item
-        if(!floatingActionButton.isVisible()) {
             floatingActionButton.show();
-        }
     }
 
 
     private void updateSourceCurrencyUI() {
 
-        etInput.setText(getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.0000"));
+        currencyInputView.setValue(getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.0000"));
         CurrencyEntity entity = getCurrencyDbHelper().getCurrency(getSourceCurrency());
-
-        String countryCode = entity.getCode().substring(0,2).toLowerCase();
-        Timber.d("Country code: " + countryCode);
-
-        final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(this, entity.getCode());
-        ibFlag.setImageResource(flagId);
-        tvCurrencyCode.setText(entity.getCode());
-        tvCurrencySymbol.setText(entity.getSymbol());
-
-        convertValue(etInput.getText().toString());
+        currencyInputView.setCurrency(entity);
+        convertValue(currencyInputView.getInputValue());
     }
 
     public String getSourceCurrency() {
@@ -389,30 +336,14 @@ public class MainActivity extends BaseActivity {
         long conversionId = getConversionEntityHelper().insertOrUpdate(conversionItem);
         conversionItem.setId(conversionId);
         mCurrencyConversionsAdapter.addItem(conversionItem);
-        convertValue(etInput.getText().toString());
+        convertValue(currencyInputView.getInputValue());
 
         //Update currency at the end
         downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
     }
 
-    private ItemTouchHelper mIth = new ItemTouchHelper(
-            new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                    ItemTouchHelper.LEFT) {
-                public boolean onMove(RecyclerView recyclerView,
-                                               RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                    final int fromPos = viewHolder.getAdapterPosition();
-                    final int toPos = viewHolder.getAdapterPosition();
-                    // move item in `fromPos` to `toPos` in adapter.
-                    return true;// true if moved, false otherwise
-                }
-                public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                    // remove from adapter
 
 
-                }
-
-
-            });
 
 }
