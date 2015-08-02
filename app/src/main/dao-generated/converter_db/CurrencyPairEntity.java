@@ -8,7 +8,7 @@ import de.greenrobot.dao.DaoException;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table CURRENCY_PAIR_ENTITY.
+ * Entity mapped to table "CURRENCY_PAIR_ENTITY".
  */
 public class CurrencyPairEntity {
 
