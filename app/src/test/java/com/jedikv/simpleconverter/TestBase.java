@@ -17,7 +17,7 @@ public class TestBase {
 
     @Before
     public void setUp() {
-        ShadowApplication shadowApplication = shadowOf(application);
+        //ShadowApplication shadowApplication = shadowOf(application);
 
 
 

@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'com.getkeepsafe.dexcount'
+
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
 def buildTime = new Date().format("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC"))
@@ -25,13 +27,13 @@ def CRASH_REPORTING = "CRASH_REPORTING"
 
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         applicationId "com.jedikv.simpleconverter"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
 
         // for espresso tests
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -62,6 +64,7 @@ android {
             minifyEnabled false
             zipAlignEnabled true
             debuggable true
+            testCoverageEnabled = true
             buildConfigField BOOLEAN, LOG_HTTP_REQUESTS, TRUE
 
         }
@@ -116,6 +119,13 @@ android {
         exclude 'LICENSE.txt'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+        }
+    }
 }
 
 
@@ -153,18 +163,14 @@ android.applicationVariants.all { variant ->
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     //Android support libraries
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:cardview-v7:22.2.1'
-    compile 'com.android.support:recyclerview-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
-    compile 'com.android.support:support-annotations:22.2.1'
-
-
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:cardview-v7:23.0.1'
+    compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
+    androidTestCompile 'com.android.support:support-annotations:23.0.1'
     compile 'com.nineoldandroids:library:2.4.0'
-
-
     //Butterknife
-    compile 'com.jakewharton:butterknife:7.0.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
     //Otto Event bus
     compile 'com.squareup:otto:1.3.8'
     //Gson JSON parser
@@ -183,14 +189,14 @@ dependencies {
     compile 'com.github.frankiesardo:icepick-processor:2.3.6'
     compile 'com.github.frankiesardo:icepick:2.3.6'
     //Okhttp & Retrofit
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     //RxAndroid
-    compile 'io.reactivex:rxjava:1.0.12'
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxandroid:1.0.1'
     //compile 'io.reactivex:rxandroid:0.24.0'
     compile 'net.danlew:android.joda:2.8.1'
-
     //Open source acknowledgements
     compile('com.mikepenz:aboutlibraries:5.0.9@aar') {
         transitive = true
@@ -199,15 +205,15 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
     //Stetho is a debug bridge for Android applications via chrome
-    compile 'com.facebook.stetho:stetho:1.1.1'
+    compile 'com.facebook.stetho:stetho:1.2.0'
     //Testing
 
     // Espresso Instrumentation Testing
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
     //androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
-    androidTestCompile 'com.android.support.test:runner:0.2'
+    androidTestCompile 'com.android.support.test:runner:0.3'
     //Dependency to use Junit4 rules
-    androidTestCompile 'com.android.support.test:rules:0.2'
+    androidTestCompile 'com.android.support.test:rules:0.3'
     //Hamcrest matcching
     androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
     // Fixes for Linux and Mac
@@ -227,9 +233,13 @@ dependencies {
     testCompile 'org.powermock:powermock-api-easymock:1.6.2'
     //Fest
     testCompile 'org.easytesting:fest:1.0.16'
-    testCompile 'com.squareup:fest-android:1.0.8'
+    androidTestCompile 'com.squareup.assertj:assertj-android:1.1.0'
+
+
+
+
     // Robolectric + Support v4
-    testCompile('org.robolectric:robolectric:3.0-rc3') {
+    testCompile('org.robolectric:robolectric:3.0') {
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
@@ -243,6 +253,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebug']) {
     reports {
         xml {
             enabled true // coveralls
+            html.enabled true
             destination "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
         }
 
