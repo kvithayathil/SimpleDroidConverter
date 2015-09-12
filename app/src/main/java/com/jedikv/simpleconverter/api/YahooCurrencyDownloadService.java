@@ -17,7 +17,9 @@ import javax.inject.Inject;
 import converter_db.CurrencyPairEntity;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -54,12 +56,15 @@ public class YahooCurrencyDownloadService {
 
             String query = YahooApiUtils.generateYQLCurrencyQuery(currencyPair);
 
-            api.getCurrencyPairs(query).flatMap(new Func1<YahooDataContainer, Observable<YahooCurrencyRate>>() {
-                @Override
-                public Observable<YahooCurrencyRate> call(YahooDataContainer yahooDataContainer) {
-                    return Observable.from(yahooDataContainer.getQuery().getResults().getRate());
-                }
-            }).flatMap(new Func1<YahooCurrencyRate, Observable<CurrencyPairEntity>>() {
+            api.getCurrencyPairs(query)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMap(new Func1<YahooDataContainer, Observable<YahooCurrencyRate>>() {
+                        @Override
+                        public Observable<YahooCurrencyRate> call(YahooDataContainer yahooDataContainer) {
+                            return Observable.from(yahooDataContainer.getQuery().getResults().getRate());
+                        }
+                    }).flatMap(new Func1<YahooCurrencyRate, Observable<CurrencyPairEntity>>() {
                 @Override
                 public Observable<CurrencyPairEntity> call(YahooCurrencyRate yahooCurrencyRate) {
                     return Observable.just(createCurrencyPairEntity(yahooCurrencyRate));
