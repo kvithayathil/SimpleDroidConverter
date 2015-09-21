@@ -1,11 +1,9 @@
 package com.jedikv.simpleconverter.ui.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.RelativeLayout;
@@ -33,6 +29,7 @@ import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
 import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
+import com.jedikv.simpleconverter.ui.views.IConversionView;
 import com.jedikv.simpleconverter.utils.Constants;
 import com.squareup.otto.Subscribe;
 
@@ -56,7 +53,7 @@ import icepick.Icicle;
 import timber.log.Timber;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements IConversionView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -99,6 +96,7 @@ public class MainActivity extends BaseActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mCurrencyConversionsAdapter);
+
 
         setUpTouchGestures();
 
@@ -347,4 +345,18 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    public String getCurrentSourceCurrency() {
+        return null;
+    }
+
+    @Override
+    public void updateViews() {
+
+    }
+
+    @Override
+    public void updateList(String inputValue) {
+
+    }
 }

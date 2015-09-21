@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import converter_db.CurrencyPairEntity;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -46,7 +47,7 @@ public class YahooCurrencyDownloadService {
 
     }
 
-    public void executeRequest(List<String> targetCurrencies, String sourceCurrency) {
+    public Subscription executeRequest(List<String> targetCurrencies, String sourceCurrency) {
 
         final List<String> currencyPair = YahooApiUtils.createReverseFromPairs(targetCurrencies, sourceCurrency);
         Timber.d("Currency Pair Size: " + currencyPair.size());
@@ -56,7 +57,7 @@ public class YahooCurrencyDownloadService {
 
             String query = YahooApiUtils.generateYQLCurrencyQuery(currencyPair);
 
-            api.getCurrencyPairs(query)
+            return api.getCurrencyPairs(query)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .flatMap(new Func1<YahooDataContainer, Observable<YahooCurrencyRate>>() {
@@ -104,6 +105,8 @@ public class YahooCurrencyDownloadService {
                 }
             });
 
+        } else {
+            return null;
         }
 
     }
