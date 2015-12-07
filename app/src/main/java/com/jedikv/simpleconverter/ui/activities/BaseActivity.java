@@ -9,6 +9,7 @@ import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
+import com.jedikv.simpleconverter.injection.component.AppComponent;
 
 import javax.inject.Inject;
 
@@ -80,5 +81,9 @@ public class BaseActivity extends AppCompatActivity {
 
     public ConversionItemDbHelper getConversionEntityHelper() {
         return mConversionEntityHelper;
+    }
+
+    public AppComponent getApplicationComponent() {
+        return App.get(this).getAppComponent();
     }
 }

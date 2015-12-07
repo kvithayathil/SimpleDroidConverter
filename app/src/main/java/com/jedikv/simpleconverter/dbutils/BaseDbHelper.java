@@ -12,14 +12,15 @@ import de.greenrobot.dao.AbstractDao;
  */
 public abstract class BaseDbHelper {
 
-    protected Context mContext;
+    protected DaoSession daoSession;
 
     public BaseDbHelper(Context context) {
-        mContext = App.get(context);
+
+         daoSession = App.get(context).daoSession();
     }
 
     protected DaoSession getDaoSession() {
-        return App.get(mContext).daoSession();
+        return daoSession;
     }
 
     public void clearCache() {

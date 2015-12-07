@@ -47,13 +47,11 @@ public class YahooCurrencyDownloadService {
 
     }
 
-    public Subscription executeRequest(List<String> targetCurrencies, String sourceCurrency) {
+    public Subscription executeRequest(List<String> targetCurrencies, String sourceCurrency, final OnRequestFinished listener) {
 
         final List<String> currencyPair = YahooApiUtils.createReverseFromPairs(targetCurrencies, sourceCurrency);
-        Timber.d("Currency Pair Size: " + currencyPair.size());
 
         //Don't bother hitting the server if there's nothing there :)
-        if(!currencyPair.isEmpty()) {
 
             String query = YahooApiUtils.generateYQLCurrencyQuery(currencyPair);
 
@@ -91,12 +89,19 @@ public class YahooCurrencyDownloadService {
                 @Override
                 public void onCompleted() {
                     Timber.d("Request success!");
-                    App.getBusInstance().post(new CurrencyUpdateEvent());
+                    //App.getBusInstance().post(new CurrencyUpdateEvent());
+
+                    if(listener != null) {
+                        listener.onRequestSuccess();
+                    }
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     Timber.e(e, e.getMessage());
+                    if(listener != null) {
+                        listener.onRequestError(e);
+                    }
                 }
 
                 @Override
@@ -104,11 +109,6 @@ public class YahooCurrencyDownloadService {
                     Timber.d("Currency Entity: " +  id + " updated.");
                 }
             });
-
-        } else {
-            return null;
-        }
-
     }
 
     /**

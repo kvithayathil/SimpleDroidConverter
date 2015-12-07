@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -26,6 +25,7 @@ import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
+import com.jedikv.simpleconverter.presenters.ConversionInteractorImpl;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
 import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
@@ -34,14 +34,12 @@ import com.jedikv.simpleconverter.utils.Constants;
 import com.squareup.otto.Subscribe;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -71,6 +69,9 @@ public class MainActivity extends BaseActivity implements IConversionView {
     Toolbar toolBar;
 
 
+    @Inject
+    ConversionInteractorImpl conversionInteractor;
+
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
     @Icicle
@@ -78,7 +79,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
-    private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
+    //private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +87,11 @@ public class MainActivity extends BaseActivity implements IConversionView {
         Timber.tag(TAG);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         setSupportActionBar(toolBar);
+        getApplicationComponent().inject(this);
+        conversionInteractor.attachView(this);
 
-        mDecimalFormat.setParseBigDecimal(true);
-        mDecimalFormat.setMinimumFractionDigits(4);
-        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), parent, getSourceCurrency());
+        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), parent, getCurrentSourceCurrency());
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -112,8 +112,8 @@ public class MainActivity extends BaseActivity implements IConversionView {
                     case EditorInfo.IME_NULL:
                     case KeyEvent.KEYCODE_ENTER:
                         currencyInputView.dismissKeyboard();
-                        convertValue(currencyInputView.getInputValue());
-                        downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+                        conversionInteractor.convertValue(currencyInputView.getInputValue());
+                        conversionInteractor.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
                         return true;
 
                     default:
@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
             @Override
             public void afterTextChanged(Editable s) {
-                    convertValue(s.toString());
+                    conversionInteractor.convertValue(s.toString());
             }
         });
 
@@ -153,11 +153,17 @@ public class MainActivity extends BaseActivity implements IConversionView {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 currencyInputView.dismissKeyboard();
-                downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+                conversionInteractor.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
                 return true;
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        conversionInteractor.detachView();
+        super.onDestroy();
     }
 
     @OnClick(R.id.fab)
@@ -169,7 +175,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
     @OnClick(R.id.ib_flag)
     public void changeSourceCurrency() {
 
-        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY, new ArrayList<>(Arrays.asList(getSourceCurrency())));
+        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY, new ArrayList<>(Arrays.asList(getCurrentSourceCurrency())));
     }
 
     private void setUpTouchGestures() {
@@ -178,12 +184,6 @@ public class MainActivity extends BaseActivity implements IConversionView {
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
-    public void downloadCurrency(List<String> currencyList) {
-       // CurrencyUpdateIntentService.startService(this, currencyList, getSourceCurrency());
-        if(!currencyList.isEmpty()) {
-            currencyDownloadService.executeRequest(currencyList, getSourceCurrency());
-        }
-    }
 
     private void startCurrencyPicker(int requestCode, ArrayList<String> currencyArray) {
 
@@ -218,6 +218,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
     }
 
 
+    /*
     private void convertValue(String entry) {
 
         if(!TextUtils.isEmpty(entry)) {
@@ -237,11 +238,12 @@ public class MainActivity extends BaseActivity implements IConversionView {
             e.printStackTrace();
         }
     }
+    */
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateSourceCurrencyUI();
+        updateViews();
 
     }
 
@@ -254,7 +256,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
-        convertValue(currencyInputView.getInputValue());
+        conversionInteractor.convertValue(currencyInputView.getInputValue());
     }
 
     @Subscribe
@@ -264,27 +266,20 @@ public class MainActivity extends BaseActivity implements IConversionView {
     }
 
 
-    private void updateSourceCurrencyUI() {
-
-        currencyInputView.setValue(getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.0000"));
-        CurrencyEntity entity = getCurrencyDbHelper().getCurrency(getSourceCurrency());
-        currencyInputView.setCurrency(entity);
-        convertValue(currencyInputView.getInputValue());
-    }
-
-    public String getSourceCurrency() {
-        return getDefaultSharedPrefs().getString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, getString(R.string.default_source_currency));
-    }
 
     public void updateSourceCurrency(long currencyCode) {
 
         CurrencyEntity currencyEntity = mCurrencyEntityHelper.getById(currencyCode);
+        Timber.d("id: " + currencyCode + " code: " + currencyEntity.getCode());
+
+        List<String> currencyList = mCurrencyConversionsAdapter.getSelectedCurrencyCodeList();
 
         if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyEntity.getCode()).commit()) {
-            updateSourceCurrencyUI();
-            downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
-
+            updateViews();
         }
+
+        conversionInteractor.downloadCurrency(currencyList);
+
     }
 
     @Override
@@ -313,7 +308,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     private void addCurrencyToList(long currencyCode) {
 
-        CurrencyEntity sourceCurrencyEntity = getCurrencyDbHelper().getCurrency(getSourceCurrency());
+        CurrencyEntity sourceCurrencyEntity = getCurrencyDbHelper().getCurrency(getCurrentSourceCurrency());
         CurrencyEntity targetCurrencyEntity = getCurrencyDbHelper().getById(currencyCode);
 
         CurrencyPairEntity entity = getPairDbHelper().getCurrencyPair(sourceCurrencyEntity.getNumericCode(), currencyCode);
@@ -337,26 +332,31 @@ public class MainActivity extends BaseActivity implements IConversionView {
         long conversionId = getConversionEntityHelper().insertOrUpdate(conversionItem);
         conversionItem.setId(conversionId);
         mCurrencyConversionsAdapter.addItem(conversionItem);
-        convertValue(currencyInputView.getInputValue());
-
+        conversionInteractor.convertValue(currencyInputView.getInputValue());
 
         //Update currency at the end
-        downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
+        conversionInteractor.downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
     }
 
     @Override
     public String getCurrentSourceCurrency() {
-        return null;
+        return getDefaultSharedPrefs().getString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, getString(R.string.default_source_currency));
+
     }
 
     @Override
     public void updateViews() {
-
+        currencyInputView.setValue(getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.0000"));
+        CurrencyEntity entity = getCurrencyDbHelper().getCurrency(getCurrentSourceCurrency());
+        currencyInputView.setCurrency(entity);
+        conversionInteractor.convertValue(currencyInputView.getInputValue());
     }
 
     @Override
-    public void updateList(String inputValue) {
-
+    public void updateList(BigDecimal inputValue) {
+        mCurrencyConversionsAdapter.updateCurrencyTargets(getCurrentSourceCurrency(), inputValue);
     }
+
+
 }

@@ -12,6 +12,7 @@ import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 
 import javax.inject.Singleton;
 
+import converter_db.DaoSession;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
@@ -43,27 +44,32 @@ public class AppModule {
 
     @Provides
     @Singleton
-    SharedPreferences provideSharedPrefs() {
-        return PreferenceManager.getDefaultSharedPreferences(mApp);
+    SharedPreferences provideSharedPrefs(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     @Provides
     @Singleton
-    ConversionItemDbHelper provideConversionItemDbHelper() {
-        return new ConversionItemDbHelper(this.mApp);
+    ConversionItemDbHelper provideConversionItemDbHelper(Context context) {
+        return new ConversionItemDbHelper(context);
     }
 
     @Provides
     @Singleton
-    CurrencyPairDbHelper provideCurrencyPairDbHelper() {
-        return new CurrencyPairDbHelper(this.mApp);
+    CurrencyPairDbHelper provideCurrencyPairDbHelper(Context context) {
+        return new CurrencyPairDbHelper(context);
     }
 
     @Provides
     @Singleton
-    CurrencyDbHelper provideCurrencyDbHelper() {
-        return new CurrencyDbHelper(this.mApp);
+    CurrencyDbHelper provideCurrencyDbHelper(Context context) {
+        return new CurrencyDbHelper(context);
     }
 
+    @Provides
+    @Singleton
+    public DaoSession provideDaoSession() {
+        return mApp.daoSession();
+    }
 
 }

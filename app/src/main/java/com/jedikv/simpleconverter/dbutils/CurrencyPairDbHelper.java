@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.jedikv.simpleconverter.utils.DateUtils;
+
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -21,6 +23,8 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     public CurrencyPairDbHelper(Context context) {
         super(context);
+        QueryBuilder.LOG_SQL = true;
+        QueryBuilder.LOG_VALUES = true;
         Timber.tag(CurrencyPairDbHelper.class.getSimpleName());
     }
 
@@ -44,7 +48,6 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
     public CurrencyPairEntity getCurrencyPair(long sourceId, long targetId) {
 
         Timber.d("Source Id: " + sourceId + " TargetId: " + targetId);
-
         QueryBuilder<CurrencyPairEntity> queryBuilder = getDao().queryBuilder();
         queryBuilder.where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId), CurrencyPairEntityDao.Properties.Target_currency.eq(targetId));
         return queryBuilder.build().unique();
@@ -86,12 +89,7 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     public List<CurrencyPairEntity> getPairsToBeUpdated(long sourceId) {
 
-        TimeZone utc = TimeZone.getTimeZone("UTC");
-
-        DateTime today = DateTime.now(utc);
-        DateTime yesterday = today.minusDays(1);
-
-        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId), CurrencyPairEntityDao.Properties.Last_updated.le((yesterday.getMilliseconds(utc)))).build().list();
+        return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId), CurrencyPairEntityDao.Properties.Last_updated.le(DateUtils.getPrevious24HoursTimestamp())).build().list();
 
     }
 

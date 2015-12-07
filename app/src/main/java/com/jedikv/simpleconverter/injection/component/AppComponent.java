@@ -1,6 +1,7 @@
 package com.jedikv.simpleconverter.injection.component;
 
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.ui.activities.BaseActivity;
 import com.jedikv.simpleconverter.ui.activities.CurrencyPickerActivity;
 import com.jedikv.simpleconverter.ui.activities.MainActivity;
@@ -25,4 +26,7 @@ public interface AppComponent {
    public void inject (MainActivity mainActivity);
 
    public void inject (CurrencyPickerActivity currencyPickerActivity);
+
+
+
 }
