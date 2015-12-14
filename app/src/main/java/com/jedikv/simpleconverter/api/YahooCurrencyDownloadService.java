@@ -26,7 +26,7 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 13/06/2015.
  */
-public class YahooCurrencyDownloadService {
+public class YahooCurrencyDownloadService implements ICurrencyDownloadService {
 
     private static final String TAG = YahooCurrencyDownloadService.class.getSimpleName();
 
@@ -47,6 +47,7 @@ public class YahooCurrencyDownloadService {
 
     }
 
+    @Override
     public Subscription executeRequest(List<String> targetCurrencies, String sourceCurrency, final OnRequestFinished listener) {
 
         final List<String> currencyPair = YahooApiUtils.createReverseFromPairs(targetCurrencies, sourceCurrency);

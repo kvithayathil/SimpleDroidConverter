@@ -2,6 +2,7 @@ package com.jedikv.simpleconverter.presenters;
 
 import android.text.TextUtils;
 
+import com.jedikv.simpleconverter.api.ICurrencyDownloadService;
 import com.jedikv.simpleconverter.api.OnRequestFinished;
 import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.ui.views.IConversionView;
@@ -13,36 +14,27 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 
-import rx.Observable;
 import rx.Subscription;
-import rx.functions.Action1;
 import timber.log.Timber;
 
 /**
  * Created by KV_87 on 20/09/2015.
  */
-public class ConversionInteractorImpl implements IPresenterBase<IConversionView> {
+public class ConversionPresenter implements IPresenterBase<IConversionView> {
 
     private final DecimalFormat decimalFormat;
 
     private IConversionView conversionView;
-    private YahooCurrencyDownloadService downloadService;
+    private ICurrencyDownloadService downloadService;
 
     private Subscription currencySubscription;
 
-    public ConversionInteractorImpl(YahooCurrencyDownloadService yahooCurrencyDownloadService) {
-        Timber.d(ConversionInteractorImpl.class.getSimpleName());
-        this.downloadService = yahooCurrencyDownloadService;
+    public ConversionPresenter(ICurrencyDownloadService downloadService) {
+        Timber.d(ConversionPresenter.class.getSimpleName());
+        this.downloadService = downloadService;
         decimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
         decimalFormat.setParseBigDecimal(true);
         decimalFormat.setMinimumFractionDigits(4);
-    }
-
-
-    private void createL(String yo, String lo) {
-
-        Observable.just(new )
-
     }
 
     public void downloadCurrency(List<String> currencyList) {

@@ -25,7 +25,7 @@ import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
 import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
-import com.jedikv.simpleconverter.presenters.ConversionInteractorImpl;
+import com.jedikv.simpleconverter.presenters.ConversionPresenter;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
 import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
@@ -70,7 +70,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
 
     @Inject
-    ConversionInteractorImpl conversionInteractor;
+    ConversionPresenter conversionPresenter;
 
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         getApplicationComponent().inject(this);
-        conversionInteractor.attachView(this);
+        conversionPresenter.attachView(this);
 
         mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), parent, getCurrentSourceCurrency());
 
@@ -112,8 +112,8 @@ public class MainActivity extends BaseActivity implements IConversionView {
                     case EditorInfo.IME_NULL:
                     case KeyEvent.KEYCODE_ENTER:
                         currencyInputView.dismissKeyboard();
-                        conversionInteractor.convertValue(currencyInputView.getInputValue());
-                        conversionInteractor.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+                        conversionPresenter.convertValue(currencyInputView.getInputValue());
+                        conversionPresenter.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
                         return true;
 
                     default:
@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
             @Override
             public void afterTextChanged(Editable s) {
-                    conversionInteractor.convertValue(s.toString());
+                    conversionPresenter.convertValue(s.toString());
             }
         });
 
@@ -153,7 +153,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 currencyInputView.dismissKeyboard();
-                conversionInteractor.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+                conversionPresenter.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
                 return true;
             }
         });
@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     @Override
     protected void onDestroy() {
-        conversionInteractor.detachView();
+        conversionPresenter.detachView();
         super.onDestroy();
     }
 
@@ -256,7 +256,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     @Subscribe
     public void updateCurrencyEvent(CurrencyUpdateEvent event) {
-        conversionInteractor.convertValue(currencyInputView.getInputValue());
+        conversionPresenter.convertValue(currencyInputView.getInputValue());
     }
 
     @Subscribe
@@ -278,7 +278,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
             updateViews();
         }
 
-        conversionInteractor.downloadCurrency(currencyList);
+        conversionPresenter.downloadCurrency(currencyList);
 
     }
 
@@ -332,10 +332,10 @@ public class MainActivity extends BaseActivity implements IConversionView {
         long conversionId = getConversionEntityHelper().insertOrUpdate(conversionItem);
         conversionItem.setId(conversionId);
         mCurrencyConversionsAdapter.addItem(conversionItem);
-        conversionInteractor.convertValue(currencyInputView.getInputValue());
+        conversionPresenter.convertValue(currencyInputView.getInputValue());
 
         //Update currency at the end
-        conversionInteractor.downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
+        conversionPresenter.downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
 
     }
 
@@ -350,7 +350,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
         currencyInputView.setValue(getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.0000"));
         CurrencyEntity entity = getCurrencyDbHelper().getCurrency(getCurrentSourceCurrency());
         currencyInputView.setCurrency(entity);
-        conversionInteractor.convertValue(currencyInputView.getInputValue());
+        conversionPresenter.convertValue(currencyInputView.getInputValue());
     }
 
     @Override

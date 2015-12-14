@@ -1,20 +1,15 @@
 package com.jedikv.simpleconverter.injection.module;
 
-import android.content.Context;
-import android.text.TextUtils;
-
+import com.jedikv.simpleconverter.api.ICurrencyDownloadService;
 import com.jedikv.simpleconverter.api.IYahooCurrencyApi;
 import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.api.YahooCurrencyRestAdapter;
-import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
-import com.jedikv.simpleconverter.presenters.ConversionInteractorImpl;
-import com.jedikv.simpleconverter.presenters.IPresenterBase;
+import com.jedikv.simpleconverter.presenters.ConversionPresenter;
 
 import javax.inject.Singleton;
 
-import converter_db.DaoSession;
 import dagger.Module;
 import dagger.Provides;
 import retrofit.RestAdapter;
@@ -40,13 +35,13 @@ public class CurrencyUpdaterModule {
 
     @Provides
     @Singleton
-    public YahooCurrencyDownloadService provideYahooCurrencyDownloadService(IYahooCurrencyApi api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+    public ICurrencyDownloadService provideCurrencyDownloadService(IYahooCurrencyApi api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         return new YahooCurrencyDownloadService(api, currencyDbHelper, currencyPairDbHelper);
     }
 
     @Provides
-    public ConversionInteractorImpl provideConversionInteractor(YahooCurrencyDownloadService downloadService) {
-        return new ConversionInteractorImpl(downloadService);
+    public ConversionPresenter provideConversionPresenter(ICurrencyDownloadService downloadService) {
+        return new ConversionPresenter(downloadService);
     }
 
 }

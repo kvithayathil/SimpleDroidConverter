@@ -3,7 +3,9 @@ package com.jedikv.simpleconverter.dbutils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 
+import com.jedikv.simpleconverter.BuildConfig;
 import com.jedikv.simpleconverter.utils.DateUtils;
 
 import java.util.Date;
@@ -23,8 +25,12 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
 
     public CurrencyPairDbHelper(Context context) {
         super(context);
-        QueryBuilder.LOG_SQL = true;
-        QueryBuilder.LOG_VALUES = true;
+
+        if(BuildConfig.DEBUG) {
+            QueryBuilder.LOG_SQL = true;
+            QueryBuilder.LOG_VALUES = true;
+        }
+
         Timber.tag(CurrencyPairDbHelper.class.getSimpleName());
     }
 
