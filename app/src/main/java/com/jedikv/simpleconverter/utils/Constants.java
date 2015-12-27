@@ -13,7 +13,8 @@ public class Constants {
     public static final String YAHOO_CURRENCY_URL = "https://query.yahooapis.com";
 
 
-    public static final String PREFS_CURRENTLY_SELECTED_CURRENCY = "prefs_currently_selected";
+    public static final String PREFS_CURRENTLY_SELECTED_CURRENCY = "prefs_currently_selected_string";
+    public static final String PREFS_CURRENTLY_SELECTED_CURRENCY_CODE = "prefs_currently_selected_code";
 
     public static final String PREFS_CACHED_SAVED_INPUT_VALUE = "prefs_cached_input_value";
 }

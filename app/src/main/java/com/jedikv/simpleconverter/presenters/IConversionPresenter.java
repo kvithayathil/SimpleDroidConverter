@@ -1,17 +1,25 @@
 package com.jedikv.simpleconverter.presenters;
 
+import com.jedikv.simpleconverter.ui.views.IConversionView;
+
 import java.util.List;
 
 /**
  * Created by KV_87 on 20/09/2015.
  */
-public interface IConversionPresenter extends IPresenterBase {
+public interface IConversionPresenter {
 
-    void downloadCurrency(List<String> currencyList);
+    void attachView(IConversionView view);
+
+    void detachView();
+
+    void onResume();
+
+    void onPause();
 
     void convertValue(String value);
 
-    void addCurrency(long currencyCode);
+    void addCurrency(long sourceCurrency, long targetCurrencyCode);
 
-    void updateSourceCurrency(List<String> currencyList);
+    void updateFromSourceCurrency(long sourceCurrencyCode);
 }

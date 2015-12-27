@@ -96,7 +96,6 @@ public class CurrencyPairDbHelper extends BaseDbHelper {
     public List<CurrencyPairEntity> getPairsToBeUpdated(long sourceId) {
 
         return getDao().queryBuilder().where(CurrencyPairEntityDao.Properties.Source_currency.eq(sourceId), CurrencyPairEntityDao.Properties.Last_updated.le(DateUtils.getPrevious24HoursTimestamp())).build().list();
-
     }
 
     public List<CurrencyPairEntity> getCurrencyPairByTarget(long sourceId) {

@@ -5,39 +5,96 @@ import android.text.TextUtils;
 import com.jedikv.simpleconverter.api.ICurrencyDownloadService;
 import com.jedikv.simpleconverter.api.OnRequestFinished;
 import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
+import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
+import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.ui.views.IConversionView;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import converter_db.ConversionItem;
+import converter_db.CurrencyEntity;
+import converter_db.CurrencyPairEntity;
 import rx.Subscription;
 import timber.log.Timber;
 
 /**
  * Created by KV_87 on 20/09/2015.
  */
-public class ConversionPresenter implements IPresenterBase<IConversionView> {
+public class ConversionPresenter implements IConversionPresenter {
 
     private final DecimalFormat decimalFormat;
 
     private IConversionView conversionView;
     private ICurrencyDownloadService downloadService;
+    private CurrencyPairDbHelper currencyPairDbHelper;
+    private CurrencyDbHelper currencyDbHelper;
 
     private Subscription currencySubscription;
 
-    public ConversionPresenter(ICurrencyDownloadService downloadService) {
+    public ConversionPresenter(ICurrencyDownloadService downloadService, CurrencyPairDbHelper currencyPairDbHelper, CurrencyDbHelper currencyDbHelper) {
         Timber.d(ConversionPresenter.class.getSimpleName());
+        this.currencyPairDbHelper = currencyPairDbHelper;
+        this.currencyDbHelper = currencyDbHelper;
         this.downloadService = downloadService;
         decimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
         decimalFormat.setParseBigDecimal(true);
         decimalFormat.setMinimumFractionDigits(4);
     }
 
-    public void downloadCurrency(List<String> currencyList) {
+    @Override
+    public void addCurrency(long sourceCurrency, long targetCurrencyCode) {
+
+        CurrencyEntity sourceCurrencyEntity = currencyDbHelper.getById(sourceCurrency);
+        CurrencyEntity targetCurrencyEntity = currencyDbHelper.getById(targetCurrencyCode);
+
+
+        CurrencyPairEntity entity = currencyPairDbHelper.getCurrencyPair(sourceCurrency, targetCurrencyCode);
+        if(entity == null) {
+
+            Timber.d("New currency pair entry");
+            //Create a dummy pair for now till it's updated over the web
+            entity = new CurrencyPairEntity();
+            entity.setSource_id(sourceCurrencyEntity);
+            entity.setTarget_id(targetCurrencyEntity);
+            entity.setRate(0);
+            entity.setCreated_date(new Date());
+            long id = currencyPairDbHelper.insertOrUpdate(entity);
+            entity.setId(id);
+        }
+
+        ConversionItem conversionItem = new ConversionItem();
+        conversionItem.setCurrencyPairEntity(entity);
+        conversionItem.setPosition(conversionView.getListSize());
+        conversionView.insertConversionItem(conversionItem);
+
+    }
+
+    @Override
+    public void updateFromSourceCurrency(long sourceCurrencyCode) {
+
+        List<CurrencyPairEntity> pairEntityList = currencyPairDbHelper.getPairsToBeUpdated(sourceCurrencyCode);
+
+        if(pairEntityList != null && !pairEntityList.isEmpty()) {
+
+            ArrayList<String> codeList = new ArrayList<>(pairEntityList.size());
+
+            for(CurrencyPairEntity entity : pairEntityList) {
+                CurrencyEntity currencyEntity = entity.getTarget_id();
+                codeList.add(currencyEntity.getCode());
+            }
+            downloadCurrency(codeList);
+        }
+    }
+
+
+    private void downloadCurrency(List<String> currencyList) {
         if(currencySubscription != null) {
             currencySubscription.unsubscribe();
         }
@@ -107,4 +164,6 @@ public class ConversionPresenter implements IPresenterBase<IConversionView> {
     public void onPause() {
 
     }
+
+
 }

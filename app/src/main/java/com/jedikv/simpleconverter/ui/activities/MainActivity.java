@@ -272,13 +272,12 @@ public class MainActivity extends BaseActivity implements IConversionView {
         CurrencyEntity currencyEntity = mCurrencyEntityHelper.getById(currencyCode);
         Timber.d("id: " + currencyCode + " code: " + currencyEntity.getCode());
 
-        List<String> currencyList = mCurrencyConversionsAdapter.getSelectedCurrencyCodeList();
-
         if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyEntity.getCode()).commit()) {
+            getDefaultSharedPrefs().edit().putLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, currencyCode).commit();
             updateViews();
         }
 
-        conversionPresenter.downloadCurrency(currencyList);
+        conversionPresenter.updateFromSourceCurrency(currencyCode);
 
     }
 
@@ -307,41 +306,29 @@ public class MainActivity extends BaseActivity implements IConversionView {
     }
 
     private void addCurrencyToList(long currencyCode) {
-
-        CurrencyEntity sourceCurrencyEntity = getCurrencyDbHelper().getCurrency(getCurrentSourceCurrency());
-        CurrencyEntity targetCurrencyEntity = getCurrencyDbHelper().getById(currencyCode);
-
-        CurrencyPairEntity entity = getPairDbHelper().getCurrencyPair(sourceCurrencyEntity.getNumericCode(), currencyCode);
-
-        if(entity == null) {
-
-            Timber.d("New currency pair entry");
-            //Create a dummy pair for now till it's updated over the web
-            entity = new CurrencyPairEntity();
-            entity.setSource_id(sourceCurrencyEntity);
-            entity.setTarget_id(targetCurrencyEntity);
-            entity.setRate(0);
-            entity.setCreated_date(new Date());
-            long id = getPairDbHelper().insertOrUpdate(entity);
-            entity.setId(id);
-        }
-
-        ConversionItem conversionItem = new ConversionItem();
-        conversionItem.setCurrencyPairEntity(entity);
-        conversionItem.setPosition(mCurrencyConversionsAdapter.getItemCount());
-        long conversionId = getConversionEntityHelper().insertOrUpdate(conversionItem);
-        conversionItem.setId(conversionId);
-        mCurrencyConversionsAdapter.addItem(conversionItem);
-        conversionPresenter.convertValue(currencyInputView.getInputValue());
-
-        //Update currency at the end
-        conversionPresenter.downloadCurrency(Arrays.asList(targetCurrencyEntity.getCode()));
-
+        conversionPresenter.addCurrency(getCurrentSourceCurrencyCode(), currencyCode);
     }
 
     @Override
     public String getCurrentSourceCurrency() {
         return getDefaultSharedPrefs().getString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, getString(R.string.default_source_currency));
+
+    }
+
+    @Override
+    public long getCurrentSourceCurrencyCode() {
+        return getDefaultSharedPrefs().getLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, R.integer.default_source_currency_code);
+    }
+
+    @Override
+    public int getListSize() {
+        return mCurrencyConversionsAdapter.getItemCount();
+    }
+
+    @Override
+    public void insertConversionItem(ConversionItem conversionItem) {
+        mCurrencyConversionsAdapter.addItem(conversionItem);
+        conversionPresenter.convertValue(currencyInputView.getInputValue());
 
     }
 

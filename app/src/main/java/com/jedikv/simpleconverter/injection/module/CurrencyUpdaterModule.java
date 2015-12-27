@@ -40,8 +40,8 @@ public class CurrencyUpdaterModule {
     }
 
     @Provides
-    public ConversionPresenter provideConversionPresenter(ICurrencyDownloadService downloadService) {
-        return new ConversionPresenter(downloadService);
+    public ConversionPresenter provideConversionPresenter(ICurrencyDownloadService downloadService, CurrencyPairDbHelper currencyPairDbHelper, CurrencyDbHelper currencyDbHelper) {
+        return new ConversionPresenter(downloadService, currencyPairDbHelper, currencyDbHelper);
     }
 
 }
