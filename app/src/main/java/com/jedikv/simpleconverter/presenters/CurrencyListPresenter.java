@@ -1,12 +1,9 @@
 package com.jedikv.simpleconverter.presenters;
 
-import android.content.Context;
-
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

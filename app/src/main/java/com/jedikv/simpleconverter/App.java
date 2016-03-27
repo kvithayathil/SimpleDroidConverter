@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.facebook.stetho.Stetho;
+import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
 import com.jedikv.simpleconverter.injection.component.AppComponent;
 import com.jedikv.simpleconverter.injection.component.DaggerAppComponent;
 import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
@@ -38,7 +39,9 @@ public class App extends Application {
         super.onCreate();
         Timber.tag(TAG);
         LeakCanary.install(this);
-
+        if (BuildConfig.DEBUG) {
+            AndroidDevMetrics.initWith(this);
+        }
 
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)

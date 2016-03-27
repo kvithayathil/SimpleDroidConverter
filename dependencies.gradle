@@ -1,0 +1,126 @@
+ext.versions = [
+        //versionCode: 1,
+        //versionName: '1.0.0.0',
+        appMajor: 0,
+        appMinor: 1,
+        appPatch: 0,
+        appBuild: 0,
+
+
+        minSdk: 15,
+        targetSdk: 23,
+        compileSdk: 23,
+        buildTools: '23.0.2',
+
+        androidGradlePlugin: '1.5.0',
+        aptGradlePlugin: '1.8',
+
+        jacocoGradlePlugin: '0.7.6.201602180812',
+        androidDevMetricsGradlePlugin: '0.4',
+
+        dagger: '2.1',
+        javaxInject: '1',
+        javaxAnnotationApi: '1.2',
+        javaxGlassfish: '10.0-b28',
+        rxJava: '1.1.2',
+        rxAndroid: '1.1.0',
+        supportLibs: '23.2.1',
+        okHttp: '3.2.0',
+        retrofit: '2.0.0',
+        autoValue: '1.2-rc1',
+        butterKnife: '7.0.1',
+        timber: '4.1.1',
+        espresso: '2.2.2',
+        stetho: '1.3.1',
+        leakCanary: '1.3.1',
+        otto: '1.3.8',
+        gson: '2.6.2',
+        icePick: '2.3.6',
+        icePickProcessor: '2.3.6',
+
+        junit: '4.12',
+        robolectric: '3.0',
+        assertJ: '1.7.1',
+        mockito: '1.10.19',
+        supportTestRunner: '0.5',
+
+        jodaAndroid: '2.9.2',
+
+        dexCount: '0.4.3',
+        gradleVersionsPlugn: '0.12.0',
+        nineOldAndroids: '2.4.0',
+        aboutLibraries: '5.6.2@aar',
+
+        greendao: '2.1.0',
+]
+
+ext.gradlePlugins = [
+        android: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
+        apt: "com.neenbedankt.gradle.plugins:android-apt:$versions.aptGradlePlugin",
+        jacoco: "org.jacoco:org.jacoco.core:$versions.jacocoGradlePlugin",
+        androidDevMetrics: "com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:$versions.androidDevMetricsGradlePlugin",
+        keepSafeDexCount: "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexCount",
+        gradleVersionsPlugin:"com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugn",
+]
+
+ext.libraries = [
+        dagger: "com.google.dagger:dagger:$versions.dagger",
+        daggerCompiler: "com.google.dagger:dagger-compiler:$versions.dagger",
+        javaxInject: "javax.inject:javax.inject:$versions.javaxInject",
+        javaxAnnotationApi: "javax.annotation:javax.annotation-api:$versions.javaxAnnotationApi",
+        javaxGlassfish: "org.glassfish:javax.annotation:$versions.javaxGlassfish",
+
+        rxJava: "io.reactivex:rxjava:$versions.rxJava",
+        rxAndroid: "io.reactivex:rxandroid:$versions.rxAndroid",
+
+        okHttp: "com.squareup.okhttp3:okhttp:$versions.okHttp",
+        okHttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:$versions.okHttp",
+        okHttpUrlConnection: "com.squareup.okhttp3:okhttp-urlconnection:$versions.okHttp",
+
+        retrofit: "com.squareup.retrofit2:retrofit:$versions.retrofit",
+        retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava:$versions.retrofit",
+        retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+
+
+        autoValue: "com.google.auto.value:auto-value:$versions.autoValue",
+        gson: "com.google.code.gson:gson:$versions.gson",
+
+        supportAnnotations: "com.android.support:support-annotations:$versions.supportLibs",
+        supportAppCompat: "com.android.support:appcompat-v7:$versions.supportLibs",
+        supportDesign: "com.android.support:design:$versions.supportLibs",
+        supportRecyclerView: "com.android.support:recyclerview-v7:$versions.supportLibs",
+        supportCardView: "com.android.support:cardview-v7:$versions.supportLibs",
+
+        otto: "com.squareup:otto:$versions.otto",
+        nineOldAndroids: "com.nineoldandroids:library:$versions.nineOldAndroids",
+        butterKnife: "com.jakewharton:butterknife:$versions.butterKnife",
+        timber: "com.jakewharton.timber:timber:$versions.timber",
+
+        greendao: "de.greenrobot:greendao:$versions.greendao",
+        aboutLibraries: "com.mikepenz:aboutlibraries:$versions.aboutLibraries",
+        jodaAndroid: "net.danlew:android.joda:$versions.jodaAndroid",
+
+        icePick: "com.github.frankiesardo:icepick:$versions.icePick",
+        icePickProcessor: "com.github.frankiesardo:icepick-processor:$versions.icePickProcessor",
+
+        // Developer Tools
+        stetho : "com.facebook.stetho:stetho:$versions.stetho",
+        stethoOkHttp: "com.facebook.stetho:stetho-okhttp3:$versions.stetho",
+        leakCanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakCanary",
+        leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakCanary",
+        devMetricsNoOp: "com.frogermcs.androiddevmetrics:androiddevmetrics-runtime-noop:$versions.androidDevMetricsGradlePlugin",
+
+        // Test dependencies
+        junit: "junit:junit:$versions.junit",
+        robolectric: "org.robolectric:robolectric:$versions.robolectric",
+        assertJ: "org.assertj:assertj-core:$versions.assertJ",
+        okHttpMockWebServer: "com.squareup.okhttp3:mockwebserver:$versions.okHttp",
+        mockitoCore: "org.mockito:mockito-core:$versions.mockito",
+        supportTestRunner: "com.android.support.test:runner:$versions.supportTestRunner",
+        supportTestRules: "com.android.support.test:rules:$versions.supportTestRunner",
+        espressoCore: "com.android.support.test.espresso:espresso-core:$versions.espresso",
+        espressoContrib: "com.android.support.test.espresso:espresso-contrib:$versions.espresso",
+        espressoWeb: "com.android.support.test.espresso:espresso-web:$versions.espresso",
+        espressoIntents: "com.android.support.test.espresso:espresso-intents:$versions.espresso",
+        espressoIdle: "com.android.support.test.espresso:espresso-idling-resource:$versions.espresso",
+]

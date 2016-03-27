@@ -1,6 +1,5 @@
 package com.jedikv.simpleconverter.presenters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

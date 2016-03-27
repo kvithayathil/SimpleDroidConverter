@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.jedikv.simpleconverter.App;
-import com.jedikv.simpleconverter.api.IYahooCurrencyApi;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
@@ -15,7 +14,6 @@ import javax.inject.Singleton;
 import converter_db.DaoSession;
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
 
 /**
  * Created by Kurian on 03/05/2015.

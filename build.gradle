@@ -1,58 +1,60 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: 'dependencies.gradle'
 
 buildscript {
+
+    // Gradle will not find vars defined in an external file when referring to them
+    // in the buildscript block, unless you link it from the buildscript block, too.
+    apply from: 'dependencies.gradle'
+
     repositories {
         jcenter()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://clojars.org/repo/" }
         mavenCentral()
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.9'
-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.2.1'
+        // See dependencies.gradle for declaration of plugins.
 
+        classpath gradlePlugins.android
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        // Compile-time annotation processing.
+        classpath gradlePlugins.apt
+        //Dexcounter
+        classpath gradlePlugins.keepSafeDexCount
+        //Gradle plugin to discover dependency updates
+        classpath gradlePlugins.gradleVersionsPlugin
+        // Performance metrics library for Android development.
+        classpath gradlePlugins.androidDevMetrics
+        // Code coverage.
+        classpath gradlePlugins.jacoco
     }
 }
 
 allprojects {
-    apply plugin: 'jacoco'
-    apply plugin: 'com.github.ben-manes.versions'
-
-
+    //apply plugin: 'com.github.ben-manes.versions'
     repositories {
         jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-
     }
 
-    // Specify latest jacoco, else use default
-    jacoco {
-        version '0.7.4.201502262128'
+    // Workaround to prevent Gradle from stealing focus from other apps during tests run/etc.
+    // https://gist.github.com/artem-zinnatullin/4c250e04636e25797165
+    tasks.withType(JavaForkOptions) {
+        jvmArgs '-Djava.awt.headless=true'
     }
+}
 
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
 
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = JavaVersion.VERSION_1_7
-
-        // report all Java errors even if the IDE does not
-        configure(options) {
-            compilerArgs << '-Xlint:all' << '-Xlint:-options'
-            deprecation = true
-            encoding = 'UTF-8'
-        }
-    }
-
-    // print errors from test in the terminal
-    tasks.withType(Test) {
-        testLogging {
-            exceptionFormat 'full'
+ext.preDexLibs = !project.hasProperty('disablePreDex')
+subprojects {
+    project.plugins.whenPluginAdded { plugin ->
+        if ('com.android.build.gradle.AppPlugin'.equals(plugin.class.name) || 'com.android.build.gradle.LibraryPlugin'.equals(plugin.class.name)) {
+            // enable or disable pre-dexing
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
         }
     }
 }

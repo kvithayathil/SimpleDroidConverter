@@ -54,7 +54,10 @@ public class ConversionPresenter implements IConversionPresenter {
 
         CurrencyEntity sourceCurrencyEntity = currencyDbHelper.getById(currentCurrencyISOCode);
         CurrencyEntity targetCurrencyEntity = currencyDbHelper.getById(targetCurrencyCode);
+        Timber.d("TargetCurrency Code: " + targetCurrencyCode);
 
+        //Timber.d("source: %1$s", sourceCurrencyEntity.getName());
+        Timber.d("source: %1$s", targetCurrencyEntity.getName());
 
         CurrencyPairEntity entity = currencyPairDbHelper.getCurrencyPair(currentCurrencyISOCode, targetCurrencyCode);
         if(entity == null) {
@@ -83,7 +86,7 @@ public class ConversionPresenter implements IConversionPresenter {
         this.currentCurrencyISOCode = sourceCurrencyCode;
 
         List<CurrencyPairEntity> pairEntityList = currencyPairDbHelper.getPairsToBeUpdated(sourceCurrencyCode);
-
+        Timber.d("Pair size: %1$d", pairEntityList.size());
         if(pairEntityList != null && !pairEntityList.isEmpty()) {
 
             ArrayList<String> codeList = new ArrayList<>(pairEntityList.size());
@@ -102,7 +105,7 @@ public class ConversionPresenter implements IConversionPresenter {
             currencySubscription.unsubscribe();
         }
 
-        Timber.d("Currency Pair Size: " + currencyList.size());
+        Timber.d("Currency Pair Size: %1$d", currencyList.size());
 
 
         if(!currencyList.isEmpty()) {
@@ -132,7 +135,7 @@ public class ConversionPresenter implements IConversionPresenter {
         try {
             BigDecimal enteredValue = (BigDecimal)decimalFormat.parse(value);
 
-            Timber.d("Inputted: " + value + " Converted: " + enteredValue.toPlainString());
+            Timber.d("Inputted: %1$s Converted: %2$s", value, enteredValue.toPlainString());
 
             conversionView.updateList(enteredValue);
 
@@ -150,7 +153,7 @@ public class ConversionPresenter implements IConversionPresenter {
 
     @Override
     public void detachView() {
-        Timber.d(conversionView.getClass().getSimpleName() + " detached");
+        Timber.d("%1$s detached", conversionView.getClass().getSimpleName());
         this.conversionView = null;
 
         if(currencySubscription != null) {
@@ -160,7 +163,7 @@ public class ConversionPresenter implements IConversionPresenter {
 
     @Override
     public void attachView(IConversionView view) {
-        Timber.d(view.getClass().getSimpleName() + " attached");
+        Timber.d("%1$s attached", view.getClass().getSimpleName());
         this.conversionView = view;
     }
 

@@ -8,12 +8,13 @@ import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.presenters.ConversionPresenter;
 import com.jedikv.simpleconverter.presenters.CurrencyListPresenter;
+import com.jedikv.simpleconverter.presenters.ICurrencyListPresenter;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
+import retrofit2.Retrofit;
 
 /**
  * Created by Kurian on 03/05/2015.
@@ -23,14 +24,14 @@ public class CurrencyUpdaterModule {
 
     @Provides
     @Singleton
-    public RestAdapter provideYahooCurrencyRestAdapter() {
+    public Retrofit provideYahooCurrencyRestAdapter() {
         return new YahooCurrencyRestAdapter().getRestAdapter();
     }
 
 
     @Provides
     @Singleton
-    IYahooCurrencyApi provideYahooCurrencyApi(RestAdapter restAdapter) {
+    IYahooCurrencyApi provideYahooCurrencyApi(Retrofit restAdapter) {
         return restAdapter.create(IYahooCurrencyApi.class);
     }
 
@@ -46,7 +47,7 @@ public class CurrencyUpdaterModule {
     }
 
     @Provides
-    public CurrencyListPresenter provideCurrencyListPresenter(CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+    public ICurrencyListPresenter provideCurrencyListPresenter(CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         return new CurrencyListPresenter(currencyPairDbHelper, currencyDbHelper);
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -305,7 +306,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     @Override
     public long getCurrentSourceCurrencyCode() {
-        return getDefaultSharedPrefs().getLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, R.integer.default_source_currency_code);
+        return getDefaultSharedPrefs().getLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, getResources().getInteger(R.integer.default_source_currency_code));
     }
 
     @Override
