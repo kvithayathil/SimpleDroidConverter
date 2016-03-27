@@ -112,8 +112,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
                     case EditorInfo.IME_NULL:
                     case KeyEvent.KEYCODE_ENTER:
                         currencyInputView.dismissKeyboard();
-                        conversionPresenter.convertValue(currencyInputView.getInputValue());
-                        conversionPresenter.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+                        conversionPresenter.updateFromSourceCurrency(getCurrentSourceCurrencyCode());
                         return true;
 
                     default:
@@ -153,10 +152,12 @@ public class MainActivity extends BaseActivity implements IConversionView {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 currencyInputView.dismissKeyboard();
-                conversionPresenter.downloadCurrency(mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+                conversionPresenter.updateFromSourceCurrency(getCurrentSourceCurrencyCode());
                 return true;
             }
         });
+
+        conversionPresenter.updateFromSourceCurrency(getCurrentSourceCurrencyCode());
 
     }
 
@@ -169,13 +170,13 @@ public class MainActivity extends BaseActivity implements IConversionView {
     @OnClick(R.id.fab)
     public void addCurrency() {
 
-        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY, mCurrencyConversionsAdapter.getSelectedCurrencyCodeList());
+        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY);
     }
 
     @OnClick(R.id.ib_flag)
     public void changeSourceCurrency() {
 
-        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY, new ArrayList<>(Arrays.asList(getCurrentSourceCurrency())));
+        startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY);
     }
 
     private void setUpTouchGestures() {
@@ -185,11 +186,10 @@ public class MainActivity extends BaseActivity implements IConversionView {
     }
 
 
-    private void startCurrencyPicker(int requestCode, ArrayList<String> currencyArray) {
+    private void startCurrencyPicker(int requestCode) {
 
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList(CurrencyPickerActivity.EXTRA_CURRENCY_LIST, currencyArray);
-
+        bundle.putLong(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, getCurrentSourceCurrencyCode());
         Intent pickCurrencyIntent = new Intent(this, CurrencyPickerActivity.class);
         pickCurrencyIntent.putExtras(bundle);
         startActivityForResult(pickCurrencyIntent, requestCode);
@@ -254,18 +254,6 @@ public class MainActivity extends BaseActivity implements IConversionView {
         getDefaultSharedPrefs().edit().putString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, currencyInputView.getInputValue()).apply();
     }
 
-    @Subscribe
-    public void updateCurrencyEvent(CurrencyUpdateEvent event) {
-        conversionPresenter.convertValue(currencyInputView.getInputValue());
-    }
-
-    @Subscribe
-    public void removeItemEvent(RemoveConversionEvent event) {
-        currencyInputView.dismissKeyboard();
-        mCurrencyConversionsAdapter.removeItem(event.getPosition());
-    }
-
-
 
     public void updateSourceCurrency(long currencyCode) {
 
@@ -306,7 +294,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
     }
 
     private void addCurrencyToList(long currencyCode) {
-        conversionPresenter.addCurrency(getCurrentSourceCurrencyCode(), currencyCode);
+        conversionPresenter.addCurrency(currencyCode);
     }
 
     @Override

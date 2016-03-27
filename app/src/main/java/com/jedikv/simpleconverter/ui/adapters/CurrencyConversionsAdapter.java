@@ -108,21 +108,6 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         return mInputValue;
     }
 
-    public ArrayList<String> getSelectedCurrencyCodeList() {
-
-        ArrayList<String> codeList = new ArrayList<>();
-
-
-        List<CurrencyPairEntity> pairEntityList = mCurrencyPairDbHelper.getPairsToBeUpdated(sourceCurrencyEntity.getNumericCode());
-
-        for(CurrencyPairEntity entity : pairEntityList) {
-
-           CurrencyEntity currencyEntity = entity.getTarget_id();
-            codeList.add(currencyEntity.getCode());
-        }
-
-        return codeList;
-    }
 
     @Override
     public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

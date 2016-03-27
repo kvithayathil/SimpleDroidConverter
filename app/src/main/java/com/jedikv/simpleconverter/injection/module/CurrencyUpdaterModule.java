@@ -7,6 +7,7 @@ import com.jedikv.simpleconverter.api.YahooCurrencyRestAdapter;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.presenters.ConversionPresenter;
+import com.jedikv.simpleconverter.presenters.CurrencyListPresenter;
 
 import javax.inject.Singleton;
 
@@ -42,6 +43,11 @@ public class CurrencyUpdaterModule {
     @Provides
     public ConversionPresenter provideConversionPresenter(ICurrencyDownloadService downloadService, CurrencyPairDbHelper currencyPairDbHelper, CurrencyDbHelper currencyDbHelper) {
         return new ConversionPresenter(downloadService, currencyPairDbHelper, currencyDbHelper);
+    }
+
+    @Provides
+    public CurrencyListPresenter provideCurrencyListPresenter(CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+        return new CurrencyListPresenter(currencyPairDbHelper, currencyDbHelper);
     }
 
 }

@@ -19,7 +19,7 @@ public interface IConversionPresenter {
 
     void convertValue(String value);
 
-    void addCurrency(long sourceCurrency, long targetCurrencyCode);
+    void addCurrency(long targetCurrencyCode);
 
     void updateFromSourceCurrency(long sourceCurrencyCode);
 }

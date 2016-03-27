@@ -13,10 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
+import com.jedikv.simpleconverter.presenters.ICurrencyListPresenter;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyPickerAdapter;
 import com.squareup.otto.Subscribe;
+
+import java.util.Collections;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,8 +40,8 @@ public class CurrencyPickerActivity extends BaseActivity {
     public static final int RESULT_CODE_SUCCESS = 1001;
 
     public static final String EXTRA_CURRENCY_LIST = "extra_currency_list";
-
     public static final String EXTRA_SELECTED_CURRENCY_CODE = "extra_selected_currency_code";
+    public static final String EXTRA_REQUEST_CODE = "extra_request_code";
 
     // The elevation of the toolbar when content is scrolled behind
     private static final float TOOLBAR_ELEVATION = 14f;
@@ -48,6 +54,9 @@ public class CurrencyPickerActivity extends BaseActivity {
 
     private CurrencyPickerAdapter mAdapter;
 
+    @Inject
+    ICurrencyListPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +64,7 @@ public class CurrencyPickerActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getApplicationComponent().inject(this);
 
         //recyclerView.setScrollViewCallbacks(this);
         recyclerView.setHasFixedSize(true);
@@ -62,9 +72,15 @@ public class CurrencyPickerActivity extends BaseActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
 
-        if(getIntent().getExtras() != null) {
+        Bundle extras = getIntent().getExtras();
 
-            mAdapter = new CurrencyPickerAdapter(this, getIntent().getExtras().getStringArrayList(EXTRA_CURRENCY_LIST));
+        if(extras != null) {
+
+            if(extras.getLong(EXTRA_REQUEST_CODE) == REQUEST_CODE_ADD_CURRENCY) {
+                mAdapter = new CurrencyPickerAdapter(this, presenter.getListToHide(extras.getLong(EXTRA_SELECTED_CURRENCY_CODE)));
+            } else {
+                mAdapter = new CurrencyPickerAdapter(this, Collections.EMPTY_LIST);
+            }
 
             recyclerView.setAdapter(mAdapter);
         }

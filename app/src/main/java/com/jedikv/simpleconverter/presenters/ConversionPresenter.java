@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.jedikv.simpleconverter.api.ICurrencyDownloadService;
 import com.jedikv.simpleconverter.api.OnRequestFinished;
-import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.ui.views.IConversionView;
@@ -36,6 +35,8 @@ public class ConversionPresenter implements IConversionPresenter {
     private CurrencyPairDbHelper currencyPairDbHelper;
     private CurrencyDbHelper currencyDbHelper;
 
+    private long currentCurrencyISOCode;
+
     private Subscription currencySubscription;
 
     public ConversionPresenter(ICurrencyDownloadService downloadService, CurrencyPairDbHelper currencyPairDbHelper, CurrencyDbHelper currencyDbHelper) {
@@ -49,13 +50,13 @@ public class ConversionPresenter implements IConversionPresenter {
     }
 
     @Override
-    public void addCurrency(long sourceCurrency, long targetCurrencyCode) {
+    public void addCurrency(long targetCurrencyCode) {
 
-        CurrencyEntity sourceCurrencyEntity = currencyDbHelper.getById(sourceCurrency);
+        CurrencyEntity sourceCurrencyEntity = currencyDbHelper.getById(currentCurrencyISOCode);
         CurrencyEntity targetCurrencyEntity = currencyDbHelper.getById(targetCurrencyCode);
 
 
-        CurrencyPairEntity entity = currencyPairDbHelper.getCurrencyPair(sourceCurrency, targetCurrencyCode);
+        CurrencyPairEntity entity = currencyPairDbHelper.getCurrencyPair(currentCurrencyISOCode, targetCurrencyCode);
         if(entity == null) {
 
             Timber.d("New currency pair entry");
@@ -78,6 +79,8 @@ public class ConversionPresenter implements IConversionPresenter {
 
     @Override
     public void updateFromSourceCurrency(long sourceCurrencyCode) {
+
+        this.currentCurrencyISOCode = sourceCurrencyCode;
 
         List<CurrencyPairEntity> pairEntityList = currencyPairDbHelper.getPairsToBeUpdated(sourceCurrencyCode);
 
@@ -103,7 +106,8 @@ public class ConversionPresenter implements IConversionPresenter {
 
 
         if(!currencyList.isEmpty()) {
-            currencySubscription = downloadService.executeRequest(currencyList, conversionView.getCurrentSourceCurrency(), new OnRequestFinished() {
+            String currencyCode = currencyDbHelper.getById(currentCurrencyISOCode).getCode();
+            currencySubscription = downloadService.executeRequest(currencyList, currencyCode, new OnRequestFinished() {
                 @Override
                 public void onRequestSuccess() {
                     if(conversionView != null) {
