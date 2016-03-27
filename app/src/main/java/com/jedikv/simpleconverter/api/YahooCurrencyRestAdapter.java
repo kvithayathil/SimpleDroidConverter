@@ -20,7 +20,7 @@ public class YahooCurrencyRestAdapter implements IRestAdapter {
 
     public YahooCurrencyRestAdapter() {
 
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         if(BuildConfig.DEBUG) {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         } else {
@@ -31,7 +31,7 @@ public class YahooCurrencyRestAdapter implements IRestAdapter {
                 .addInterceptor(logging)
                 .build();
         //Show http logs only in debug builds
-        Gson gson = new GsonBuilder()
+        final Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
 

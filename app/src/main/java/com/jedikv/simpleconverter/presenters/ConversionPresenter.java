@@ -56,7 +56,7 @@ public class ConversionPresenter implements IConversionPresenter {
         CurrencyEntity targetCurrencyEntity = currencyDbHelper.getById(targetCurrencyCode);
         Timber.d("TargetCurrency Code: " + targetCurrencyCode);
 
-        //Timber.d("source: %1$s", sourceCurrencyEntity.getName());
+        Timber.d("source: %1$s", sourceCurrencyEntity.getName());
         Timber.d("source: %1$s", targetCurrencyEntity.getName());
 
         CurrencyPairEntity entity = currencyPairDbHelper.getCurrencyPair(currentCurrencyISOCode, targetCurrencyCode);
