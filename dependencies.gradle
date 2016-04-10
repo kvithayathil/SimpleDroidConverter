@@ -63,7 +63,7 @@ ext.gradlePlugins = [
         androidDevMetrics: "com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:$versions.androidDevMetricsGradlePlugin",
         keepSafeDexCount: "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexCount",
         gradleVersionsPlugin:"com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugn",
-        apt: "io.requery:requery-processor:$versions.requery",
+        requeryProcessor: "io.requery:requery-processor:$versions.requery",
 ]
 
 ext.libraries = [
