@@ -162,6 +162,11 @@ dependencies {
     provided libraries.javaxGlassfish
     //Greendao ORM database
     compile libraries.greendao
+    //ReQuery database
+    compile libraries.requery
+    compile libraries.requeryAndroid
+    compile libraries.requeryProcessor
+
     //Date4J date parser
     compile libraries.date4j
 

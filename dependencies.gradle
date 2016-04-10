@@ -63,7 +63,6 @@ ext.gradlePlugins = [
         androidDevMetrics: "com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:$versions.androidDevMetricsGradlePlugin",
         keepSafeDexCount: "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexCount",
         gradleVersionsPlugin:"com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugn",
-        requeryProcessor: "io.requery:requery-processor:$versions.requery",
 ]
 
 ext.libraries = [
@@ -102,6 +101,8 @@ ext.libraries = [
         greendao: "de.greenrobot:greendao:$versions.greendao",
         requery: "io.requery:requery:$versions.requery",
         requeryAndroid: "io.requery:requery-android:$versions.requery",
+        requeryProcessor: "io.requery:requery-processor:$versions.requery",
+
 
         aboutLibraries: "com.mikepenz:aboutlibraries:$versions.aboutLibraries",
         jodaAndroid: "net.danlew:android.joda:$versions.jodaAndroid",
