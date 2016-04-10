@@ -22,4 +22,6 @@ public interface IConversionPresenter {
     void addCurrency(long targetCurrencyCode);
 
     void updateFromSourceCurrency(long sourceCurrencyCode);
+
+    void removeItem(long id);
 }

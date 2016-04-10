@@ -147,6 +147,11 @@ public class ConversionPresenter implements IConversionPresenter {
     }
 
     @Override
+    public void removeItem(long id) {
+
+    }
+
+    @Override
     public void onResume() {
 
     }

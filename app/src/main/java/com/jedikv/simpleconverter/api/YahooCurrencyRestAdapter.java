@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class YahooCurrencyRestAdapter implements IRestAdapter {
 
-    private Retrofit instance;
+    private final Retrofit instance;
 
     public YahooCurrencyRestAdapter() {
 

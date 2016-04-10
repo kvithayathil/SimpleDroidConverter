@@ -10,9 +10,9 @@ ext.versions = [
         minSdk: 15,
         targetSdk: 23,
         compileSdk: 23,
-        buildTools: '23.0.2',
+        buildTools: '23.0.3',
 
-        androidGradlePlugin: '1.5.0',
+        androidGradlePlugin: '2.0.0',
         aptGradlePlugin: '1.8',
 
         jacocoGradlePlugin: '0.7.6.201602180812',
@@ -24,7 +24,7 @@ ext.versions = [
         javaxGlassfish: '10.0-b28',
         rxJava: '1.1.2',
         rxAndroid: '1.1.0',
-        supportLibs: '23.2.1',
+        supportLibs: '23.3.0',
         okHttp: '3.2.0',
         retrofit: '2.0.0',
         autoValue: '1.2-rc1',
@@ -45,6 +45,7 @@ ext.versions = [
         supportTestRunner: '0.5',
 
         jodaAndroid: '2.9.2',
+        date4j: '1.5.1',
 
         dexCount: '0.4.3',
         gradleVersionsPlugn: '0.12.0',
@@ -99,6 +100,7 @@ ext.libraries = [
         greendao: "de.greenrobot:greendao:$versions.greendao",
         aboutLibraries: "com.mikepenz:aboutlibraries:$versions.aboutLibraries",
         jodaAndroid: "net.danlew:android.joda:$versions.jodaAndroid",
+        date4j: "com.darwinsys:hirondelle-date4j:$versions.date4j",
 
         icePick: "com.github.frankiesardo:icepick:$versions.icePick",
         icePickProcessor: "com.github.frankiesardo:icepick-processor:$versions.icePickProcessor",

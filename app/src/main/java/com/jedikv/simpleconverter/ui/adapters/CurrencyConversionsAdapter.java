@@ -165,14 +165,21 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
         final ConversionItem entity = mConverterList.remove(position);
         entity.setPosition(position);
-        mConversionDbHelper.deleteItem(entity);
         notifyItemRemoved(position);
 
-        Snackbar.make(parent, R.string.snack_bar_deleted, Snackbar.LENGTH_LONG).setAction(R.string.snack_bar_undo, new View.OnClickListener() {
+        Snackbar.make(parent, R.string.snack_bar_deleted, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snack_bar_undo, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mConversionDbHelper.insertOrUpdate(entity);
                 addItemAtPosition(entity.getPosition(), entity);
+            }
+        }).setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                //Only process the delete if the UNDO hasn't been clicked
+                if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                    mConversionDbHelper.deleteItem(entity);
+                }
             }
         }).show();
 
