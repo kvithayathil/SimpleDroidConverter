@@ -183,6 +183,10 @@ dependencies {
     compile libraries.retrofitRxJavaAdapter
     compile libraries.retrofitGsonConverter
 
+    //AutoValue
+    provided libraries.autoValue
+    apt libraries.autoValue
+
     //RxAndroid
     compile libraries.rxJava
     compile libraries.rxAndroid

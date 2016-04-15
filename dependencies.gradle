@@ -17,6 +17,7 @@ ext.versions = [
 
         jacocoGradlePlugin: '0.7.6.201602180812',
         androidDevMetricsGradlePlugin: '0.4',
+        aptPlugin: '0.6',
 
         dagger: '2.1',
         javaxInject: '1',
@@ -54,6 +55,8 @@ ext.versions = [
 
         greendao: '2.1.0',
         requery: '1.0.0-beta12',
+
+        autoValue: '1.2',
 ]
 
 ext.gradlePlugins = [
@@ -62,7 +65,8 @@ ext.gradlePlugins = [
         jacoco: "org.jacoco:org.jacoco.core:$versions.jacocoGradlePlugin",
         androidDevMetrics: "com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:$versions.androidDevMetricsGradlePlugin",
         keepSafeDexCount: "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexCount",
-        gradleVersionsPlugin:"com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugn",
+        gradleVersionsPlugin: "com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugn",
+        androidAptPlugin: "net.ltgt.gradle:gradle-apt-plugin:$versions.aptPlugin",
 ]
 
 ext.libraries = [
@@ -110,6 +114,9 @@ ext.libraries = [
 
         icePick: "com.github.frankiesardo:icepick:$versions.icePick",
         icePickProcessor: "com.github.frankiesardo:icepick-processor:$versions.icePickProcessor",
+
+        autoValue: "com.google.auto.value:auto-value:$versions.autoValue",
+
 
         // Developer Tools
         stetho : "com.facebook.stetho:stetho:$versions.stetho",
