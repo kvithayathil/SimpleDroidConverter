@@ -6,18 +6,16 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.facebook.stetho.Stetho;
 import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
+import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
 import com.jedikv.simpleconverter.injection.component.AppComponent;
 import com.jedikv.simpleconverter.injection.component.DaggerAppComponent;
-import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
+import com.jedikv.simpleconverter.injection.module.AppModule;
 import com.jedikv.simpleconverter.utils.OttoBus;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.otto.ThreadEnforcer;
 
-import net.danlew.android.joda.JodaTimeAndroid;
-
 import converter_db.DaoMaster;
 import converter_db.DaoSession;
-import com.jedikv.simpleconverter.injection.module.AppModule;
 import timber.log.Timber;
 
 /**
@@ -52,7 +50,7 @@ public class App extends Application {
 
         setUpGraph();
 
-        JodaTimeAndroid.init(this);
+        //JodaTimeAndroid.init(this);
 
         mBus = new OttoBus(ThreadEnforcer.MAIN);
         Timber.plant(new Timber.DebugTree());

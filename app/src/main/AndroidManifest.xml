@@ -31,10 +31,6 @@
                 android:resource="@xml/currency_search"/>
         </activity>
 
-        <service
-            android:name=".intentsevice.CurrencyUpdateIntentService"
-            android:exported="false" >
-        </service>
     </application>
 
 </manifest>
