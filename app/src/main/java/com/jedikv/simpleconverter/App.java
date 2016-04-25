@@ -30,6 +30,11 @@ public class App extends Application {
 
     private static OttoBus mBus;
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //MultiDex.install(this);
+    }
 
     @Override
     public void onCreate() {
@@ -81,7 +86,6 @@ public class App extends Application {
     public static OttoBus getBusInstance() {
         return mBus;
     }
-
 
     private void setUpDatabase() {
 

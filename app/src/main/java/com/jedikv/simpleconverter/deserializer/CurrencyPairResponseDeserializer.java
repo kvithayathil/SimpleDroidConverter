@@ -7,8 +7,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.jedikv.simpleconverter.response.ExchangePairResponse;
 
-
-
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -17,8 +15,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import hirondelle.date4j.DateTime;
 
 /**
  * Created by Kurian on 02/05/2015.
@@ -41,7 +37,7 @@ public class CurrencyPairResponseDeserializer implements JsonDeserializer<Exchan
         final String dateString = jsonObject.get("Date").getAsString();
         final String timeString = jsonObject.get("Time").getAsString();
 
-        DateTime dateTime = new DateTime(dateString + " " + timeString);
+        //DateTime dateTime = new DateTime(dateString + " " + timeString);
 
         final ExchangePairResponse response = new ExchangePairResponse();
         final BigDecimal inRateConverter = rate.multiply(new BigDecimal(10000));

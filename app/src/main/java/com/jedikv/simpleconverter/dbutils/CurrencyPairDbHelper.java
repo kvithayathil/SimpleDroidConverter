@@ -3,19 +3,15 @@ package com.jedikv.simpleconverter.dbutils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 
 import com.jedikv.simpleconverter.BuildConfig;
 import com.jedikv.simpleconverter.utils.DateUtils;
 
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import converter_db.CurrencyPairEntity;
 import converter_db.CurrencyPairEntityDao;
 import de.greenrobot.dao.query.QueryBuilder;
-import hirondelle.date4j.DateTime;
 import timber.log.Timber;
 
 /**

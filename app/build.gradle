@@ -44,6 +44,8 @@ android {
         versionCode versions.appMajor * 100 + versions.appMinor * 10 + versions.appPatch + versions.appBuild
         versionName "${versions.appMajor}.${versions.appMinor}.${versions.appPatch}"
 
+        // Enabling multidex support.
+        //multiDexEnabled true
 
         buildConfigField STRING, GIT_SHA, "\"${gitSha}\""
         buildConfigField STRING, BUILD_TIME, "\"${buildTime}\""
@@ -102,7 +104,7 @@ android {
         includeFieldCount = true
         format = "json"
         orderByMethodCount = true
-        verbose = true
+        verbose = false
     }
 
     testOptions {
@@ -117,6 +119,11 @@ android {
         encoding "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        //preDexLibraries = false
     }
 
     packagingOptions {
@@ -152,6 +159,9 @@ dependencies {
     compile libraries.supportDesign
     compile libraries.supportAnnotations
     compile libraries.nineOldAndroids
+
+    //compile libraries.multidex
+
     //Butterknife
     compile libraries.butterKnife
     //Otto Event bus
@@ -161,7 +171,7 @@ dependencies {
     //Dagger 2.0
     compile libraries.dagger
     apt libraries.daggerCompiler
-    provided libraries.javaxGlassfish
+    provided libraries.jsr250
     //Greendao ORM database
     compile libraries.greendao
     //ReQuery database
@@ -170,7 +180,7 @@ dependencies {
     //compile libraries.requeryProcessor
 
     //Date4J date parser
-    compile libraries.date4j
+    //compile libraries.date4j
 
     //Timber logging library
     compile libraries.timber
@@ -186,8 +196,8 @@ dependencies {
     compile libraries.retrofitGsonConverter
 
     //AutoValue
-    provided libraries.autoValue
-    apt libraries.autoValue
+    //provided libraries.autoValue
+    //apt libraries.autoValue
 
     //RxAndroid
     compile libraries.rxJava
