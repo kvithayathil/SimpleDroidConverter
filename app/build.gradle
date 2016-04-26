@@ -175,9 +175,9 @@ dependencies {
     //Greendao ORM database
     compile libraries.greendao
     //ReQuery database
-    //compile libraries.requery
-    //compile libraries.requeryAndroid
-    //compile libraries.requeryProcessor
+    compile libraries.requery
+    compile libraries.requeryAndroid
+    apt libraries.requeryProcessor
 
     //Date4J date parser
     //compile libraries.date4j
@@ -186,7 +186,7 @@ dependencies {
     compile libraries.timber
     //Icepick
     compile libraries.icePick
-    compile libraries.icePickProcessor
+    provided libraries.icePickProcessor
     //Okhttp & Retrofit
     compile libraries.okHttp
     compile libraries.okHttpLoggingInterceptor
@@ -196,8 +196,8 @@ dependencies {
     compile libraries.retrofitGsonConverter
 
     //AutoValue
-    //provided libraries.autoValue
-    //apt libraries.autoValue
+    provided libraries.autoValue
+    apt libraries.autoValue
 
     //RxAndroid
     compile libraries.rxJava

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,21 +23,14 @@ import android.widget.TextView;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
-import com.jedikv.simpleconverter.busevents.CurrencyUpdateEvent;
-import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.presenters.ConversionPresenter;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
 import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
 import com.jedikv.simpleconverter.ui.views.IConversionView;
 import com.jedikv.simpleconverter.utils.Constants;
-import com.squareup.otto.Subscribe;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -47,8 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
-import converter_db.CurrencyPairEntity;
-import icepick.Icicle;
+import icepick.State;
 import timber.log.Timber;
 
 
@@ -75,7 +66,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
-    @Icicle
+    @State
     String mInputedValueString;
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();

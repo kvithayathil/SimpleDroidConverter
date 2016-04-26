@@ -39,9 +39,13 @@
 -keep class **$Properties
 
 #Icepick
+
 -dontwarn icepick.**
--keep class **$$Icicle { *; }
--keepnames class * { @icepick.Icicle *;}
+-keep class icepick.** { *; }
+-keep class **$$Icepick { *; }
+-keepclasseswithmembernames class * {
+    @icepick.* <fields>;
+}
 
 #Retrofit
 -keep class com.squareup.okhttp.** { *; }
