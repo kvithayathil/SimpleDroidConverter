@@ -20,7 +20,7 @@ import com.jedikv.simpleconverter.utils.AndroidUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import converter_db.CurrencyEntity;
 import timber.log.Timber;
@@ -76,13 +76,13 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Bind(R.id.iv_flag)
+        @BindView(R.id.iv_flag)
         ImageView ivFlag;
-        @Bind(R.id.tv_currency_code)
+        @BindView(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
-        @Bind(R.id.tv_currency_name)
+        @BindView(R.id.tv_currency_name)
         AppCompatTextView tvCurrencyName;
-        @Bind(R.id.tv_currency_symbol)
+        @BindView(R.id.tv_currency_symbol)
         AppCompatTextView tvCurrencySymbol;
 
         private CurrencyEntity currencyEntity;

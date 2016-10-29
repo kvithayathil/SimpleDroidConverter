@@ -34,7 +34,7 @@ import java.math.BigDecimal;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import converter_db.ConversionItem;
@@ -47,17 +47,17 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    @Bind(R.id.currency_input)
+    @BindView(R.id.currency_input)
     CurrencyInputView currencyInputView;
-    @Bind(R.id.rl_container)
+    @BindView(R.id.rl_container)
     RelativeLayout rlContainer;
-    @Bind(R.id.list)
+    @BindView(R.id.list)
     RecyclerView recyclerView;
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton floatingActionButton;
-    @Bind(R.id.coordinatorLayout)
+    @BindView(R.id.coordinatorLayout)
     CoordinatorLayout parent;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolBar;
 
 

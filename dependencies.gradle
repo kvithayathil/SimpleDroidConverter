@@ -7,41 +7,41 @@ ext.versions = [
         appBuild: 0,
 
 
-        minSdk: 15,
-        targetSdk: 23,
-        compileSdk: 23,
-        buildTools: '23.0.3',
+        minSdk: 16,
+        targetSdk: 25,
+        compileSdk: 25,
+        buildTools: '25.0.0',
 
-        androidGradlePlugin: '2.0.0',
+        androidGradlePlugin: '2.2.2',
         aptGradlePlugin: '1.8',
 
         multidex: '1.0.1',
 
         jacocoGradlePlugin: '0.7.6.201602180812',
         androidDevMetricsGradlePlugin: '0.4',
-        aptPlugin: '0.6',
+        //aptPlugin: '0.6',
 
-        dagger: '2.4',
+        dagger: '2.7',
         javaxInject: '1',
         javaxAnnotationApi: '1.2',
         javaxGlassfish: '10.0-b28',
-        rxJava: '1.1.3',
-        rxAndroid: '1.1.0',
-        supportLibs: '23.3.0',
-        okHttp: '3.2.0',
-        retrofit: '2.0.2',
-        butterKnife: '7.0.1',
-        timber: '4.1.1',
+        rxJava: '1.2.1',
+        rxAndroid: '1.2.0',
+        supportLibs: '25.0.0',
+        okHttp: '3.4.1',
+        retrofit: '2.1.0',
+        butterKnife: '8.4.0',
+        timber: '4.1.2',
         espresso: '2.2.2',
-        stetho: '1.3.1',
-        leakCanary: '1.3.1',
+        stetho: '1.4.1',
+        leakCanary: '1.4',
         otto: '1.3.8',
-        gson: '2.6.2',
+        gson: '2.8.0',
         icePick: '3.2.0',
 
         junit: '4.12',
-        robolectric: '3.0',
-        assertJ: '1.7.1',
+        robolectric: '3.1',
+        assertJ: '3.5.2',
         mockito: '1.10.19',
         supportTestRunner: '0.5',
 
@@ -49,14 +49,14 @@ ext.versions = [
         date4j: '1.5.1',
 
         dexCount: '0.5.0',
-        gradleVersionsPlugn: '0.12.0',
+        gradleVersionsPlugn: '0.13.0',
         nineOldAndroids: '2.4.0',
-        aboutLibraries: '5.6.5@aar',
+        aboutLibraries: '5.8.1@aar',
 
         greendao: '2.1.0',
-        requery: '1.0.0-beta16',
+        requery: '1.0.0',
 
-        autoValue: '1.2',
+        autoValue: '1.3',
 
         jsr250: '1.0'
 ]
@@ -105,6 +105,8 @@ ext.libraries = [
         otto: "com.squareup:otto:$versions.otto",
         nineOldAndroids: "com.nineoldandroids:library:$versions.nineOldAndroids",
         butterKnife: "com.jakewharton:butterknife:$versions.butterKnife",
+        butterKnifeCompiler: "com.jakewharton:butterknife-compiler:$versions.butterKnife",
+
         timber: "com.jakewharton.timber:timber:$versions.timber",
 
         greendao: "de.greenrobot:greendao:$versions.greendao",

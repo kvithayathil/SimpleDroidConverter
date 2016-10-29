@@ -164,6 +164,7 @@ dependencies {
 
     //Butterknife
     compile libraries.butterKnife
+    apt libraries.butterKnifeCompiler
     //Otto Event bus
     compile libraries.otto
     //Gson JSON parser

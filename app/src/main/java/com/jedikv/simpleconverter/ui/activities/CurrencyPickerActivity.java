@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.presenters.ICurrencyListPresenter;
@@ -24,7 +23,7 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import converter_db.CurrencyEntity;
 import timber.log.Timber;
@@ -45,9 +44,9 @@ public class CurrencyPickerActivity extends BaseActivity {
 
     // The elevation of the toolbar when content is scrolled behind
     private static final float TOOLBAR_ELEVATION = 14f;
-    @Bind(R.id.list)
+    @BindView(R.id.list)
     RecyclerView recyclerView;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolBar;
 
     private SearchView searchView;

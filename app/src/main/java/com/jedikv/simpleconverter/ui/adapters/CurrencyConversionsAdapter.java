@@ -34,7 +34,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
@@ -202,17 +202,17 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
         private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
-        @Bind(R.id.card_view)
+        @BindView(R.id.card_view)
         CardView cardView;
-        @Bind(R.id.iv_flag)
+        @BindView(R.id.iv_flag)
         ImageView ivFlag;
-        @Bind(R.id.tv_currency_name)
+        @BindView(R.id.tv_currency_name)
         AppCompatTextView tvCurrencyName;
-        @Bind(R.id.tv_value)
+        @BindView(R.id.tv_value)
         AppCompatTextView tvValue;
-        @Bind(R.id.ib_remove)
+        @BindView(R.id.ib_remove)
         ImageButton ibRemove;
-        @Bind(R.id.tv_currency_code)
+        @BindView(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
 
         public CurrencyViewHolder(View v) {

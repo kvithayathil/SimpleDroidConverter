@@ -17,12 +17,11 @@ import android.widget.TextView;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnFocusChange;
 import converter_db.CurrencyEntity;
@@ -38,13 +37,13 @@ public class CurrencyInputView extends LinearLayout {
     private final DecimalFormat decimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
 
-    @Bind(R.id.et_input)
+    @BindView(R.id.et_input)
     AppCompatEditText input;
-    @Bind(R.id.ib_flag)
+    @BindView(R.id.ib_flag)
     ImageButton flagSelect;
-    @Bind(R.id.tv_currency_symbol)
+    @BindView(R.id.tv_currency_symbol)
     AppCompatTextView currencySymbol;
-    @Bind(R.id.tv_currency_code)
+    @BindView(R.id.tv_currency_code)
     AppCompatTextView currencyCode;
 
     public CurrencyInputView(Context context) {
@@ -66,7 +65,6 @@ public class CurrencyInputView extends LinearLayout {
         decimalFormat.setMinimumFractionDigits(4);
         View view = LayoutInflater.from(context).inflate(R.layout.currency_input_layout, this);
         ButterKnife.bind(view);
-
     }
 
 
