@@ -48,7 +48,7 @@ ext.versions = [
         jodaAndroid: '2.9.2',
         date4j: '1.5.1',
 
-        dexCount: '0.5.0',
+        dexCount: '0.6.1',
         gradleVersionsPlugn: '0.13.0',
         nineOldAndroids: '2.4.0',
         aboutLibraries: '5.8.1@aar',

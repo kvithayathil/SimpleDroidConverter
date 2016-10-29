@@ -158,9 +158,6 @@ dependencies {
     compile libraries.supportRecyclerView
     compile libraries.supportDesign
     compile libraries.supportAnnotations
-    compile libraries.nineOldAndroids
-
-    //compile libraries.multidex
 
     //Butterknife
     compile libraries.butterKnife
