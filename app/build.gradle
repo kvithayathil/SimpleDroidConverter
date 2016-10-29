@@ -79,12 +79,17 @@ android {
             }
 
 
-            /*
+
             unitTest {
+                /*
                 java.srcDir file('androidTest')
                 resources.srcDir file('androidTest/resources')
+                */
+                java.srcDirs = [
+                        'src/test/java',
+                ]
             }
-            */
+
 
         }
 
@@ -166,6 +171,7 @@ dependencies {
     compile libraries.otto
     //Gson JSON parser
     compile libraries.gson
+    compile libraries.moshi
     //Dagger 2.0
     compile libraries.dagger
     apt libraries.daggerCompiler

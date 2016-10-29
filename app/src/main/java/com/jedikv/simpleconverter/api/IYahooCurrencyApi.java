@@ -11,9 +11,8 @@ import rx.Observable;
  */
 public interface IYahooCurrencyApi {
 
+    //YQL - select * from yahoo.finance.xchange where pair in ("USDMXN", "USDCHF")
 
     @GET("public/yql?format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys&callback=")
     Observable<YahooDataContainer> getCurrencyPairs(@Query("q")String query);
-
-    //select * from yahoo.finance.xchange where pair in ("USDMXN", "USDCHF")
 }
