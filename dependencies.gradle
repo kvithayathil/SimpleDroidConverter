@@ -90,6 +90,7 @@ ext.libraries = [
         retrofit: "com.squareup.retrofit2:retrofit:$versions.retrofit",
         retrofitRxJavaAdapter: "com.squareup.retrofit2:adapter-rxjava:$versions.retrofit",
         retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+        retrofitMoshiConverter: "com.squareup.retrofit2:converter-moshi:$versions.retrofit",
 
 
         autoValue: "com.google.auto.value:auto-value:$versions.autoValue",

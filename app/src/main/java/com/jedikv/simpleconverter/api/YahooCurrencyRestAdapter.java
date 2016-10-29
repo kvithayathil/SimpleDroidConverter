@@ -3,13 +3,21 @@ package com.jedikv.simpleconverter.api;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jedikv.simpleconverter.BuildConfig;
+import com.jedikv.simpleconverter.api.jsonadapters.DateAdapter;
 import com.jedikv.simpleconverter.utils.Constants;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonReader;
+import com.squareup.moshi.JsonWriter;
+import com.squareup.moshi.Moshi;
+
+import java.io.IOException;
+import java.util.Date;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
 /**
  * Created by Kurian on 02/05/2015.
@@ -35,10 +43,13 @@ public class YahooCurrencyRestAdapter implements IRestAdapter {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
 
+        final Moshi moshi = new Moshi.Builder()
+                .add(Date.class, new DateAdapter("yyyy-MM-dd'T'HH:mm:ssZ"))
+                .build();
 
         instance = new Retrofit.Builder()
                 .baseUrl(Constants.YAHOO_CURRENCY_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
                 .build();
@@ -46,7 +57,6 @@ public class YahooCurrencyRestAdapter implements IRestAdapter {
 
     @Override
     public Retrofit getRestAdapter() {
-
         return instance;
     }
 }

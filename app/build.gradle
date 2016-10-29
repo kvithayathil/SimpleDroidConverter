@@ -198,6 +198,8 @@ dependencies {
     compile libraries.okHttpUrlConnection
     compile libraries.retrofitRxJavaAdapter
     compile libraries.retrofitGsonConverter
+    compile libraries.retrofitMoshiConverter
+
 
     //AutoValue
     provided libraries.autoValue

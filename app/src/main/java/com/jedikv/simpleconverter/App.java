@@ -31,7 +31,7 @@ import timber.log.Timber;
  */
 public class App extends Application {
 
-    private static final String TAG = App.class.getSimpleName();
+    private static final String TAG = App.class.getCanonicalName();
 
     private AppComponent mAppComponent;
     private DaoSession mDaoSession;
@@ -44,7 +44,6 @@ public class App extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        //MultiDex.install(this);
     }
 
     @Override
@@ -66,8 +65,6 @@ public class App extends Application {
 
         setUpGraph();
 
-        //JodaTimeAndroid.init(this);
-
         mBus = new OttoBus(ThreadEnforcer.MAIN);
         Timber.plant(new Timber.DebugTree());
 
@@ -76,7 +73,6 @@ public class App extends Application {
 
     private void setUpGraph() {
         mAppComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
-
         mAppComponent.inject(this);
     }
 
@@ -116,8 +112,6 @@ public class App extends Application {
         if (dataStore == null) {
             // override onUpgrade to handle migrating to a new version
             DatabaseSource source = new DatabaseSource(this, Models.DEFAULT, 1) {
-
-
 
             };
             if (BuildConfig.DEBUG) {
