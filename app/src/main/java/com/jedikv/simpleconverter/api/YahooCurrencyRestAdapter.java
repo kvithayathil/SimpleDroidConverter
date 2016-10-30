@@ -5,12 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.jedikv.simpleconverter.BuildConfig;
 import com.jedikv.simpleconverter.api.jsonadapters.DateAdapter;
 import com.jedikv.simpleconverter.utils.Constants;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.JsonReader;
-import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.Moshi;
 
-import java.io.IOException;
 import java.util.Date;
 
 import okhttp3.OkHttpClient;
@@ -22,7 +18,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 /**
  * Created by Kurian on 02/05/2015.
  */
-public class YahooCurrencyRestAdapter implements IRestAdapter {
+public class YahooCurrencyRestAdapter implements RestAdapter {
 
     private final Retrofit instance;
 

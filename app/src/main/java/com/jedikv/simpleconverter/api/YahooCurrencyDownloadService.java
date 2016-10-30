@@ -24,18 +24,18 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 13/06/2015.
  */
-public class YahooCurrencyDownloadService implements ICurrencyDownloadService {
+public class YahooCurrencyDownloadService implements CurrencyDownloadService {
 
     private static final String TAG = YahooCurrencyDownloadService.class.getSimpleName();
 
-    private IYahooCurrencyApi api;
+    private YahooCurrencyApi api;
 
     CurrencyDbHelper currencyDbHelper;
     CurrencyPairDbHelper currencyPairDbHelper;
 
 
     @Inject
-    public YahooCurrencyDownloadService(IYahooCurrencyApi api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+    public YahooCurrencyDownloadService(YahooCurrencyApi api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         Timber.tag(TAG);
 
         this.currencyDbHelper = currencyDbHelper;

@@ -9,7 +9,7 @@ import rx.Observable;
 /**
  * Created by Kurian on 02/05/2015.
  */
-public interface IYahooCurrencyApi {
+public interface YahooCurrencyApi {
 
     //YQL - select * from yahoo.finance.xchange where pair in ("USDMXN", "USDCHF")
 

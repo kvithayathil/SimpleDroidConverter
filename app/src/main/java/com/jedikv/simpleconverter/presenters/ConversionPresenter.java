@@ -2,7 +2,7 @@ package com.jedikv.simpleconverter.presenters;
 
 import android.text.TextUtils;
 
-import com.jedikv.simpleconverter.api.ICurrencyDownloadService;
+import com.jedikv.simpleconverter.api.CurrencyDownloadService;
 import com.jedikv.simpleconverter.api.OnRequestFinished;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
@@ -31,7 +31,7 @@ public class ConversionPresenter implements IConversionPresenter {
     private final DecimalFormat decimalFormat;
 
     private IConversionView conversionView;
-    private ICurrencyDownloadService downloadService;
+    private CurrencyDownloadService downloadService;
     private CurrencyPairDbHelper currencyPairDbHelper;
     private CurrencyDbHelper currencyDbHelper;
 
@@ -39,7 +39,7 @@ public class ConversionPresenter implements IConversionPresenter {
 
     private Subscription currencySubscription;
 
-    public ConversionPresenter(ICurrencyDownloadService downloadService, CurrencyPairDbHelper currencyPairDbHelper, CurrencyDbHelper currencyDbHelper) {
+    public ConversionPresenter(CurrencyDownloadService downloadService, CurrencyPairDbHelper currencyPairDbHelper, CurrencyDbHelper currencyDbHelper) {
         Timber.d(ConversionPresenter.class.getSimpleName());
         this.currencyPairDbHelper = currencyPairDbHelper;
         this.currencyDbHelper = currencyDbHelper;
