@@ -1,7 +1,7 @@
-package com.jedikv.simpleconverter.api;
+package com.jedikv.simpleconverter.api.yahoofinance;
 
-import com.jedikv.simpleconverter.api.responses.YahooCurrencyRate;
-import com.jedikv.simpleconverter.api.responses.YahooDataContainer;
+import com.jedikv.simpleconverter.api.CurrencyDownloadService;
+import com.jedikv.simpleconverter.api.OnRequestFinished;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.utils.YahooApiUtils;
@@ -57,15 +57,15 @@ public class YahooCurrencyDownloadService implements CurrencyDownloadService {
         return api.getCurrencyPairs(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<YahooDataContainer, Observable<YahooCurrencyRate>>() {
+                .flatMap(new Func1<YahooDataContainerResponse, Observable<YahooCurrencyRateResponse>>() {
                     @Override
-                    public Observable<YahooCurrencyRate> call(YahooDataContainer yahooDataContainer) {
-                        return Observable.from(yahooDataContainer.getQuery().getResults().getRate());
+                    public Observable<YahooCurrencyRateResponse> call(YahooDataContainerResponse yahooDataContainerResponse) {
+                        return Observable.from(yahooDataContainerResponse.getQuery().getResults().getRate());
                     }
-                }).flatMap(new Func1<YahooCurrencyRate, Observable<CurrencyPairEntity>>() {
+                }).flatMap(new Func1<YahooCurrencyRateResponse, Observable<CurrencyPairEntity>>() {
                     @Override
-                    public Observable<CurrencyPairEntity> call(YahooCurrencyRate yahooCurrencyRate) {
-                        return Observable.just(createCurrencyPairEntity(yahooCurrencyRate));
+                    public Observable<CurrencyPairEntity> call(YahooCurrencyRateResponse yahooCurrencyRateResponse) {
+                        return Observable.just(createCurrencyPairEntity(yahooCurrencyRateResponse));
                     }
                 }).map(new Func1<CurrencyPairEntity, Long>() {
                     @Override
@@ -116,7 +116,7 @@ public class YahooCurrencyDownloadService implements CurrencyDownloadService {
      * @param rate
      * @return
      */
-    private CurrencyPairEntity createCurrencyPairEntity(YahooCurrencyRate rate) {
+    private CurrencyPairEntity createCurrencyPairEntity(YahooCurrencyRateResponse rate) {
 
         String source = rate.getId().substring(0, 3);
         String target = rate.getId().substring(3);

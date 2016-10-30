@@ -1,9 +1,9 @@
-package com.jedikv.simpleconverter.api.responses;
+package com.jedikv.simpleconverter.api.yahoofinance;
 
 /**
  * Created by Kurian on 03/05/2015.
  */
-public class YahooCurrencyRate {
+public class YahooCurrencyRateResponse {
 
     private String id;
     private String Name;

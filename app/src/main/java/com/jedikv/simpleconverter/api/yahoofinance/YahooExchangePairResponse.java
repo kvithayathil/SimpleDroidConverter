@@ -1,11 +1,11 @@
-package com.jedikv.simpleconverter.response;
+package com.jedikv.simpleconverter.api.yahoofinance;
 
 import java.util.Date;
 
 /**
  * Created by Kurian on 02/05/2015.
  */
-public class ExchangePairResponse {
+public class YahooExchangePairResponse {
 
     private String id;
     private String name;

@@ -1,9 +1,9 @@
 package com.jedikv.simpleconverter.injection.module;
 
 import com.jedikv.simpleconverter.api.CurrencyDownloadService;
-import com.jedikv.simpleconverter.api.YahooCurrencyApi;
-import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
-import com.jedikv.simpleconverter.api.YahooCurrencyRestAdapter;
+import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyApi;
+import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyDownloadService;
+import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRestAdapter;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.presenters.ConversionPresenter;

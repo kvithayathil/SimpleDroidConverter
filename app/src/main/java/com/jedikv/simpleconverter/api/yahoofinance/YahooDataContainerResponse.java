@@ -1,11 +1,11 @@
-package com.jedikv.simpleconverter.api.responses;
+package com.jedikv.simpleconverter.api.yahoofinance;
 
 import java.util.List;
 
 /**
  * Created by Kurian on 03/05/2015.
  */
-public class YahooDataContainer {
+public class YahooDataContainerResponse {
 
     private YahooCurrencyQueryResult query;
 
@@ -15,9 +15,9 @@ public class YahooDataContainer {
 
     public static class YahooCurrencyResultContainer {
 
-        private List<YahooCurrencyRate> rate;
+        private List<YahooCurrencyRateResponse> rate;
 
-        public List<YahooCurrencyRate> getRate() {
+        public List<YahooCurrencyRateResponse> getRate() {
             return rate;
         }
     }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jedikv.simpleconverter.App;
-import com.jedikv.simpleconverter.api.YahooCurrencyDownloadService;
+import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;

@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.jedikv.simpleconverter.response.ExchangePairResponse;
+import com.jedikv.simpleconverter.api.yahoofinance.YahooExchangePairResponse;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -19,13 +19,13 @@ import java.util.Locale;
 /**
  * Created by Kurian on 02/05/2015.
  */
-public class CurrencyPairResponseDeserializer implements JsonDeserializer<ExchangePairResponse> {
+public class CurrencyPairResponseDeserializer implements JsonDeserializer<YahooExchangePairResponse> {
 
     private final DecimalFormat decimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
     private final DateFormat dateFormat = new SimpleDateFormat("M/D/YYYY h:mma");
 
     @Override
-    public ExchangePairResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public YahooExchangePairResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
         final JsonObject jsonObject = json.getAsJsonObject();
 
@@ -39,7 +39,7 @@ public class CurrencyPairResponseDeserializer implements JsonDeserializer<Exchan
 
         //DateTime dateTime = new DateTime(dateString + " " + timeString);
 
-        final ExchangePairResponse response = new ExchangePairResponse();
+        final YahooExchangePairResponse response = new YahooExchangePairResponse();
         final BigDecimal inRateConverter = rate.multiply(new BigDecimal(10000));
 
         response.setId(id);

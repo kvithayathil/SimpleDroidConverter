@@ -1,8 +1,9 @@
-package com.jedikv.simpleconverter.api;
+package com.jedikv.simpleconverter.api.yahoofinance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jedikv.simpleconverter.BuildConfig;
+import com.jedikv.simpleconverter.api.RestAdapter;
 import com.jedikv.simpleconverter.api.jsonadapters.DateAdapter;
 import com.jedikv.simpleconverter.utils.Constants;
 import com.squareup.moshi.Moshi;
