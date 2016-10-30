@@ -10,5 +10,5 @@ public interface ICurrencyExtractor {
      * @param inputPath location of file to read in
      * @param outputPath location of generated file
      */
-    public void readAndExtract(String inputPath, String outputPath);
+    void readAndExtract(String inputPath, String outputPath);
 }

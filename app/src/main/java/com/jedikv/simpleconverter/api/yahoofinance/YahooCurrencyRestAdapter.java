@@ -5,10 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.jedikv.simpleconverter.BuildConfig;
 import com.jedikv.simpleconverter.api.RestAdapter;
 import com.jedikv.simpleconverter.api.jsonadapters.DateAdapter;
-import com.jedikv.simpleconverter.utils.Constants;
 import com.squareup.moshi.Moshi;
-
-import java.util.Date;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -37,7 +34,7 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
                 .build();
         //Show http logs only in debug builds
         final Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
                 .create();
 
         final Moshi moshi = new Moshi.Builder()
@@ -45,7 +42,7 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
                 .build();
 
         instance = new Retrofit.Builder()
-                .baseUrl(Constants.YAHOO_CURRENCY_URL)
+                .baseUrl("https://query.yahooapis.com/v1/")
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

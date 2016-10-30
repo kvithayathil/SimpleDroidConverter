@@ -28,14 +28,14 @@ public class YahooCurrencyDownloadService implements CurrencyDownloadService {
 
     private static final String TAG = YahooCurrencyDownloadService.class.getSimpleName();
 
-    private YahooCurrencyApi api;
+    private YahooApiService api;
 
     CurrencyDbHelper currencyDbHelper;
     CurrencyPairDbHelper currencyPairDbHelper;
 
 
     @Inject
-    public YahooCurrencyDownloadService(YahooCurrencyApi api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+    public YahooCurrencyDownloadService(YahooApiService api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         Timber.tag(TAG);
 
         this.currencyDbHelper = currencyDbHelper;

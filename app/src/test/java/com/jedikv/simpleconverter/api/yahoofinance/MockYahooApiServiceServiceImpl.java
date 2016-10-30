@@ -13,12 +13,12 @@ import rx.Observable;
  * Created by Kurian on 30/10/2016.
  */
 
-public class MockYahooCurrencyApiServiceImpl implements YahooCurrencyApi {
+public class MockYahooApiServiceServiceImpl implements YahooApiService {
 
     private final YahooDataContainerResponse containerResponse;
     private static Observable dummyYahooResult = null;
 
-    public MockYahooCurrencyApiServiceImpl() {
+    public MockYahooApiServiceServiceImpl() {
 
         //Set up the dummy currency result to send back to the caller
         List<YahooCurrencyRateResponse> rateList = new ArrayList<>(2);

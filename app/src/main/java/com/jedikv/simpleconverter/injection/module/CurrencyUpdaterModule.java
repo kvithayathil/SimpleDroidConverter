@@ -1,7 +1,7 @@
 package com.jedikv.simpleconverter.injection.module;
 
 import com.jedikv.simpleconverter.api.CurrencyDownloadService;
-import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyApi;
+import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRestAdapter;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
@@ -31,13 +31,13 @@ public class CurrencyUpdaterModule {
 
     @Provides
     @Singleton
-    YahooCurrencyApi provideYahooCurrencyApi(Retrofit restAdapter) {
-        return restAdapter.create(YahooCurrencyApi.class);
+    YahooApiService provideYahooCurrencyApi(Retrofit restAdapter) {
+        return restAdapter.create(YahooApiService.class);
     }
 
     @Provides
     @Singleton
-    public CurrencyDownloadService provideCurrencyDownloadService(YahooCurrencyApi api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
+    public CurrencyDownloadService provideCurrencyDownloadService(YahooApiService api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         return new YahooCurrencyDownloadService(api, currencyDbHelper, currencyPairDbHelper);
     }
 

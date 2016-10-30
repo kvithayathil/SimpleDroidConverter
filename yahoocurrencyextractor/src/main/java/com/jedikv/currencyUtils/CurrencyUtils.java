@@ -18,7 +18,7 @@ public class CurrencyUtils {
     }
 
     static {
-        currencyLocaleSortedMap = new TreeMap<Currency, Locale>(new Comparator<Currency>() {
+        currencyLocaleSortedMap = new TreeMap<>(new Comparator<Currency>() {
             @Override
             public int compare(Currency c1, Currency c2) {
                 return c1.getCurrencyCode().compareTo(c2.getCurrencyCode());
