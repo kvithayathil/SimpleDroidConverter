@@ -1,8 +1,10 @@
 package com.jedikv.simpleconverter.api.jsonadapters;
 
+import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
+import com.squareup.moshi.ToJson;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -13,7 +15,7 @@ import java.util.Date;
  * Created by Kurian on 29/10/2016.
  */
 
-public class DateAdapter extends JsonAdapter<Date> {
+public class DateAdapter {
 
     final SimpleDateFormat sdf;
 
@@ -21,7 +23,7 @@ public class DateAdapter extends JsonAdapter<Date> {
         this.sdf = new SimpleDateFormat(format);
     }
 
-    @Override
+    @FromJson
     public Date fromJson(JsonReader reader) throws IOException {
         try {
             return sdf.parse(reader.nextString());
@@ -31,7 +33,7 @@ public class DateAdapter extends JsonAdapter<Date> {
         }
     }
 
-    @Override
+    @ToJson
     public void toJson(JsonWriter writer, Date value) throws IOException {
         String output = sdf.format(value);
         writer.value(output);

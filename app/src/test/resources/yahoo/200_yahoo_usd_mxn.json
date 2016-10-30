@@ -1,0 +1,29 @@
+{
+  "query": {
+    "count": 2,
+    "created": "2016-10-30T16:08:09Z",
+    "lang": "en-US",
+    "results": {
+      "rate": [
+        {
+          "id": "USDMXN",
+          "Name": "USD/MXN",
+          "Rate": "18.9500",
+          "Date": "10/29/2016",
+          "Time": "10:53pm",
+          "Ask": "19.0000",
+          "Bid": "18.9500"
+        },
+        {
+          "id": "USDCHF",
+          "Name": "USD/CHF",
+          "Rate": "0.9872",
+          "Date": "10/28/2016",
+          "Time": "9:00pm",
+          "Ask": "0.9885",
+          "Bid": "0.9872"
+        }
+      ]
+    }
+  }
+}

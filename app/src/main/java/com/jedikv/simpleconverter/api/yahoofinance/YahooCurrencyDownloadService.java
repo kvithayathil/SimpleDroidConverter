@@ -60,7 +60,7 @@ public class YahooCurrencyDownloadService implements CurrencyDownloadService {
                 .flatMap(new Func1<YahooDataContainerResponse, Observable<YahooCurrencyRateResponse>>() {
                     @Override
                     public Observable<YahooCurrencyRateResponse> call(YahooDataContainerResponse yahooDataContainerResponse) {
-                        return Observable.from(yahooDataContainerResponse.getQuery().getResults().getRate());
+                        return Observable.from(yahooDataContainerResponse.query.results.rate);
                     }
                 }).flatMap(new Func1<YahooCurrencyRateResponse, Observable<CurrencyPairEntity>>() {
                     @Override
@@ -118,8 +118,8 @@ public class YahooCurrencyDownloadService implements CurrencyDownloadService {
      */
     private CurrencyPairEntity createCurrencyPairEntity(YahooCurrencyRateResponse rate) {
 
-        String source = rate.getId().substring(0, 3);
-        String target = rate.getId().substring(3);
+        String source = rate.id.substring(0, 3);
+        String target = rate.id.substring(3);
 
         Timber.d("Source:  " + source + " Target: " + target);
 
@@ -129,9 +129,9 @@ public class YahooCurrencyDownloadService implements CurrencyDownloadService {
         entity.setSource_id(currencyDbHelper.getCurrency(source));
         entity.setTarget_id(currencyDbHelper.getCurrency(target));
 
-        BigDecimal decimalRate = new BigDecimal(rate.getRate());
+        BigDecimal decimalRate = new BigDecimal(rate.rate);
 
-        Timber.d("BigDecimalRate: " + decimalRate.toPlainString() + " Rate String: " + rate.getRate());
+        Timber.d("BigDecimalRate: " + decimalRate.toPlainString() + " Rate String: " + rate.rate);
 
         //Set the rate to a full integer to prevent any rounding errors from floats/doubles
         entity.setRate(decimalRate.multiply(new BigDecimal(10000)).intValue());

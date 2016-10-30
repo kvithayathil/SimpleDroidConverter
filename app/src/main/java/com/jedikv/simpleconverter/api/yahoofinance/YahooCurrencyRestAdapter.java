@@ -41,7 +41,7 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
                 .create();
 
         final Moshi moshi = new Moshi.Builder()
-                .add(Date.class, new DateAdapter("yyyy-MM-dd'T'HH:mm:ssZ"))
+                .add(new DateAdapter("yyyy-MM-dd'T'HH:mm:ss'Z'"))
                 .build();
 
         instance = new Retrofit.Builder()

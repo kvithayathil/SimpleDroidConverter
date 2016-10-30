@@ -1,5 +1,8 @@
 package com.jedikv.simpleconverter.api.yahoofinance;
 
+import com.squareup.moshi.Json;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -7,43 +10,39 @@ import java.util.List;
  */
 public class YahooDataContainerResponse {
 
-    private YahooCurrencyQueryResult query;
+    @Json(name = "query")
+    public final YahooCurrencyQueryResult query;
 
-    public YahooCurrencyQueryResult getQuery() {
-        return query;
+    public YahooDataContainerResponse(YahooCurrencyQueryResult query) {
+        this.query = query;
     }
 
-    public static class YahooCurrencyResultContainer {
+    public static class YahooCurrencyRatesHolder {
 
-        private List<YahooCurrencyRateResponse> rate;
+        @Json(name = "rate")
+        public final List<YahooCurrencyRateResponse> rate;
 
-        public List<YahooCurrencyRateResponse> getRate() {
-            return rate;
+        public YahooCurrencyRatesHolder(List<YahooCurrencyRateResponse> rate) {
+            this.rate = rate;
         }
     }
 
     public static class YahooCurrencyQueryResult {
 
-        private int count;
-        private String created;
-        private String lang;
-        private YahooCurrencyResultContainer results;
+        @Json(name = "count")
+        public final int count;
+        @Json(name = "created")
+        public final Date created;
+        @Json(name = "lang")
+        public final String lang;
+        @Json(name = "results")
+        public final YahooCurrencyRatesHolder results;
 
-        public YahooCurrencyResultContainer getResults() {
-            return results;
+        public YahooCurrencyQueryResult(int count, Date created, String lang, YahooCurrencyRatesHolder results) {
+            this.count = count;
+            this.created = created;
+            this.lang = lang;
+            this.results = results;
         }
-
-        public int getCount() {
-            return count;
-        }
-
-        public String getCreated() {
-            return created;
-        }
-
-        public String getLang() {
-            return lang;
-        }
-
     }
 }
