@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,12 +32,6 @@ public class YahooJsonParserTest {
                 .add(new DateAdapter("yyyy-MM-dd'T'HH:mm:ss'Z'"))
                 .build();
 
-    }
-
-    @Test
-    public void testDecimalToInteger() {
-        Assert.assertEquals(9872, new BigDecimal("0.9872").movePointRight(4).intValue());
-        Assert.assertEquals(189500, new BigDecimal("18.9500").movePointRight(4).intValue());
     }
 
     /**
