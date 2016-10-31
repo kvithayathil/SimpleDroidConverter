@@ -7,6 +7,7 @@ import com.jedikv.simpleconverter.api.RestAdapter;
 import com.jedikv.simpleconverter.api.jsonadapters.DateAdapter;
 import com.squareup.moshi.Moshi;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -20,7 +21,7 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
 
     private final Retrofit instance;
 
-    public YahooCurrencyRestAdapter() {
+    public YahooCurrencyRestAdapter(Cache cache) {
 
         final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         if(BuildConfig.DEBUG) {
@@ -31,6 +32,7 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
 
         final OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(logging)
+                .cache(cache)
                 .build();
         //Show http logs only in debug builds
         final Gson gson = new GsonBuilder()

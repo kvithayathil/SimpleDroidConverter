@@ -1,5 +1,6 @@
 package com.jedikv.simpleconverter.domain.repository;
 
+import com.jedikv.simpleconverter.api.ConversionItemDTO;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRateResponse;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooDataContainerResponse;
@@ -19,17 +20,18 @@ import rx.functions.Func1;
 public class YahooConversionRepository implements ConversionRepository {
 
     private final YahooApiService api;
+    private final YqlStringHelper yqlStringHelper;
 
     public YahooConversionRepository(YahooApiService api) {
+        this.yqlStringHelper = new YqlStringHelper();
         this.api = api;
     }
 
     @Override
-    public Observable<List<ConversionItem>> getConversionItems(String source,
-                                                               List<String> selectedCurrencies) {
+    public Observable<List<ConversionItemDTO>> getConversionItems(String source,
+                                                                  List<String> selectedCurrencies) {
 
-        List<String> currencyPair = createReverseFromPairs(selectedCurrencies, source);
-        String yqlStatement = generateYQLCurrencyQuery(currencyPair);
+        String yqlStatement = yqlStringHelper.generateYQLCurrencyQuery(selectedCurrencies, source);
 
         return api.getCurrencyPairs(yqlStatement)
                 .map(new Func1<YahooDataContainerResponse,
@@ -39,21 +41,24 @@ public class YahooConversionRepository implements ConversionRepository {
                         return response.query.results;
                     }
                 })
-                .map(new Func1<YahooDataContainerResponse.YahooCurrencyRatesHolder, List<ConversionItem>>() {
+                .map(new Func1<YahooDataContainerResponse.YahooCurrencyRatesHolder, List<ConversionItemDTO>>() {
 
                     @Override
-                    public List<ConversionItem> call(YahooDataContainerResponse.YahooCurrencyRatesHolder conversion) {
-                        List<ConversionItem> conversionItems
+                    public List<ConversionItemDTO> call(YahooDataContainerResponse.YahooCurrencyRatesHolder conversion) {
+                        List<ConversionItemDTO> conversionItems
                                 = new ArrayList<>(conversion.rate.size());
 
                         for (YahooCurrencyRateResponse rate : conversion.rate) {
-                            conversionItems.add(ConversionItem
+
+                            //Get the individual currencies
+                            //[0] is the source and [1] is a target
+                            String[] currencyId = rate.name.split("/");
+                            conversionItems.add(ConversionItemDTO
                                     .builder()
-                                    .currencyId(0)
-                                    .conversionComboId(rate.id)
-                                    .conversionRate(new BigDecimal(rate.rate)
-                                            .movePointRight(4)
-                                            .intValue())
+                                    .currencyId(rate.name)
+                                    .conversionRateAsInteger(convertRateToInteger(rate.rate))
+                                    .currencyId(currencyId[1])
+                                    .pairTo(currencyId[0])
                                     .build());
                         }
                         return conversionItems;
@@ -61,56 +66,9 @@ public class YahooConversionRepository implements ConversionRepository {
                 });
     }
 
-    /**
-     * Build the YQL statement to pass into the request
-     *
-     * @param currencyPairs list of currency pairs to pass in e.g. USDGBP, USDCHF...
-     * @return the YQL statement to execute the request
-     */
-    private String generateYQLCurrencyQuery(List<String> currencyPairs) {
-
-        //select * from yahoo.finance.xchange where pair in ("USDMXN", "USDCHF")
-
-        StringBuilder sb = new StringBuilder("select * from yahoo.finance.xchange where pair in ");
-        sb.append("(");
-
-        int count = 1;
-
-        for (String currencyPair : currencyPairs) {
-
-            sb.append("\"").append(currencyPair).append("\"");
-
-            //Check if it's not the last entry in the list
-            if (count < currencyPairs.size()) {
-                sb.append(",");
-            }
-
-            count++;
-        }
-
-        sb.append(")");
-
-        return sb.toString();
-    }
-
-
-    /**
-     * Create the reverse pairs for
-     *
-     * @param targetCurrencies list of currencies to get the converted values for
-     * @param sourceCurrency   the currency at the source of the conversion
-     * @return A string list of currency pairs
-     */
-    private List<String> createReverseFromPairs(List<String> targetCurrencies, String sourceCurrency) {
-
-        List<String> currencyPairs = new ArrayList<>();
-
-        for (String targetCurrency : targetCurrencies) {
-
-            currencyPairs.add(targetCurrency + sourceCurrency);
-            currencyPairs.add(sourceCurrency + targetCurrency);
-        }
-
-        return currencyPairs;
+    private int convertRateToInteger(String rateString) {
+        return new BigDecimal(rateString)
+                .movePointRight(4)
+                .intValue();
     }
 }

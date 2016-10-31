@@ -10,8 +10,8 @@ public abstract class ConversionItem {
 
     public abstract long id();
     public abstract String conversionComboId();
-    public abstract long currencyId();
-    public abstract long pairTo();
+    public abstract String currencyId();
+    public abstract String pairTo();
     public abstract int conversionRate();
     public abstract Long lastUpdatedDate();
     public abstract int position();
@@ -21,8 +21,8 @@ public abstract class ConversionItem {
     public static abstract class Builder {
         public abstract Builder id(long numCode);
         public abstract Builder conversionComboId(String comboId);
-        public abstract Builder currencyId(long currencyId);
-        public abstract Builder pairTo(long currencyId);
+        public abstract Builder currencyId(String currencyId);
+        public abstract Builder pairTo(String currencyId);
         public abstract Builder conversionRate(int conversionRate);
         public abstract Builder lastUpdatedDate(Long date);
         public abstract Builder position(int position);

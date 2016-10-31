@@ -7,7 +7,6 @@ import com.squareup.moshi.Moshi;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,22 +22,16 @@ import testutils.ResourcePaths;
  */
 public class YahooJsonParserTest {
 
-    private Moshi moshi;
-
-    @Before
-    public void setUp() {
-        moshi = new Moshi
-                .Builder()
-                .add(new DateAdapter("yyyy-MM-dd'T'HH:mm:ss'Z'"))
-                .build();
-
-    }
-
     /**
      * Ensuring that Moshi can parse a successful JSON response from the Yahoo API
      */
     @Test
-    public void testSuccessMessageParsing() {
+    public void testSuccessResponseParsing() {
+
+        Moshi moshi = new Moshi
+                .Builder()
+                .add(new DateAdapter("yyyy-MM-dd'T'HH:mm:ss'Z'"))
+                .build();
 
         final InputStream in = this.getClass()
                 .getClassLoader()
