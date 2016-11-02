@@ -24,19 +24,6 @@ public class CurrencyUpdaterModule {
 
     @Provides
     @Singleton
-    public Retrofit provideYahooCurrencyRestAdapter() {
-        return new YahooCurrencyRestAdapter().getRestAdapter();
-    }
-
-
-    @Provides
-    @Singleton
-    YahooApiService provideYahooCurrencyApi(Retrofit restAdapter) {
-        return restAdapter.create(YahooApiService.class);
-    }
-
-    @Provides
-    @Singleton
     public CurrencyDownloadService provideCurrencyDownloadService(YahooApiService api, CurrencyDbHelper currencyDbHelper, CurrencyPairDbHelper currencyPairDbHelper) {
         return new YahooCurrencyDownloadService(api, currencyDbHelper, currencyPairDbHelper);
     }

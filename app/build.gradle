@@ -181,9 +181,11 @@ dependencies {
     //ReQuery database
     compile libraries.requery
     compile libraries.requeryAndroid
+
     apt libraries.requeryProcessor
     //StorIO
     compile libraries.storIO
+
 
     //Date4J date parser
     //compile libraries.date4j

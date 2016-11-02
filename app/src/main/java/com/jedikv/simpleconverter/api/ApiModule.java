@@ -30,8 +30,7 @@ public class ApiModule {
     @Provides @NonNull @Singleton
     Cache provideHttpCache(File file) {
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(file, cacheSize);
-        return cache;
+        return new Cache(file, cacheSize);
     }
 
     @Provides @NonNull @Singleton

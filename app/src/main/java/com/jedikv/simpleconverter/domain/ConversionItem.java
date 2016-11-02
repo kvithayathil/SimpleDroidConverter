@@ -10,8 +10,8 @@ public abstract class ConversionItem {
 
     public abstract long id();
     public abstract String conversionComboId();
-    public abstract String currencyId();
-    public abstract String pairTo();
+    public abstract String currencyCode();
+    public abstract String pairToCode();
     public abstract int conversionRate();
     public abstract Long lastUpdatedDate();
     public abstract int position();
@@ -21,8 +21,8 @@ public abstract class ConversionItem {
     public static abstract class Builder {
         public abstract Builder id(long numCode);
         public abstract Builder conversionComboId(String comboId);
-        public abstract Builder currencyId(String currencyId);
-        public abstract Builder pairTo(String currencyId);
+        public abstract Builder currencyCode(String currencyId);
+        public abstract Builder pairToCode(String currencyId);
         public abstract Builder conversionRate(int conversionRate);
         public abstract Builder lastUpdatedDate(Long date);
         public abstract Builder position(int position);
@@ -31,6 +31,9 @@ public abstract class ConversionItem {
     }
 
     public static Builder builder() {
-        return new AutoValue_ConversionItem.Builder();
+        return new AutoValue_ConversionItem
+                .Builder()
+                .lastUpdatedDate(System.currentTimeMillis())
+                .position(-1);
     }
 }

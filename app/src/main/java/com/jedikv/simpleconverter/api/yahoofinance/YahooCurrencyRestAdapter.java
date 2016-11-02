@@ -21,7 +21,7 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
 
     private final Retrofit instance;
 
-    public YahooCurrencyRestAdapter(Cache cache) {
+    public YahooCurrencyRestAdapter(final Cache cache) {
 
         final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         if(BuildConfig.DEBUG) {

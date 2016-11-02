@@ -15,14 +15,12 @@ public abstract class CurrencyItem {
 
     @AutoValue.Builder
     static abstract class Builder {
-
         abstract Builder setNumCode(long numCode);
         abstract Builder setName(String name);
         abstract Builder setSymbol(String symbol);
         abstract Builder setISOCode(String isoCode);
         abstract Builder setLocation(String location);
         abstract CurrencyItem build();
-
     }
 
     static Builder builder() {

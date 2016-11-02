@@ -4,7 +4,6 @@ import com.jedikv.simpleconverter.api.ConversionItemDTO;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRateResponse;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooDataContainerResponse;
-import com.jedikv.simpleconverter.domain.ConversionItem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -55,10 +54,9 @@ public class YahooConversionRepository implements ConversionRepository {
                             String[] currencyId = rate.name.split("/");
                             conversionItems.add(ConversionItemDTO
                                     .builder()
-                                    .currencyId(rate.name)
                                     .conversionRateAsInteger(convertRateToInteger(rate.rate))
-                                    .currencyId(currencyId[1])
-                                    .pairTo(currencyId[0])
+                                    .currencyCode(currencyId[1])
+                                    .pairToCurrencyCode(currencyId[0])
                                     .build());
                         }
                         return conversionItems;

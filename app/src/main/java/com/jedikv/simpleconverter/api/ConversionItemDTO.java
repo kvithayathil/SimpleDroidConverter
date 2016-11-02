@@ -10,16 +10,16 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class ConversionItemDTO {
 
-    public abstract String currencyId();
-    public abstract String pairTo();
+    public abstract String currencyCode();
+    public abstract String pairToCurrencyCode();
     public abstract int conversionRateAsInteger();
     @Nullable
     public abstract String source();
 
     @AutoValue.Builder
     public static abstract class Builder {
-        public abstract Builder currencyId(String currencyId);
-        public abstract Builder pairTo(String currencyId);
+        public abstract Builder currencyCode(String currencyId);
+        public abstract Builder pairToCurrencyCode(String currencyId);
         public abstract Builder conversionRateAsInteger(int conversionRate);
         public abstract Builder source(String source);
         public abstract ConversionItemDTO build();

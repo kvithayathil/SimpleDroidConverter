@@ -3,11 +3,15 @@ package com.jedikv.simpleconverter.injection.module;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import com.jedikv.simpleconverter.App;
+import com.jedikv.simpleconverter.dbutils.AppDbHelper;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
+
+import java.io.File;
 
 import javax.inject.Singleton;
 
@@ -47,6 +51,13 @@ public class AppModule {
     }
 
     @Provides
+    @NonNull
+    @Singleton
+    public File providesLocalCacheDir() {
+        return mApp.getCacheDir();
+    }
+
+    @Provides
     @Singleton
     ConversionItemDbHelper provideConversionItemDbHelper(Context context) {
         return new ConversionItemDbHelper(context);
@@ -70,4 +81,10 @@ public class AppModule {
         return mApp.daoSession();
     }
 
+    @Provides
+    @NonNull
+    @Singleton
+    public AppDbHelper providesDbHelper(Context context) {
+        return new AppDbHelper(context, "converter_db", 1);
+    }
 }
