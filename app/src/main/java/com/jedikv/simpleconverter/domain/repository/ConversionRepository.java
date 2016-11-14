@@ -1,6 +1,6 @@
 package com.jedikv.simpleconverter.domain.repository;
 
-import com.jedikv.simpleconverter.api.ConversionItemDTO;
+import com.jedikv.simpleconverter.domain.ConversionItem;
 
 import java.util.List;
 
@@ -12,6 +12,6 @@ import rx.Observable;
 
 public interface ConversionRepository {
 
-    Observable<List<ConversionItemDTO>> getConversionItems(String source,
-                                                           List<String> selectedCurrencies);
+    Observable<List<ConversionItem>> getConversionItems(String source,
+                                                        List<String> selectedCurrencies);
 }

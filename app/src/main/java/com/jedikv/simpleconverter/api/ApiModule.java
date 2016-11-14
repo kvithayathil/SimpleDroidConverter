@@ -3,15 +3,11 @@ package com.jedikv.simpleconverter.api;
 import android.support.annotation.NonNull;
 
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
-import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyDownloadService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRestAdapter;
 import com.jedikv.simpleconverter.domain.repository.ConversionRepository;
-import com.jedikv.simpleconverter.domain.repository.YahooConversionRepository;
-import com.jedikv.simpleconverter.domain.repository.YqlStringHelper;
 
 import java.io.File;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -40,8 +36,8 @@ public class ApiModule {
                 .create(YahooApiService.class);
     }
 
-    @Provides @NonNull @Singleton @Named("YahooRepository")
-    ConversionRepository provideYahooConversionRepository(YahooApiService api) {
-        return new YahooConversionRepository(api);
+    @Provides @NonNull @Singleton
+    ConversionRepository provideYahooConversionRepository() {
+        return null;
     }
 }

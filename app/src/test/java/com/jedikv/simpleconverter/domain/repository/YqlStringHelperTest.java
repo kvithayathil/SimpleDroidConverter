@@ -1,5 +1,7 @@
 package com.jedikv.simpleconverter.domain.repository;
 
+import com.jedikv.simpleconverter.api.yahoofinance.YqlStringHelper;
+
 import junit.framework.Assert;
 
 import org.junit.Test;

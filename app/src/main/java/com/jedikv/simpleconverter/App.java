@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.facebook.stetho.Stetho;
 import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
 import com.jedikv.simpleconverter.api.ApiModule;
+import com.jedikv.simpleconverter.data.DataModule;
 import com.jedikv.simpleconverter.dbutils.ConverterDaoMaster;
 import com.jedikv.simpleconverter.injection.component.AppComponent;
 import com.jedikv.simpleconverter.injection.component.DaggerAppComponent;
@@ -74,8 +75,9 @@ public class App extends Application {
 
     private void setUpGraph() {
         mAppComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
+                .dataModule(new DataModule())
                 .apiModule(new ApiModule())
+                .appModule(new AppModule(this))
                 .build();
         mAppComponent.inject(this);
     }

@@ -1,9 +1,10 @@
-package com.jedikv.simpleconverter.domain.repository;
+package com.jedikv.simpleconverter.data;
 
 import com.jedikv.simpleconverter.api.ConversionItemDTO;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRateResponse;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooDataContainerResponse;
+import com.jedikv.simpleconverter.api.yahoofinance.YqlStringHelper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,26 +14,26 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * Created by Kurian on 30/10/2016.
+ * Created by Kurian on 07/11/2016.
  */
 
-public class YahooConversionRepository implements ConversionRepository {
+public class NetworkDataSource implements ConversionDataSource {
 
-    private final YahooApiService api;
+    private final YahooApiService apiService;
     private final YqlStringHelper yqlStringHelper;
 
-    public YahooConversionRepository(YahooApiService api) {
+    public NetworkDataSource(YahooApiService apiService) {
+        this.apiService = apiService;
         this.yqlStringHelper = new YqlStringHelper();
-        this.api = api;
     }
 
     @Override
-    public Observable<List<ConversionItemDTO>> getConversionItems(String source,
-                                                                  List<String> selectedCurrencies) {
+    public Observable<List<ConversionItemDTO>> getConversionItems(String sourceCurrency,
+                                                                  List<String> targetCurrencies) {
+        String yqlStatement = yqlStringHelper
+                .generateYQLCurrencyQuery(targetCurrencies, sourceCurrency);
 
-        String yqlStatement = yqlStringHelper.generateYQLCurrencyQuery(selectedCurrencies, source);
-
-        return api.getCurrencyPairs(yqlStatement)
+        return apiService.getCurrencyPairs(yqlStatement)
                 .map(new Func1<YahooDataContainerResponse,
                         YahooDataContainerResponse.YahooCurrencyRatesHolder>() {
                     @Override
@@ -63,6 +64,7 @@ public class YahooConversionRepository implements ConversionRepository {
                     }
                 });
     }
+
 
     private int convertRateToInteger(String rateString) {
         return new BigDecimal(rateString)

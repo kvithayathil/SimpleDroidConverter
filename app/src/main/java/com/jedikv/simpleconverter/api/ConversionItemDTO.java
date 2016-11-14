@@ -13,6 +13,7 @@ public abstract class ConversionItemDTO {
     public abstract String currencyCode();
     public abstract String pairToCurrencyCode();
     public abstract int conversionRateAsInteger();
+
     @Nullable
     public abstract String source();
 

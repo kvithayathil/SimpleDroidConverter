@@ -1,4 +1,4 @@
-package com.jedikv.simpleconverter.domain.repository;
+package com.jedikv.simpleconverter.api.yahoofinance;
 
 import java.util.ArrayList;
 import java.util.List;
