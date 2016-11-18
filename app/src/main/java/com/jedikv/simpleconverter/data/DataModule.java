@@ -5,6 +5,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
 import com.jedikv.simpleconverter.dbutils.AppDbHelper;
+import com.jedikv.simpleconverter.domain.ConversionItem;
+import com.jedikv.simpleconverter.domain.database.ConversionDeleteResolver;
+import com.jedikv.simpleconverter.domain.database.ConversionGetResolver;
+import com.jedikv.simpleconverter.domain.database.ConversionPutResolver;
+import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
 
@@ -36,6 +41,12 @@ public class DataModule {
         return DefaultStorIOSQLite
                 .builder()
                 .sqliteOpenHelper(sqLiteOpenHelper)
+                .addTypeMapping(ConversionItem.class, SQLiteTypeMapping
+                        .<ConversionItem>builder()
+                .putResolver(new ConversionPutResolver())
+                .getResolver(new ConversionGetResolver())
+                .deleteResolver(new ConversionDeleteResolver())
+                .build())
                 .build();
     }
 }
