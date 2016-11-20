@@ -81,10 +81,10 @@ android {
 
 
             unitTest {
-                /*
+
                 java.srcDir file('androidTest')
                 resources.srcDir file('androidTest/resources')
-                */
+
                 java.srcDirs = [
                         'src/test/java',
                 ]
