@@ -1,10 +1,10 @@
 package com.jedikv.simpleconverter.data;
 
-import com.jedikv.simpleconverter.api.ConversionItemDTO;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRateResponse;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooDataContainerResponse;
 import com.jedikv.simpleconverter.api.yahoofinance.YqlStringHelper;
+import com.jedikv.simpleconverter.domain.ConversionItem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import rx.functions.Func1;
  * Created by Kurian on 07/11/2016.
  */
 
-public class NetworkDataSource implements ConversionDataSource {
+public class NetworkDataSource {
 
     private final YahooApiService apiService;
     private final YqlStringHelper yqlStringHelper;
@@ -27,10 +27,9 @@ public class NetworkDataSource implements ConversionDataSource {
         this.yqlStringHelper = new YqlStringHelper();
     }
 
-    @Override
-    public Observable<List<ConversionItemDTO>> getConversionItems(String sourceCurrency,
-                                                                  List<String> targetCurrencies) {
-        String yqlStatement = yqlStringHelper
+    public Observable<List<ConversionItem>> getConversionItems(String sourceCurrency,
+                                                               List<String> targetCurrencies) {
+        final String yqlStatement = yqlStringHelper
                 .generateYQLCurrencyQuery(targetCurrencies, sourceCurrency);
 
         return apiService.getCurrencyPairs(yqlStatement)
@@ -41,11 +40,11 @@ public class NetworkDataSource implements ConversionDataSource {
                         return response.query.results;
                     }
                 })
-                .map(new Func1<YahooDataContainerResponse.YahooCurrencyRatesHolder, List<ConversionItemDTO>>() {
+                .map(new Func1<YahooDataContainerResponse.YahooCurrencyRatesHolder, List<ConversionItem>>() {
 
                     @Override
-                    public List<ConversionItemDTO> call(YahooDataContainerResponse.YahooCurrencyRatesHolder conversion) {
-                        List<ConversionItemDTO> conversionItems
+                    public List<ConversionItem> call(YahooDataContainerResponse.YahooCurrencyRatesHolder conversion) {
+                        List<ConversionItem> conversionItems
                                 = new ArrayList<>(conversion.rate.size());
 
                         for (YahooCurrencyRateResponse rate : conversion.rate) {
@@ -53,11 +52,12 @@ public class NetworkDataSource implements ConversionDataSource {
                             //Get the individual currencies
                             //[0] is the source and [1] is a target
                             String[] currencyId = rate.name.split("/");
-                            conversionItems.add(ConversionItemDTO
+                            conversionItems.add(ConversionItem
                                     .builder()
-                                    .conversionRateAsInteger(convertRateToInteger(rate.rate))
+                                    .conversionRate(convertRateToInteger(rate.rate))
                                     .currencyCode(currencyId[1])
-                                    .pairToCurrencyCode(currencyId[0])
+                                    .pairToCode(currencyId[0])
+                                    .source(YahooApiService.SOURCE)
                                     .build());
                         }
                         return conversionItems;

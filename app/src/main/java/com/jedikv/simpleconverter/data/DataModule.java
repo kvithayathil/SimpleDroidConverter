@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
-import com.jedikv.simpleconverter.dbutils.AppDbHelper;
+import com.jedikv.simpleconverter.domain.database.AppDbHelper;
 import com.jedikv.simpleconverter.domain.ConversionItem;
 import com.jedikv.simpleconverter.domain.database.ConversionDeleteResolver;
 import com.jedikv.simpleconverter.domain.database.ConversionGetResolver;

@@ -1,4 +1,4 @@
-package com.jedikv.simpleconverter.dbutils;
+package com.jedikv.simpleconverter.domain.database;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,8 +10,6 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 
 import com.jedikv.simpleconverter.R;
-import com.jedikv.simpleconverter.domain.database.ConversionPairTable;
-import com.jedikv.simpleconverter.domain.database.CurrencyTable;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 import com.jedikv.simpleconverter.utils.Constants;
 import com.squareup.moshi.Json;
@@ -44,8 +42,14 @@ public class AppDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CurrencyTable.createTable());
-        db.execSQL(ConversionPairTable.createTable());
+        db.beginTransaction();
+        try {
+            db.execSQL(CurrencyTable.createTable());
+            db.execSQL(ConversionPairTable.createTable());
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.jedikv.simpleconverter.utils;
 
-import android.content.Context;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import com.jedikv.simpleconverter.App;
-import com.jedikv.simpleconverter.dbutils.AppDbHelper;
+import com.jedikv.simpleconverter.domain.database.AppDbHelper;
 import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;

@@ -9,6 +9,8 @@ import rx.Observable;
  */
 public interface YahooApiService {
 
+    String SOURCE = "Yahoo Finance";
+
     //YQL - select * from yahoo.finance.xchange where pair in ("USDMXN", "USDCHF")
 
     @GET("public/yql?format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys&callback=")

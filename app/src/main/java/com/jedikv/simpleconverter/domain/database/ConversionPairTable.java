@@ -64,4 +64,17 @@ public class ConversionPairTable implements Table {
                 .orderBy(COLUMN_LIST_POSITION + " ASC")
                 .build();
     }
+
+
+    public static final Query queryConversionItem(String sourceIsoCode, String targetIsoCode) {
+        return Query.builder()
+                .table(TABLE)
+                .where(COLUMN_SOURCE_CURRENCY_CODE
+                        + " = ?"
+                        + " AND "
+                        + COLUMN_TARGET_CURRENCY_CODE + " = ?")
+                .whereArgs(sourceIsoCode, targetIsoCode)
+                .orderBy(COLUMN_LIST_POSITION + " ASC")
+                .build();
+    }
 }
