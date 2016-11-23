@@ -5,16 +5,15 @@ import android.content.ContentValues;
 import com.jedikv.simpleconverter.domain.ConversionItem;
 import com.jedikv.simpleconverter.domain.CurrencyItem;
 import com.jedikv.simpleconverter.domain.database.ConversionPairTable;
-import com.jedikv.simpleconverter.domain.database.ConversionUpdatePutResolver;
+import com.jedikv.simpleconverter.domain.database.ConversionPositionsUpdatePutResolver;
 import com.jedikv.simpleconverter.domain.database.CurrencyTable;
-import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import timber.log.Timber;
 
@@ -42,7 +41,7 @@ public class PersistentDataSource {
                 .asRxObservable();
     }
 
-    public Observable<List<CurrencyModel>> getFilteredCurrencies(List<String> excludedIsoCodes) {
+    public Observable<List<CurrencyItem>> getFilteredCurrencies(List<String> excludedIsoCodes) {
 
         final Query query;
 
@@ -59,30 +58,14 @@ public class PersistentDataSource {
                 .listOfObjects(CurrencyItem.class)
                 .withQuery(query)
                 .prepare()
-                .asRxObservable()
-                .map(new Func1<List<CurrencyItem>, List<CurrencyModel>>() {
-                    @Override
-                    public List<CurrencyModel> call(List<CurrencyItem> currencyItems) {
-
-                        List<CurrencyModel> currencyModels = new ArrayList<>();
-
-                        for (CurrencyItem item : currencyItems) {
-                            currencyModels.add(CurrencyModel.builder()
-                                    .isoCode(item.isoCode())
-                                    .location(item.location())
-                                    .name(item.name())
-                                    .numericCode(item.numCode())
-                                    .symbol(item.symbol())
-                                    .build());
-                        }
-
-                        return currencyModels;
-                    }
-                });
+                .asRxObservable();
     }
 
 
-    public Observable<ConversionItem> addConversionItem(String sourceCurrency, String target) {
+    public Observable<ConversionItem> addConversionItem(final String sourceCurrency,
+                                                        final String target,
+                                                        final int targetPos) {
+
         return storIOSQLite
                 .get()
                 .object(ConversionItem.class)
@@ -92,25 +75,55 @@ public class PersistentDataSource {
                 .map(new Func1<ConversionItem, ConversionItem>() {
                     @Override
                     public ConversionItem call(ConversionItem item) {
-                        if (item != null) {
-                            return item;
-                        } else
-                            return null;
+                        if (item == null) {
+                            //Create placeholder entry if it doesn't exist already
+                            return item.toBuilder()
+                                    .source(sourceCurrency)
+                                    .pairToCode(target)
+                                    .conversionRate(1)
+                                    .position(targetPos)
+                                    .build();
+                        } else {
+                            return item.updatePosition(targetPos);
+                        }
+                    }
+                })
+                .doOnNext(new Action1<ConversionItem>() {
+                    @Override
+                    public void call(ConversionItem item) {
+                        //Update the new position
+                        storIOSQLite.put()
+                                .object(item.updatePosition(targetPos))
+                                .prepare()
+                                .executeAsBlocking();
                     }
                 });
     }
 
 
-    public void removeConversionItem(final long id) {
+    public Observable<Void> removeConversionItemFromList(final String sourceCurrencyIso,
+                                                         final Integer oldPos) {
 
-        final ContentValues cv = new ContentValues(1);
-        cv.put(ConversionPairTable.COLUMN_LIST_POSITION, -1);
+        return updateConversionItemPositions(sourceCurrencyIso, oldPos, -1);
+    }
 
-        storIOSQLite
+    public Observable<Void> updateConversionItemPositions(final String sourceCurrencyIso,
+                                                          final int oldPos,
+                                                          final int newPos) {
+
+        final ContentValues cv = new ContentValues();
+        cv.put(ConversionPairTable.COLUMN_SOURCE_CURRENCY_CODE, sourceCurrencyIso);
+        if (newPos >= 0) {
+            cv.put(ConversionPairTable.COLUMN_LIST_POSITION, newPos);
+        }
+
+        return storIOSQLite
                 .put()
                 .contentValues(cv)
-                .withPutResolver(ConversionUpdatePutResolver.create(id))
+                .withPutResolver(ConversionPositionsUpdatePutResolver
+                        .create(sourceCurrencyIso, oldPos))
                 .prepare()
-                .executeAsBlocking();
+                .asRxObservable()
+                .ignoreElements().cast(Void.TYPE);
     }
 }

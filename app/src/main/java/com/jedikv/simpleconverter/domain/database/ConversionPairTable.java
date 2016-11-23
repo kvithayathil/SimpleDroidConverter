@@ -2,6 +2,8 @@ package com.jedikv.simpleconverter.domain.database;
 
 import com.jedikv.simpleconverter.utils.SqlUtils;
 import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio.sqlite.queries.RawQuery;
+import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
 
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class ConversionPairTable implements Table {
     }
 
     public static final Query querySelectedConversionItems(String sourceIsoCode,
-                                                         List<String> isoCodes) {
+                                                           List<String> isoCodes) {
         return Query.builder()
                 .table(TABLE)
                 .where(COLUMN_SOURCE_CURRENCY_CODE

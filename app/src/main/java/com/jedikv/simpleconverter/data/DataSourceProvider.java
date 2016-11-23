@@ -1,9 +1,5 @@
 package com.jedikv.simpleconverter.data;
 
-import com.jedikv.simpleconverter.domain.ConversionItem;
-
-import rx.Observable;
-
 /**
  * Created by Kurian on 07/11/2016.
  */
