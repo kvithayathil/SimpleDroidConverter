@@ -3,7 +3,6 @@ package com.jedikv.simpleconverter.domain.database;
 import com.jedikv.simpleconverter.utils.SqlUtils;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 import com.pushtorefresh.storio.sqlite.queries.RawQuery;
-import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
 
 import java.util.List;
 
@@ -43,13 +42,54 @@ public class ConversionPairTable implements Table {
                 .toString();
     }
 
-    public static final Query queryBy(String currencyCode) {
+    public static final RawQuery queryBySourceCurrency(String currencyCode) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT ")
+                .append(CurrencyTable.TABLE + "." + CurrencyTable.COLUMN_LOCATION)
+                .append(", ")
+                .append(CurrencyTable.TABLE + "." + CurrencyTable.COLUMN_SYMBOL)
+                .append(", ")
+                .append(CurrencyTable.TABLE + "." + CurrencyTable.COLUMN_DECIMAL_MARK)
+                .append(", ")
+                .append(CurrencyTable.TABLE + "." + CurrencyTable.COLUMN_SYMBOL_AT_START)
+                .append(", ")
+                .append(CurrencyTable.TABLE + "." + CurrencyTable.COLUMN_NAME)
+                .append(", ")
+                .append(TABLE + "." + COLUMN_ID)
+                .append(", ")
+                .append(TABLE + "." + COLUMN_SOURCE_CURRENCY_CODE)
+                .append(", ")
+                .append(TABLE + "." + COLUMN_TARGET_CURRENCY_CODE)
+                .append(", ")
+                .append(TABLE + "." + COLUMN_RATE_AS_INTEGER)
+                .append(", ")
+                .append(TABLE + "." + COLUMN_LAST_UPDATED)
+                .append(", ")
+                .append(TABLE + "." + COLUMN_UPDATE_SOURCE)
+                .append(" ")
+                .append("FROM " + TABLE + " ")
+
+                .append("LEFT JOIN " + CurrencyTable.TABLE + " ON (")
+                .append(TABLE + "." + COLUMN_TARGET_CURRENCY_CODE + ") ")
+                .append(" = ")
+                .append(CurrencyTable.TABLE + "." + CurrencyTable.COLUMN_ISO_CODE + ") ")
+                .append("WHERE "  + COLUMN_SOURCE_CURRENCY_CODE + " = ? AND ")
+                .append(COLUMN_LIST_POSITION + " >= ?");
+
+        return RawQuery.builder()
+                .query(sb.toString())
+                .args(currencyCode, 0)
+                .build();
+
+        /*
         return Query.builder()
                 .table(TABLE)
                 .where(COLUMN_TARGET_CURRENCY_CODE + " = ? AND " + COLUMN_LIST_POSITION + " >= 0")
                 .whereArgs(currencyCode)
                 .orderBy(COLUMN_LIST_POSITION + " ASC")
                 .build();
+                */
     }
 
     public static final Query querySelectedConversionItems(String sourceIsoCode,

@@ -1,4 +1,4 @@
-package com.jedikv.simpleconverter.ui.activities;
+package com.jedikv.simpleconverter.ui.conversionscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,10 +24,11 @@ import android.widget.TextView;
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.presenters.ConversionPresenter;
+import com.jedikv.simpleconverter.ui.activities.BaseActivity;
+import com.jedikv.simpleconverter.ui.activities.CurrencyPickerActivity;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
 import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
-import com.jedikv.simpleconverter.ui.views.IConversionView;
 import com.jedikv.simpleconverter.utils.Constants;
 
 import java.math.BigDecimal;
@@ -43,7 +44,7 @@ import icepick.State;
 import timber.log.Timber;
 
 
-public class MainActivity extends BaseActivity implements IConversionView {
+public class MainActivity extends BaseActivity implements ConversionView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -80,7 +81,7 @@ public class MainActivity extends BaseActivity implements IConversionView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
-        getApplicationComponent().inject(this);
+        getApplicationComponent()(this);
         conversionPresenter.attachView(this);
 
         mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), parent, getCurrentSourceCurrency());
@@ -208,29 +209,6 @@ public class MainActivity extends BaseActivity implements IConversionView {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-    /*
-    private void convertValue(String entry) {
-
-        if(!TextUtils.isEmpty(entry)) {
-            mInputedValueString = entry;
-        } else {
-            mInputedValueString = "0";
-        }
-        try {
-            BigDecimal enteredValue = (BigDecimal)mDecimalFormat.parse(mInputedValueString);
-            mCurrencyConversionsAdapter.updateCurrencyTargets(getSourceCurrency(), enteredValue);
-
-        } catch (NumberFormatException e) {
-            Timber.e(e, e.getMessage());
-
-        } catch (ParseException e) {
-            Timber.e(e, e.getMessage());
-            e.printStackTrace();
-        }
-    }
-    */
 
     @Override
     protected void onResume() {

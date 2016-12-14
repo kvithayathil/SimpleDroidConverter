@@ -1,7 +1,6 @@
 package com.jedikv.simpleconverter.api.jsonadapters;
 
 import com.squareup.moshi.FromJson;
-import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.ToJson;

@@ -1,7 +1,5 @@
 package com.jedikv.simpleconverter.ui.model;
 
-import android.os.Build;
-
 import com.google.auto.value.AutoValue;
 
 import java.math.BigDecimal;
@@ -21,6 +19,8 @@ public abstract class ConversionItemModel {
     public abstract String decimalMarker();
     public abstract String separator();
     public abstract BigDecimal rate();
+    public abstract Long timestamp();
+    public abstract String source();
 
     public static Builder builder() {
         return new AutoValue_ConversionItemModel.Builder();
@@ -37,6 +37,8 @@ public abstract class ConversionItemModel {
         public abstract Builder separator(String separator);
         public abstract Builder decimalMarker(String decimalMarker);
         public abstract Builder symbolAtStart(boolean symbolAtStart);
+        public abstract Builder timestamp(Long timestamp);
+        public abstract Builder source(String source);
         public abstract ConversionItemModel build();
     }
 }

@@ -2,41 +2,60 @@ package com.jedikv.simpleconverter.domain;
 
 import android.support.annotation.NonNull;
 
+import com.jedikv.simpleconverter.ConversionAppScope;
+import com.jedikv.simpleconverter.data.DataModule;
+import com.jedikv.simpleconverter.data.NetworkDataSource;
+import com.jedikv.simpleconverter.data.PersistentDataSource;
 import com.jedikv.simpleconverter.domain.executor.PostExecutionThread;
 import com.jedikv.simpleconverter.domain.executor.ThreadExecutor;
+import com.jedikv.simpleconverter.domain.interactor.ConversionOperations;
 import com.jedikv.simpleconverter.domain.interactor.ExecutionThread;
+import com.jedikv.simpleconverter.domain.interactor.GetCurrencyList;
 import com.jedikv.simpleconverter.ui.MainThreadExecutor;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by Kurian on 01/11/2016.
  */
-@Module
+@Module(includes = {DataModule.class})
 public class DomainModule {
-
-    public static final String SCHEDULERS_EXECUTION = "schedulers_execution";
-    public static final String SCHEDULERS_MAIN = "schedulers_main";
 
     @Provides
     @NonNull
-    @Singleton
-    @Named(SCHEDULERS_EXECUTION)
+    @ConversionAppScope
     ThreadExecutor providesBackgroundThread() {
         return new ExecutionThread();
     }
 
     @Provides
     @NonNull
-    @Singleton
+    @ConversionAppScope
     PostExecutionThread providesMainThread() {
         return new MainThreadExecutor();
+    }
+
+    @Provides
+    @NonNull
+    @ConversionAppScope
+    ConversionOperations providesConversionOperation(@NonNull PersistentDataSource localSource,
+                                                     @NonNull NetworkDataSource remoteSource,
+                                                     @NonNull PostExecutionThread postExecThread,
+                                                     @NonNull ThreadExecutor threadExecutor) {
+
+        return new ConversionOperations(localSource, remoteSource, postExecThread, threadExecutor);
+    }
+
+    @Provides
+    @ConversionAppScope
+    @NonNull
+    GetCurrencyList providesGetCurrencyList(@NonNull PersistentDataSource localSource,
+                                            @NonNull PostExecutionThread postExecThread,
+                                            @NonNull ThreadExecutor threadExecutor) {
+
+        return new GetCurrencyList(localSource, postExecThread, threadExecutor);
     }
 }

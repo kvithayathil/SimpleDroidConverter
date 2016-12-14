@@ -1,7 +1,6 @@
 package com.jedikv.simpleconverter.utils;
 
 import android.content.Context;
-import android.os.Build;
 
 import timber.log.Timber;
 

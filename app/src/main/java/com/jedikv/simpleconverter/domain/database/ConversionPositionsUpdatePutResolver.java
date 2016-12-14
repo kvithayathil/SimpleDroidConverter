@@ -9,7 +9,11 @@ import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.RawQuery;
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
 
-import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.*;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_ID;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_LIST_POSITION;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_SOURCE_CURRENCY_CODE;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_TARGET_CURRENCY_CODE;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.TABLE;
 
 /**
  * Created by Kurian on 21/11/2016.
@@ -57,7 +61,7 @@ public class ConversionPositionsUpdatePutResolver extends PutResolver<ContentVal
                 updateCount += lowLevel
                         .update(swapConversionPosition(sourceIsoCode, position), contentValues);
             } else {
-                lowLevel.executeSQL(updateRemainingConversionPositions(sourceIsoCode, oldPos));
+                lowLevel.executeSQL(postDeleteUpdateRemainingConversionPositions(sourceIsoCode, oldPos));
             }
 
             lowLevel.setTransactionSuccessful();
@@ -78,13 +82,39 @@ public class ConversionPositionsUpdatePutResolver extends PutResolver<ContentVal
                 .build();
     }
 
+    private RawQuery moveItemToTopOrEnd(String targetIsoCode,
+                                           String sourceIsoCode,
+                                           int targetPos) {
+
+        final String positionOperator;
+        if(targetPos == 0) {
+            positionOperator = " + ";
+        } else {
+            positionOperator = " - ";
+        }
+
+        return RawQuery.builder()
+                .query("UPDATE " + TABLE + " SET " + COLUMN_LIST_POSITION
+                        + " = " + COLUMN_LIST_POSITION  + positionOperator + "1"
+                        + " WHERE "
+                        + COLUMN_SOURCE_CURRENCY_CODE + " = ? AND "
+                        + COLUMN_TARGET_CURRENCY_CODE + " = ?"
+                        + COLUMN_LIST_POSITION + " > -1")
+                .affectsTables(TABLE)
+                .args(sourceIsoCode, targetIsoCode)
+                .build();
+
+
+    }
+
     /**
      * Update the positions of every conversion entry below the deleted entry
      * @param sourceCurrency the source currency to filter by
      * @param deletedPosition the deleted position to compare to
      * @return Constructed raw query object
      */
-    private RawQuery updateRemainingConversionPositions(String sourceCurrency, int deletedPosition) {
+    private RawQuery postDeleteUpdateRemainingConversionPositions(String sourceCurrency,
+                                                                  int deletedPosition) {
 
         return RawQuery.builder()
                 .query("UPDATE " + TABLE + " SET " + COLUMN_LIST_POSITION

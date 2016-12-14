@@ -12,7 +12,7 @@ ext.versions = [
         compileSdk: 25,
         buildTools: '25.0.0',
 
-        androidGradlePlugin: '2.2.2',
+        androidGradlePlugin: '2.2.3',
         aptGradlePlugin: '1.8',
 
         multidex: '1.0.1',
@@ -28,7 +28,7 @@ ext.versions = [
         rxJava: '1.2.1',
         rxAndroid: '1.2.0',
         supportLibs: '25.0.0',
-        okHttp: '3.4.1',
+        okHttp: '3.5.0',
         retrofit: '2.1.0',
         butterKnife: '8.4.0',
         timber: '4.1.2',

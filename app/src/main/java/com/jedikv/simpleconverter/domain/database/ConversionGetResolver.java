@@ -6,7 +6,14 @@ import android.support.annotation.NonNull;
 import com.jedikv.simpleconverter.domain.ConversionItem;
 import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver;
 
-import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.*;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_CURRENCY_CODES_COMBO;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_ID;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_LAST_UPDATED;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_LIST_POSITION;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_RATE_AS_INTEGER;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_SOURCE_CURRENCY_CODE;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_TARGET_CURRENCY_CODE;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_UPDATE_SOURCE;
 
 /**
  * Created by Kurian on 14/11/2016.

@@ -6,7 +6,7 @@ import com.jedikv.simpleconverter.api.CurrencyDownloadService;
 import com.jedikv.simpleconverter.api.OnRequestFinished;
 import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
 import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
-import com.jedikv.simpleconverter.ui.views.IConversionView;
+import com.jedikv.simpleconverter.ui.conversionscreen.ConversionView;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -30,7 +30,7 @@ public class ConversionPresenter implements IConversionPresenter {
 
     private final DecimalFormat decimalFormat;
 
-    private IConversionView conversionView;
+    private ConversionView conversionView;
     private CurrencyDownloadService downloadService;
     private CurrencyPairDbHelper currencyPairDbHelper;
     private CurrencyDbHelper currencyDbHelper;
@@ -167,7 +167,7 @@ public class ConversionPresenter implements IConversionPresenter {
     }
 
     @Override
-    public void attachView(IConversionView view) {
+    public void attachView(ConversionView view) {
         Timber.d("%1$s attached", view.getClass().getSimpleName());
         this.conversionView = view;
     }

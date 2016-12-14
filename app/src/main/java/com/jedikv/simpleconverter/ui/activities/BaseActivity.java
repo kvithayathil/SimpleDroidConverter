@@ -5,11 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.jedikv.simpleconverter.App;
-import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyDownloadService;
-import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
-import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
-import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
-import com.jedikv.simpleconverter.injection.component.AppComponent;
+import com.jedikv.simpleconverter.AppComponent;
 
 import javax.inject.Inject;
 
@@ -20,17 +16,7 @@ import icepick.Icepick;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    @Inject
-    protected CurrencyDbHelper mCurrencyEntityHelper;
-    @Inject
-    protected CurrencyPairDbHelper mCurrencyPairEntityHelper;
-    @Inject
-    protected ConversionItemDbHelper mConversionEntityHelper;
-
-    @Inject SharedPreferences mSharedPrefs;
-
-    @Inject
-    YahooCurrencyDownloadService currencyDownloadService;
+    @Inject SharedPreferences sharedPrefs;
 
     @Override
     protected void onStart() {
@@ -49,12 +35,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
 
-        ((App)getApplication()).getAppComponent().inject(this);
-
-        //mCurrencyEntityHelper = new CurrencyDbHelper(this);
-        //mCurrencyPairEntityHelper = new CurrencyPairDbHelper(this);
-        //mConversionEntityHelper = new ConversionItemDbHelper(this);
-
+        this.sharedPrefs = ((App)getApplication())
+                .getAppComponent().providesSharedPrefs();
     }
 
     @Override
@@ -63,27 +45,11 @@ public class BaseActivity extends AppCompatActivity {
         Icepick.saveInstanceState(this, outState);
     }
 
-    protected int getScreenHeight() {
-        return findViewById(android.R.id.content).getHeight();
-    }
-
-
-    protected SharedPreferences getDefaultSharedPrefs() {
-
-        return mSharedPrefs;
-    }
-
-    protected CurrencyDbHelper getCurrencyDbHelper() {
-        return mCurrencyEntityHelper;
-    }
-
-    protected CurrencyPairDbHelper getPairDbHelper() { return mCurrencyPairEntityHelper; }
-
-    public ConversionItemDbHelper getConversionEntityHelper() {
-        return mConversionEntityHelper;
-    }
-
     public AppComponent getApplicationComponent() {
         return App.get(this).getAppComponent();
+    }
+
+    protected SharedPreferences getDefaultSharedPrefs() {
+        return this.sharedPrefs;
     }
 }

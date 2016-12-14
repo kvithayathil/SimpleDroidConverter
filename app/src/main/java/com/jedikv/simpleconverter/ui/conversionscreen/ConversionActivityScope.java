@@ -1,4 +1,4 @@
-package com.jedikv.simpleconverter.injection;
+package com.jedikv.simpleconverter.ui.conversionscreen;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import javax.inject.Scope;
 
 /**
- * Created by KV_87 on 20/09/2015.
- *
-**/
+ * Created by Kurian on 12/12/2016.
+ */
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActivityScope {}
+public @interface ConversionActivityScope {
+}

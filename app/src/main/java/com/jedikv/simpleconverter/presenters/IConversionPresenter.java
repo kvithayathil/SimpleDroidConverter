@@ -1,15 +1,13 @@
 package com.jedikv.simpleconverter.presenters;
 
-import com.jedikv.simpleconverter.ui.views.IConversionView;
-
-import java.util.List;
+import com.jedikv.simpleconverter.ui.conversionscreen.ConversionView;
 
 /**
  * Created by KV_87 on 20/09/2015.
  */
 public interface IConversionPresenter {
 
-    void attachView(IConversionView view);
+    void attachView(ConversionView view);
 
     void detachView();
 

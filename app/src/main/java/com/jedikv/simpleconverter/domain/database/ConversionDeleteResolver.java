@@ -6,7 +6,8 @@ import com.jedikv.simpleconverter.domain.ConversionItem;
 import com.pushtorefresh.storio.sqlite.operations.delete.DefaultDeleteResolver;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 
-import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.*;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.COLUMN_ID;
+import static com.jedikv.simpleconverter.domain.database.ConversionPairTable.TABLE;
 
 /**
  * Created by Kurian on 14/11/2016.

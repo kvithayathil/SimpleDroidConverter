@@ -6,8 +6,6 @@ import android.os.Looper;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
-import java.util.logging.LogRecord;
-
 /**
  * Created by Kurian on 08/05/2015.
  */

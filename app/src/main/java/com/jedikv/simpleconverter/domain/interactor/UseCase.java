@@ -16,4 +16,12 @@ public abstract class UseCase {
         this.mainThread = mainThread;
         this.executionThread = executionThread;
     }
+
+    protected PostExecutionThread getPostExecutionThread() {
+        return this.mainThread;
+    }
+
+    protected ThreadExecutor getExecutionThread() {
+        return this.executionThread;
+    }
 }
