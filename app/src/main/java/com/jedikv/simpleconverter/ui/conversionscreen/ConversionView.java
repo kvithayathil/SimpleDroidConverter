@@ -5,6 +5,7 @@ import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 import com.jedikv.simpleconverter.ui.views.MvpView;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import converter_db.ConversionItem;
 
@@ -21,5 +22,5 @@ public interface ConversionView extends MvpView {
 
     void updateSelectedCurrency(CurrencyModel source, int value);
 
-
+    void updateConversions(List<ConversionItemModel> items);
 }

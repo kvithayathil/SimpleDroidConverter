@@ -37,54 +37,42 @@ public class ConversionOperations extends UseCase {
     }
 
 
-    public Observable<List<ConversionItemModel>> loadConversionItems(final String sourceCurrencyIso,
-                                                                     final List<String> targetCurrencyIsos) {
-
-        //Load from local data store
-        final Observable<List<ConversionItemModel>> localItem
-                = loadConversionsFromLocalStore(sourceCurrencyIso)
-                .subscribeOn(getExecutionThread().getScheduler());
-
-        localItem.map(new Func1<List<ConversionItemModel>, List<String>>() {
-
-            @Override
-            public List<String> call(List<ConversionItemModel> items) {
-
-                List<String> isoCodes = new ArrayList<>();
-                for(ConversionItemModel item : items) {
-                    isoCodes.add(item.isoCode());
-                }
-
-                return isoCodes;
-            }
-        })
-        .flatMap(new Func1<List<String>, Observable<List<ConversionItemModel>>>() {
-            @Override
-            public Observable<List<ConversionItemModel>> call(List<String> strings) {
-                return downloadAndStoreConversionItems(sourceCurrencyIso, strings);
-            }
-        });
+    public Observable<List<ConversionItemModel>> loadConversionItems(final String sourceCurrencyIso) {
 
         //Download from network
         final Observable<List<ConversionItemModel>> downloadConversionItems
-                = downloadAndStoreConversionItems(sourceCurrencyIso, targetCurrencyIsos);
+                = downloadAndStoreConversionItems(sourceCurrencyIso)
+                .subscribeOn(getExecutionThread().getScheduler());
+
+        final Observable<List<ConversionItemModel>> localConversionItems
+                = loadConversionsFromLocalStore(sourceCurrencyIso)
+                .subscribeOn(getExecutionThread().getScheduler());
 
         //Emit their responses sequentially
-        return Observable.concat(localItem, downloadConversionItems)
+        return Observable.concat(localConversionItems, downloadConversionItems)
                 .observeOn(getPostExecutionThread().getScheduler());
     }
 
     private Observable<List<ConversionItemModel>> loadConversionsFromLocalStore(final String sourceIso) {
-        return localDataSource.getConversionItems(sourceIso)
-                .subscribeOn(getExecutionThread().getScheduler());
-
+        return localDataSource.getConversionItems(sourceIso);
     }
 
-    private Observable<List<ConversionItemModel>> downloadAndStoreConversionItems(final String sourceIso,
-                                                                                  List<String> targetIso) {
+    private Observable<List<ConversionItemModel>> downloadAndStoreConversionItems(final String sourceIso) {
 
-        return networkDataSource
-                .getConversionItems(sourceIso, targetIso)
+        return localDataSource.getConversionItems(sourceIso)
+                .flatMap(new Func1<List<ConversionItemModel>, Observable<List<ConversionItem>>>() {
+                    @Override
+                    public Observable<List<ConversionItem>> call(List<ConversionItemModel> items) {
+
+                        final List<String> isoCodes = new ArrayList<>();
+                        for (ConversionItemModel item : items) {
+                            isoCodes.add(item.isoCode());
+                        }
+
+                        return networkDataSource
+                                .getConversionItems(sourceIso, isoCodes);
+                    }
+                })
                 .flatMap(new Func1<List<ConversionItem>, Observable<PutResults<ConversionItem>>>() {
                     @Override
                     public Observable<PutResults<ConversionItem>> call(List<ConversionItem> items) {
@@ -96,9 +84,7 @@ public class ConversionOperations extends UseCase {
                     public Observable<List<ConversionItemModel>> call(PutResults<ConversionItem> conversionItemPutResults) {
                         return loadConversionsFromLocalStore(sourceIso);
                     }
-                })
-                .subscribeOn(getExecutionThread().getScheduler());
-
+                });
     }
 
 
@@ -115,8 +101,13 @@ public class ConversionOperations extends UseCase {
 
 
         final Observable<ConversionItemModel> fromNetwork
-                = downloadAndStoreConversionItems(sourceCurrencyIso,
+                = networkDataSource.getConversionItems(sourceCurrencyIso,
                 Collections.singletonList(targetCurrencyIso))
+                .map(new Func1<List<ConversionItem>, ConversionItemModel>() {
+                    @Override
+                    public ConversionItemModel call(List<ConversionItem> items) {
+                    }
+                })
                 .flatMap(new Func1<List<ConversionItemModel>, Observable<ConversionItemModel>>() {
                     @Override
                     public Observable<ConversionItemModel> call(List<ConversionItemModel> conversionItemModels) {

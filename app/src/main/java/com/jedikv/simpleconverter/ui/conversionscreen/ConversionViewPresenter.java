@@ -69,7 +69,15 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
     }
 
     public void loadConversionItems(String sourceCurrencyIso) {
-        conversionOperations.loadConversionItems()
+        conversionOperations.loadConversionItems(sourceCurrencyIso)
+        .subscribe(new Action1<List<ConversionItemModel>>() {
+            @Override
+            public void call(List<ConversionItemModel> items) {
+                if(view != null) {
+                    view.updateConversions(items);
+                }
+            }
+        });
     }
 
     public void cacheSourceEntry(String currencyIso, int value) {
