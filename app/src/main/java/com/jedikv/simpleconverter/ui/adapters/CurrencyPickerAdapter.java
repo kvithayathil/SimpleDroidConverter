@@ -1,6 +1,5 @@
 package com.jedikv.simpleconverter.ui.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,10 +10,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 
-import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
-import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
-import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
+import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 
 import java.util.ArrayList;
@@ -22,46 +19,47 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import converter_db.CurrencyEntity;
 import timber.log.Timber;
 
 /**
  * Created by Kurian on 13/05/2015.
  */
-public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAdapter.CurrencyItemViewHolder> implements Filterable {
+public class CurrencyPickerAdapter
+        extends RecyclerView.Adapter<CurrencyPickerAdapter.CurrencyItemViewHolder>
+        implements Filterable {
 
-    private final List<CurrencyEntity> mCurrencyList;
-    private List<CurrencyEntity> mFilteredList;
-    private CurrencyFilter mCurrencyFilter;
-    private CurrencyDbHelper currencyDbHelper;
+    private List<CurrencyModel> currencyList;
+    private List<CurrencyModel> filteredList;
+    private CurrencyFilter currencyFilter;
 
-    public CurrencyPickerAdapter(Context context, List<String> currencyCodesToFilter) {
-        currencyDbHelper = new CurrencyDbHelper(context);
-        mCurrencyList = currencyDbHelper.getFilteredCurrencies(currencyCodesToFilter);
-        mFilteredList = mCurrencyList;
-
+    public CurrencyPickerAdapter() {
+        currencyList = new ArrayList<>();
+        filteredList = currencyList;
         getFilter();
     }
 
     @Override
     public CurrencyItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_picker_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.currency_picker_card, parent, false);
         CurrencyItemViewHolder viewHolder = new CurrencyItemViewHolder(v);
-
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(CurrencyItemViewHolder holder, int position) {
-
-        CurrencyEntity entity = mFilteredList.get(position);
-        holder.bind(entity);
+        holder.bind(filteredList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mFilteredList.size();
+        return filteredList.size();
+    }
+
+    public void loadCurrencies(List<CurrencyModel> currencies) {
+        this.currencyList = currencies;
+        this.filteredList = currencyList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -71,7 +69,7 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
     @Override
     public long getItemId(int position) {
-        return mFilteredList.get(position).getNumericCode();
+        return filteredList.get(position).numericCode();
     }
 
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -85,7 +83,7 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
         @BindView(R.id.tv_currency_symbol)
         AppCompatTextView tvCurrencySymbol;
 
-        private CurrencyEntity currencyEntity;
+        private CurrencyModel currency;
 
         public CurrencyItemViewHolder(View v) {
             super(v);
@@ -93,24 +91,25 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
             v.setOnClickListener(this);
         }
 
-        public void bind(CurrencyEntity currencyEntity) {
+        public void bind(CurrencyModel currency) {
 
-            this.currencyEntity = currencyEntity;
+            this.currency = currency;
 
-            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), currencyEntity.getCode());
+            final int flagId = AndroidUtils
+                    .getDrawableResIdByCurrencyCode(ivFlag.getContext(), currency.isoCode());
 
-            if(TextUtils.equals(currencyEntity.getCode(), "XCD")) {
+            if(TextUtils.equals(currency.isoCode(), "XCD")) {
                 Timber.d("XCD: " + flagId);
             }
 
             ivFlag.setImageResource(flagId);
 
-            tvCurrencyName.setText(currencyEntity.getName());
-            tvCurrencyCode.setText(currencyEntity.getCode());
+            tvCurrencyName.setText(currency.name());
+            tvCurrencyCode.setText(currency.isoCode());
 
             //Some currency symbols are just the currency code, so we avoid having to print it twice
-            if(!TextUtils.equals(currencyEntity.getCode(), currencyEntity.getSymbol())) {
-                tvCurrencySymbol.setText(currencyEntity.getSymbol());
+            if(!TextUtils.equals(currency.isoCode(), currency.symbol())) {
+                tvCurrencySymbol.setText(currency.symbol());
             } else {
                 tvCurrencySymbol.setText("");
             }
@@ -119,20 +118,17 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
         @Override
         public void onClick(View v) {
-
-            App.getBusInstance().post(new AddCurrencyEvent(currencyEntity));
+            //App.getBusInstance().post(new AddCurrencyEvent(currencyEntity));
         }
 
     }
 
     @Override
     public Filter getFilter() {
-
-        if(mCurrencyFilter == null) {
-            mCurrencyFilter = new CurrencyFilter();
+        if(currencyFilter == null) {
+            currencyFilter = new CurrencyFilter();
         }
-
-        return mCurrencyFilter;
+        return currencyFilter;
     }
 
 
@@ -144,11 +140,12 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
             FilterResults filterResults = new FilterResults();
             if(!TextUtils.isEmpty(constraint)) {
-                ArrayList<CurrencyEntity> tempList = new ArrayList<>();
+                ArrayList<CurrencyModel> tempList = new ArrayList<>();
 
-                for(CurrencyEntity currency:mCurrencyList) {
+                for(CurrencyModel currency : currencyList) {
 
-                    String content = currency.getCode() + " " + currency.getName() + " " + currency.getSymbol() + " " + currency.getCountryName();
+                    String content = currency.isoCode() + " " + currency.name()
+                            + " " + currency.symbol() + " " + currency.location();
 
                     if(content.toLowerCase().contains(constraint.toString().toLowerCase())) {
 
@@ -161,8 +158,8 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
 
             } else {
 
-                filterResults.count = mCurrencyList.size();
-                filterResults.values = mCurrencyList;
+                filterResults.count = currencyList.size();
+                filterResults.values = currencyList;
             }
 
             return filterResults;
@@ -175,8 +172,7 @@ public class CurrencyPickerAdapter extends RecyclerView.Adapter<CurrencyPickerAd
          */
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
-            mFilteredList = (ArrayList<CurrencyEntity>)results.values;
+            filteredList = (ArrayList<CurrencyModel>)results.values;
             notifyDataSetChanged();
         }
     }

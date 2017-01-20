@@ -95,24 +95,25 @@ public class ConversionOperations extends UseCase {
                 .observeOn(getPostExecutionThread().getScheduler());
     }
 
-    public Observable<ConversionItemModel> addConversionItem(String sourceCurrencyIso,
-                                                             String targetCurrencyIso,
+    public Observable<ConversionItemModel> addConversionItem(final String sourceCurrencyIso,
+                                                             final String targetCurrencyIso,
                                                              int targetPosition) {
 
 
         final Observable<ConversionItemModel> fromNetwork
                 = networkDataSource.getConversionItems(sourceCurrencyIso,
                 Collections.singletonList(targetCurrencyIso))
-                .map(new Func1<List<ConversionItem>, ConversionItemModel>() {
+
+                .flatMap(new Func1<List<ConversionItem>, Observable<PutResults<ConversionItem>>>() {
                     @Override
-                    public ConversionItemModel call(List<ConversionItem> items) {
+                    public Observable<PutResults<ConversionItem>> call(List<ConversionItem> items) {
+                        return localDataSource.saveConversionItems(items);
                     }
                 })
-                .flatMap(new Func1<List<ConversionItemModel>, Observable<ConversionItemModel>>() {
+                .flatMap(new Func1<PutResults<ConversionItem>, Observable<ConversionItemModel>>() {
                     @Override
-                    public Observable<ConversionItemModel> call(List<ConversionItemModel> conversionItemModels) {
-                        return Observable.from(conversionItemModels)
-                                .first();
+                    public Observable<ConversionItemModel> call(PutResults<ConversionItem> conversionItemPutResults) {
+                        return localDataSource.getConversionItem(sourceCurrencyIso, targetCurrencyIso);
                     }
                 });
 

@@ -6,6 +6,7 @@ import com.jedikv.simpleconverter.ui.base.BasePresenter;
 import com.jedikv.simpleconverter.ui.model.ConversionItemModel;
 import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,24 +22,12 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
     private final ConversionOperations conversionOperations;
     private final LocalKeyValueCache localKeyValueCache;
 
-    private ConversionView view;
-
     @Inject
     public ConversionViewPresenter(ConversionOperations conversionOperations,
                                    LocalKeyValueCache localKeyValueCache) {
 
         this.conversionOperations = conversionOperations;
         this.localKeyValueCache = localKeyValueCache;
-    }
-
-    @Override
-    public void attachView(ConversionView view) {
-        this.view = view;
-    }
-
-    @Override
-    public void detachView() {
-        this.view = null;
     }
 
     public void addConversionItem(String sourceCurrencyIso,
@@ -49,8 +38,8 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
                 .subscribe(new Action1<ConversionItemModel>() {
                     @Override
                     public void call(ConversionItemModel item) {
-                        if (view != null) {
-                            view.insertConversionItem(item);
+                        if (isViewAttached()) {
+                            getView().insertConversionItem(item);
                         }
                     }
                 });
@@ -73,15 +62,16 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
         .subscribe(new Action1<List<ConversionItemModel>>() {
             @Override
             public void call(List<ConversionItemModel> items) {
-                if(view != null) {
-                    view.updateConversions(items);
+                if(isViewAttached()) {
+                    getView().updateConversions(items);
                 }
             }
         });
     }
 
-    public void cacheSourceEntry(String currencyIso, int value) {
-        localKeyValueCache.saveSelectedSourceCurrencyIsoAndValue(currencyIso, value);
+    public void cacheSourceEntry(String currencyIso, String value) {
+        localKeyValueCache.saveSelectedSourceCurrencyIsoAndValue(currencyIso,
+                new BigDecimal(value).movePointRight(4).intValue());
     }
 
     public void loadSelectedSourceCurrency() {
@@ -92,8 +82,9 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
                 .subscribe(new Action1<CurrencyModel>() {
                     @Override
                     public void call(CurrencyModel source) {
-                        if (view != null)
-                            view.updateSelectedCurrency(source, value);
+                        if (isViewAttached()) {
+                            getView().updateSelectedCurrency(source, value);
+                        }
                     }
                 });
     }

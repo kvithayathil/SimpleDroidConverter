@@ -13,14 +13,7 @@ import converter_db.ConversionItem;
  * Created by KV_87 on 20/09/2015.
  */
 public interface ConversionView extends MvpView {
-
-    void updateViews();
-
     void insertConversionItem(ConversionItemModel conversionItem);
-
-    int getListSize();
-
     void updateSelectedCurrency(CurrencyModel source, int value);
-
     void updateConversions(List<ConversionItemModel> items);
 }

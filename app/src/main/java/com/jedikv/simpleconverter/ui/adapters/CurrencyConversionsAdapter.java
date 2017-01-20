@@ -17,20 +17,14 @@ import android.widget.ImageView;
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
-import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
-import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
-import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.ui.adapters.gestures.ItemTouchHelperAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.ItemTouchHelperViewHolder;
+import com.jedikv.simpleconverter.ui.model.ConversionItemModel;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -38,42 +32,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-import converter_db.ConversionItem;
-import converter_db.CurrencyEntity;
-import converter_db.CurrencyPairEntity;
 import timber.log.Timber;
 
 /**
  * Created by Kurian on 08/05/2015.
  */
-public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyConversionsAdapter.CurrencyViewHolder> implements ItemTouchHelperAdapter {
+public class CurrencyConversionsAdapter
+        extends RecyclerView.Adapter<CurrencyConversionsAdapter.CurrencyViewHolder>
+        implements ItemTouchHelperAdapter {
 
-    private List<ConversionItem> mConverterList;
-
-    private CurrencyPairDbHelper mCurrencyPairDbHelper;
-    private CurrencyDbHelper mCurrencyDbHelper;
-    private ConversionItemDbHelper mConversionDbHelper;
-
-    private CurrencyEntity sourceCurrencyEntity;
-
-    private String mSourceCurrencyCode;
-
-    private BigDecimal mInputValue;
-
-    CoordinatorLayout parent;
+    private List<ConversionItemModel> conversionItems;
+    private String sourceCurrencyCode;
+    private BigDecimal inputValue;
+    private CoordinatorLayout parent;
 
 
     @Inject
-    public CurrencyConversionsAdapter(Context context, CoordinatorLayout parent, String sourceCurrency) {
+    public CurrencyConversionsAdapter(Context context, CoordinatorLayout parent,
+                                      String sourceCurrency) {
+
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
-        mCurrencyPairDbHelper = new CurrencyPairDbHelper(context);
-        mCurrencyDbHelper = new CurrencyDbHelper(context);
-        mConversionDbHelper = new ConversionItemDbHelper(context);
-        mConverterList = new ArrayList<>();
-        sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(sourceCurrency);
-
-        mConverterList.addAll(mConversionDbHelper.getAll());
-
         this.parent = parent;
     }
 
@@ -85,122 +63,98 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
     @Override
     public long getItemId(int position) {
-        return mConverterList.get(position).getId();
+        return conversionItems.get(position).conversionId();
     }
 
     public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
-
-        mSourceCurrencyCode = currencyCode;
-
-        sourceCurrencyEntity = mCurrencyDbHelper.getCurrency(currencyCode);
-        //Clear the dao session cache so that it can be re-queried onBind
-        mConversionDbHelper.clearCache();
+        sourceCurrencyCode = currencyCode;
 
         //Ensure the value is converted to int to retain float values
-        mInputValue = inputValue;
+        this.inputValue = inputValue;
 
-        Timber.d("Preinput: " + inputValue + " PostInput: " + mInputValue);
+        Timber.d("Preinput: " + inputValue + " PostInput: " + this.inputValue);
         notifyDataSetChanged();
     }
 
 
     public BigDecimal getInputValue() {
-        return mInputValue;
+        return inputValue;
     }
 
+    public void updateInputValue(String inputValue) {
+        this.inputValue = new BigDecimal(inputValue);
+    }
 
     @Override
     public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_list_card, parent, false);
-        CurrencyViewHolder viewHolder = new CurrencyViewHolder(v);
-
-        return viewHolder;
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.currency_list_card, parent, false);
+        return new CurrencyViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
-
         Timber.d("onBind at position: " + position);
-
-        ConversionItem conversionEntity = mConverterList.get(position);
-        CurrencyPairEntity pairEntity = mCurrencyPairDbHelper.queryById(conversionEntity.getPair_id());
-        CurrencyEntity currencyEntity = pairEntity.getTarget_id();
-
-
-        //Keep the position in sync with the adapter
-        if(conversionEntity.getPosition() != position) {
-            conversionEntity.setPosition(position);
-            mConversionDbHelper.update(conversionEntity);
-        }
-
-
-        holder.bind(mInputValue, pairEntity, currencyEntity);
-
+        holder.bind(inputValue, conversionItems.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mConverterList.size();
+        return conversionItems.size();
     }
 
-    public List<ConversionItem> getItems() {
-        return mConverterList;
+    public List<ConversionItemModel> getItems() {
+        return conversionItems;
     }
 
-    public void addItem(ConversionItem conversionEntity) {
-
-        if(mConverterList.add(conversionEntity)) {
-            notifyItemInserted(conversionEntity.getPosition());
-        }
+    public void addItem(ConversionItemModel conversion) {
+        conversionItems.add(0, conversion);
+        notifyItemInserted(0);
     }
 
-    public void addItemAtPosition(int position, ConversionItem conversionEntity) {
-
-        mConverterList.add(position, conversionEntity);
+    public void addItemAtPosition(int position, ConversionItemModel conversion) {
+        conversionItems.add(position, conversion);
         notifyItemInserted(position);
     }
 
-    public ConversionItem removeItem(int position) {
+    public ConversionItemModel removeItem(final int position) {
 
-        final ConversionItem entity = mConverterList.remove(position);
-        entity.setPosition(position);
+        final ConversionItemModel item = conversionItems.remove(position);
         notifyItemRemoved(position);
 
         Snackbar.make(parent, R.string.snack_bar_deleted, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snack_bar_undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItemAtPosition(entity.getPosition(), entity);
-            }
-        }).setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onClick(View v) {
+                        addItemAtPosition(position, item);
+                    }
+                }).setCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 //Only process the delete if the UNDO hasn't been clicked
                 if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                    mConversionDbHelper.deleteItem(entity);
+                    //TODO Delete via presenter
                 }
             }
         }).show();
 
-        return entity;
+        return item;
     }
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(mConverterList, fromPosition, toPosition);
+        Collections.swap(conversionItems, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
     public void onItemDismiss(int position) {
         App.getBusInstance().post(new RemoveConversionEvent(position));
-
     }
 
-    public static class CurrencyViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
-
-        private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
+    static class CurrencyViewHolder extends RecyclerView.ViewHolder
+            implements ItemTouchHelperViewHolder {
 
         @BindView(R.id.card_view)
         CardView cardView;
@@ -218,41 +172,34 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
         public CurrencyViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
-            mDecimalFormat.setParseBigDecimal(true);
-            mDecimalFormat.setMinimumFractionDigits(4);
         }
 
+        public void bind(BigDecimal inputValue, ConversionItemModel conversionItem) {
 
-        public void bind(BigDecimal inputValue, CurrencyPairEntity currencyPairEntity, CurrencyEntity currencyEntity) {
-
-            String code = currencyEntity.getCode();
-            final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(ivFlag.getContext(), code);
+            final String code = conversionItem.isoCode();
+            final int flagId
+                    = AndroidUtils.getDrawableResIdByCurrencyCode(itemView.getContext(), code);
             ivFlag.setImageResource(flagId);
-
             tvCurrencyCode.setText(code);
-            tvCurrencyName.setText(currencyEntity.getName());
-            setValue(inputValue, currencyPairEntity.getRate());
+            tvCurrencyName.setText(conversionItem.name());
+            setValue(inputValue, conversionItem.rate());
         }
 
-        public void setValue(BigDecimal inputValue, int rate) {
+        private void setValue(BigDecimal inputValue, BigDecimal value) {
 
-            Timber.d("Input value: " + inputValue + " rate: " + rate);
-            BigDecimal result = inputValue.multiply(new BigDecimal(rate).movePointLeft(4));
+            Timber.d("Input value: %1$s rate: %2$s", inputValue, value);
+            final BigDecimal result = inputValue.multiply(value);
             //Revert the value back to the original decimal point position
             result.setScale(4, BigDecimal.ROUND_HALF_UP);
-            Timber.d("Result move point left: " + result);
-
-            //BigDecimal decimalResult = intResult.divide(new BigDecimal(10000 * 10000), 4, RoundingMode.HALF_UP);
-
-            //Timber.d("Result: " + result + " Converted result: " + decimalResult);
-
+            Timber.d("Result move point left: %1$s", result);
             tvValue.setText(result.toString());
         }
 
         @OnClick(R.id.ib_remove)
         public void removeItem() {
 
-            Timber.d("Remove adapter position: " + getAdapterPosition() + " Layout position: " + getLayoutPosition() + " Old position: " + getOldPosition());
+            Timber.d("Remove adapter position: " + getAdapterPosition() + " Layout position: "
+                    + getLayoutPosition() + " Old position: " + getOldPosition());
 
             App.getBusInstance().post(new RemoveConversionEvent(getAdapterPosition()));
         }
@@ -264,12 +211,12 @@ public class CurrencyConversionsAdapter extends RecyclerView.Adapter<CurrencyCon
 
         @Override
         public void onItemSelected() {
-            ((CardView)itemView).setCardBackgroundColor(Color.parseColor("#d2d2d2"));
+            ((CardView) itemView).setCardBackgroundColor(Color.parseColor("#d2d2d2"));
         }
 
         @Override
         public void onItemClear() {
-            ((CardView)itemView).setCardBackgroundColor(Color.WHITE);
+            ((CardView) itemView).setCardBackgroundColor(Color.WHITE);
         }
     }
 

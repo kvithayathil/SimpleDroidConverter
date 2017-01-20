@@ -21,30 +21,32 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
-import com.jedikv.simpleconverter.presenters.ConversionPresenter;
 import com.jedikv.simpleconverter.ui.activities.BaseActivity;
 import com.jedikv.simpleconverter.ui.activities.CurrencyPickerActivity;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyConversionsAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.CurrencyTouchItemCallback;
+import com.jedikv.simpleconverter.ui.base.PresenterFactory;
+import com.jedikv.simpleconverter.ui.model.ConversionItemModel;
+import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
 import com.jedikv.simpleconverter.utils.Constants;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import converter_db.ConversionItem;
 import converter_db.CurrencyEntity;
 import icepick.State;
 import timber.log.Timber;
 
 
-public class MainActivity extends BaseActivity implements ConversionView {
+public class MainActivity extends BaseActivity<ConversionViewPresenter, ConversionView>
+        implements ConversionView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -61,9 +63,8 @@ public class MainActivity extends BaseActivity implements ConversionView {
     @BindView(R.id.toolbar)
     Toolbar toolBar;
 
-
     @Inject
-    ConversionPresenter conversionPresenter;
+    ConversionPresenterFactory presenterFactory;
 
     private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
 
@@ -72,8 +73,6 @@ public class MainActivity extends BaseActivity implements ConversionView {
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
-    //private final DecimalFormat mDecimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,10 +80,8 @@ public class MainActivity extends BaseActivity implements ConversionView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
-        getApplicationComponent()(this);
-        conversionPresenter.attachView(this);
 
-        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(App.get(this), parent, getCurrentSourceCurrency());
+        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(this, parent, getCurrentSourceCurrency());
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -154,15 +151,8 @@ public class MainActivity extends BaseActivity implements ConversionView {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        conversionPresenter.detachView();
-        super.onDestroy();
-    }
-
     @OnClick(R.id.fab)
     public void addCurrency() {
-
         startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY);
     }
 
@@ -213,19 +203,15 @@ public class MainActivity extends BaseActivity implements ConversionView {
     @Override
     protected void onResume() {
         super.onResume();
-        updateViews();
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //Cache any input values for re-use when relaunching the application
-        getDefaultSharedPrefs().edit().putString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, currencyInputView.getInputValue()).apply();
     }
 
 
-    public void updateSourceCurrency(long currencyCode) {
+    private void updateSourceCurrency(long currencyCode) {
 
         CurrencyEntity currencyEntity = mCurrencyEntityHelper.getById(currencyCode);
         Timber.d("id: " + currencyCode + " code: " + currencyEntity.getCode());
@@ -234,9 +220,7 @@ public class MainActivity extends BaseActivity implements ConversionView {
             getDefaultSharedPrefs().edit().putLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, currencyCode).commit();
             updateViews();
         }
-
         conversionPresenter.updateFromSourceCurrency(currencyCode);
-
     }
 
     @Override
@@ -245,63 +229,57 @@ public class MainActivity extends BaseActivity implements ConversionView {
 
         if(resultCode == CurrencyPickerActivity.RESULT_CODE_SUCCESS) {
 
-            long currencyCode = data.getLongExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, -1);
-            Timber.d("Result currency code: " + currencyCode);
+            final long currencyCode
+                    = data.getLongExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, -1);
+
+            final String isoCode
+                    = data.getStringExtra(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_ISO);
+            Timber.d("Result currency code: 1%$s", currencyCode);
             switch (requestCode) {
 
                 case CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY: {
-
                     addCurrencyToList(currencyCode);
                     break;
                 }
 
                 case CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY: {
                     updateSourceCurrency(currencyCode);
+                    getPresenter().cacheSourceEntry(isoCode, mInputedValueString);
                     break;
                 }
             }
         }
     }
 
-    private void addCurrencyToList(long currencyCode) {
-        conversionPresenter.addCurrency(currencyCode);
+    @Override
+    public void updateSelectedCurrency(CurrencyModel source, int value) {
     }
 
     @Override
-    public String getCurrentSourceCurrency() {
-        return getDefaultSharedPrefs().getString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, getString(R.string.default_source_currency));
-
+    public void updateConversions(List<ConversionItemModel> items) {
     }
 
     @Override
-    public long getCurrentSourceCurrencyCode() {
-        return getDefaultSharedPrefs().getLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, getResources().getInteger(R.integer.default_source_currency_code));
+    public void insertConversionItem(ConversionItemModel conversionItem) {
     }
 
-    @Override
-    public int getListSize() {
-        return mCurrencyConversionsAdapter.getItemCount();
-    }
-
-    @Override
-    public void insertConversionItem(ConversionItem conversionItem) {
-        mCurrencyConversionsAdapter.addItem(conversionItem);
-        conversionPresenter.convertValue(currencyInputView.getInputValue());
-
-    }
-
-    @Override
-    public void updateViews() {
-        currencyInputView.setValue(getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.0000"));
-        CurrencyEntity entity = getCurrencyDbHelper().getCurrency(getCurrentSourceCurrency());
-        currencyInputView.setCurrency(entity);
-        conversionPresenter.convertValue(currencyInputView.getInputValue());
-    }
-
-    @Override
     public void updateList(BigDecimal inputValue) {
         mCurrencyConversionsAdapter.updateCurrencyTargets(getCurrentSourceCurrency(), inputValue);
     }
 
+    /* Handling lifecycle lifetimes of presenters */
+    @Override
+    public PresenterFactory<ConversionViewPresenter> getPresenterFactory() {
+        return presenterFactory;
+    }
 
+    @Override
+    public String getPresenterTag() {
+        return MainActivity.class.getCanonicalName();
+    }
+
+    @Override
+    protected void onPresenterPrepared(ConversionViewPresenter presenter) {
+        Timber.d("onPresenterPrepared %1$s", getPresenterTag());
+    }
 }

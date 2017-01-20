@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jedikv.simpleconverter.R;
+import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 
 import java.text.DecimalFormat;
@@ -34,8 +35,8 @@ public class CurrencyInputView extends LinearLayout {
 
     public static final String TAG = CurrencyInputView.class.getSimpleName();
 
-    private final DecimalFormat decimalFormat = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
-
+    private final DecimalFormat decimalFormat
+            = new DecimalFormat("#0.0000", new DecimalFormatSymbols(Locale.getDefault()));
 
     @BindView(R.id.et_input)
     AppCompatEditText input;
@@ -108,26 +109,28 @@ public class CurrencyInputView extends LinearLayout {
         input.setText("");
     }
 
-    public void setCurrency(@NonNull CurrencyEntity currency) {
-        currencyCode.setText(currency.getCode());
-        currencySymbol.setText(currency.getSymbol());
+    public void setCurrency(@NonNull CurrencyModel currency) {
+        currencyCode.setText(currency.isoCode());
+        currencySymbol.setText(currency.symbol());
 
-        String countryCode = currency.getCode().substring(0,2).toLowerCase();
+        String countryCode = currency.isoCode().substring(0, 2).toLowerCase();
         Timber.d("Country code: " + countryCode);
 
-        final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(getContext(), currency.getCode());
+        final int flagId = AndroidUtils.getDrawableResIdByCurrencyCode(getContext(),
+                currency.isoCode());
         flagSelect.setImageResource(flagId);
     }
 
     public void dismissKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
         clearFocus();
     }
 
     @OnFocusChange(R.id.et_input)
     public void onInputFocus(boolean isFocused) {
-        if(!isFocused) {
+        if (!isFocused) {
             setValue(input.getText().toString());
         }
     }

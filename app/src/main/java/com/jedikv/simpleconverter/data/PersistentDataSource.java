@@ -67,6 +67,23 @@ public class PersistentDataSource {
     }
 
     /**
+     * Retrive a single conversion item from the database
+     * @param sourceCurrency the source to filter by
+     * @param targetCurrency the target to filter by
+     * @return The conversion item that matches the filter
+     */
+    public Observable<ConversionItemModel> getConversionItem(String sourceCurrency,
+                                                             String targetCurrency) {
+        return storIOSQLite
+                .get()
+                .object(ConversionItemModel.class)
+                .withQuery(ConversionPairTable.queryConversionItem(sourceCurrency, targetCurrency))
+                .withGetResolver(new ConversionModelGetResolver())
+                .prepare()
+                .asRxObservable();
+    }
+
+    /**
      * Retrieve a list of currency items based upon a exclusion filter
      * @param excludedIsoCodes exclusion filter to apply
      * @return list of currencies

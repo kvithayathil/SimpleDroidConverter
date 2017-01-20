@@ -15,11 +15,17 @@ import android.view.MenuItem;
 
 import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
-import com.jedikv.simpleconverter.presenters.ICurrencyListPresenter;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyPickerAdapter;
+import com.jedikv.simpleconverter.ui.base.BasePresenter;
+import com.jedikv.simpleconverter.ui.base.PresenterFactory;
+import com.jedikv.simpleconverter.ui.model.CurrencyModel;
+import com.jedikv.simpleconverter.ui.selectcurrencyscreen.SelectCurrencyPresenterFactory;
+import com.jedikv.simpleconverter.ui.selectcurrencyscreen.SelectCurrencyScreenPresenter;
+import com.jedikv.simpleconverter.ui.selectcurrencyscreen.SelectCurrencyView;
 import com.squareup.otto.Subscribe;
 
 import java.util.Collections;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,7 +37,9 @@ import timber.log.Timber;
 /**
  * Created by Kurian on 13/05/2015.
  */
-public class CurrencyPickerActivity extends BaseActivity {
+public class CurrencyPickerActivity
+        extends BaseActivity<SelectCurrencyScreenPresenter, SelectCurrencyView>
+        implements SelectCurrencyView {
 
     public static final int REQUEST_CODE_ADD_CURRENCY = 1000;
     public static final int REQUEST_CODE_CHANGE_CURRENCY = 2000;
@@ -40,10 +48,12 @@ public class CurrencyPickerActivity extends BaseActivity {
 
     public static final String EXTRA_CURRENCY_LIST = "extra_currency_list";
     public static final String EXTRA_SELECTED_CURRENCY_CODE = "extra_selected_currency_code";
+    public static final String EXTRA_SELECTED_CURRENCY_ISO = "extra_selected_currency_iso";
     public static final String EXTRA_REQUEST_CODE = "extra_request_code";
 
     // The elevation of the toolbar when content is scrolled behind
     private static final float TOOLBAR_ELEVATION = 14f;
+
     @BindView(R.id.list)
     RecyclerView recyclerView;
     @BindView(R.id.toolbar)
@@ -51,10 +61,10 @@ public class CurrencyPickerActivity extends BaseActivity {
 
     private SearchView searchView;
 
-    private CurrencyPickerAdapter mAdapter;
+    private CurrencyPickerAdapter adapter;
 
     @Inject
-    ICurrencyListPresenter presenter;
+    SelectCurrencyPresenterFactory presenterFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +86,12 @@ public class CurrencyPickerActivity extends BaseActivity {
         if(extras != null) {
 
             if(extras.getLong(EXTRA_REQUEST_CODE) == REQUEST_CODE_ADD_CURRENCY) {
-                mAdapter = new CurrencyPickerAdapter(this, presenter.getListToHide(extras.getLong(EXTRA_SELECTED_CURRENCY_CODE)));
+                adapter = new CurrencyPickerAdapter(this, presenter.getListToHide(extras.getLong(EXTRA_SELECTED_CURRENCY_CODE)));
             } else {
-                mAdapter = new CurrencyPickerAdapter(this, Collections.EMPTY_LIST);
+                adapter = new CurrencyPickerAdapter(this, Collections.EMPTY_LIST);
             }
 
-            recyclerView.setAdapter(mAdapter);
+            recyclerView.setAdapter(adapter);
         }
 
     }
@@ -93,7 +103,8 @@ public class CurrencyPickerActivity extends BaseActivity {
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
-        SearchManager searchManager = (SearchManager) CurrencyPickerActivity.this.getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager
+                = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         if(searchItem != null) {
             searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -106,7 +117,7 @@ public class CurrencyPickerActivity extends BaseActivity {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    mAdapter.getFilter().filter(newText);
+                    adapter.getFilter().filter(newText);
                     return true;
                 }
             });
@@ -145,7 +156,28 @@ public class CurrencyPickerActivity extends BaseActivity {
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra(EXTRA_SELECTED_CURRENCY_CODE, currencyEntity.getNumericCode());
+        resultIntent.putExtra(EXTRA_SELECTED_CURRENCY_ISO, currencyEntity.getCode());
         setResult(RESULT_CODE_SUCCESS, resultIntent);
         finish();
+    }
+
+    @Override
+    public SelectCurrencyPresenterFactory getPresenterFactory() {
+        return presenterFactory;
+    }
+
+    @Override
+    public String getPresenterTag() {
+        return CurrencyPickerActivity.class.getCanonicalName();
+    }
+
+    @Override
+    protected void onPresenterPrepared(SelectCurrencyScreenPresenter presenter) {
+
+    }
+
+    @Override
+    public void displayCurrencies(List<CurrencyModel> currencies) {
+        adapter.loadCurrencies(currencies);
     }
 }

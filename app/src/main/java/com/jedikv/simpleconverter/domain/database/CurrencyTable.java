@@ -27,7 +27,7 @@ public class CurrencyTable implements Table {
     }
 
 
-    public static final String createTable() {
+    public static String createTable() {
         return new StringBuilder()
                 .append("CREATE TABLE IF NOT EXISTS " + TABLE + "(")
                 .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
@@ -42,14 +42,14 @@ public class CurrencyTable implements Table {
                 .toString();
     }
 
-    public static final Query queryForAll() {
+    public static Query queryForAll() {
         return Query.builder()
                 .table(TABLE)
                 .orderBy(COLUMN_ISO_CODE + " ASC")
                 .build();
     }
 
-    public static final Query queryByIsoCode(String isoCode) {
+    public static Query queryByIsoCode(String isoCode) {
         return Query.builder()
                 .table(TABLE)
                 .where(COLUMN_ISO_CODE + " = ?")
@@ -58,7 +58,7 @@ public class CurrencyTable implements Table {
                 .build();
     }
 
-    public static final Query queryByNumericCode(long numericCode) {
+    public static Query queryByNumericCode(long numericCode) {
         return Query.builder()
                 .table(TABLE)
                 .where(COLUMN_ID + " = ?")
@@ -68,10 +68,10 @@ public class CurrencyTable implements Table {
     }
 
 
-    public static final Query queryNonSelectedCurrencies(List<String> isoCodes) {
+    public static Query queryNonSelectedCurrencies(List<String> isoCodes) {
         return Query.builder()
                 .table(TABLE)
-                .where(COLUMN_ID + " NOT IN ("
+                .where(COLUMN_ISO_CODE + " NOT IN ("
                         + SqlUtils.generateListPlaceholder(isoCodes.size())
                         + ")")
                 .whereArgs(isoCodes)
