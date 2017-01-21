@@ -9,14 +9,14 @@ import timber.log.Timber;
  * Created by Kurian on 18/01/2017.
  */
 
-public class BaseMvpLoader<P extends BasePresenter> extends Loader<P> {
+public class MvpLoader<P extends BasePresenter> extends Loader<P> {
 
     private final PresenterFactory<P> factory;
     private final String tag;
 
     private P presenter;
 
-    public BaseMvpLoader(Context context, PresenterFactory<P> factory, String tag) {
+    public MvpLoader(Context context, PresenterFactory<P> factory, String tag) {
         super(context);
         this.tag = tag;
         this.factory = factory;
@@ -26,6 +26,8 @@ public class BaseMvpLoader<P extends BasePresenter> extends Loader<P> {
     @Override
     protected void onStartLoading() {
         Timber.d("onStartLoading %1$s", tag);
+
+        //Deliver an existing presenter instance
         if(presenter != null) {
             deliverResult(presenter);
             return;
@@ -42,8 +44,8 @@ public class BaseMvpLoader<P extends BasePresenter> extends Loader<P> {
 
     @Override
     public void deliverResult(P data) {
-        Timber.d("deliverResult %1$s", tag);
         super.deliverResult(data);
+        Timber.d("deliverResult %1$s", tag);
     }
 
     @Override
@@ -53,5 +55,9 @@ public class BaseMvpLoader<P extends BasePresenter> extends Loader<P> {
             presenter.onDestroy();
             presenter = null;
         }
+    }
+
+    public P getPresenter() {
+        return presenter;
     }
 }

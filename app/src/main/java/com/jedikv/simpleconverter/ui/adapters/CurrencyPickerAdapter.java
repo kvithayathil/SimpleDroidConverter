@@ -32,6 +32,8 @@ public class CurrencyPickerAdapter
     private List<CurrencyModel> filteredList;
     private CurrencyFilter currencyFilter;
 
+    private CurrencyListener listener;
+
     public CurrencyPickerAdapter() {
         currencyList = new ArrayList<>();
         filteredList = currencyList;
@@ -42,13 +44,12 @@ public class CurrencyPickerAdapter
     public CurrencyItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.currency_picker_card, parent, false);
-        CurrencyItemViewHolder viewHolder = new CurrencyItemViewHolder(v);
-        return viewHolder;
+        return new CurrencyItemViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(CurrencyItemViewHolder holder, int position) {
-        holder.bind(filteredList.get(position));
+        holder.bind(filteredList.get(position), listener);
     }
 
     @Override
@@ -72,7 +73,16 @@ public class CurrencyPickerAdapter
         return filteredList.get(position).numericCode();
     }
 
-    public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void setCurrencyListener(CurrencyListener listener) {
+        this.listener = listener;
+    }
+
+    public interface CurrencyListener {
+        void onItemClick(CurrencyModel currency);
+    }
+
+    public static class CurrencyItemViewHolder
+            extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.iv_flag)
         ImageView ivFlag;
@@ -84,6 +94,7 @@ public class CurrencyPickerAdapter
         AppCompatTextView tvCurrencySymbol;
 
         private CurrencyModel currency;
+        private CurrencyListener listener;
 
         public CurrencyItemViewHolder(View v) {
             super(v);
@@ -91,9 +102,10 @@ public class CurrencyPickerAdapter
             v.setOnClickListener(this);
         }
 
-        public void bind(CurrencyModel currency) {
+        public void bind(CurrencyModel currency, CurrencyListener l) {
 
             this.currency = currency;
+            this.listener = l;
 
             final int flagId = AndroidUtils
                     .getDrawableResIdByCurrencyCode(ivFlag.getContext(), currency.isoCode());
@@ -107,18 +119,20 @@ public class CurrencyPickerAdapter
             tvCurrencyName.setText(currency.name());
             tvCurrencyCode.setText(currency.isoCode());
 
-            //Some currency symbols are just the currency code, so we avoid having to print it twice
+            //Some currency symbols are just the currency code,
+            //so we avoid having to print it twice
             if(!TextUtils.equals(currency.isoCode(), currency.symbol())) {
                 tvCurrencySymbol.setText(currency.symbol());
             } else {
                 tvCurrencySymbol.setText("");
             }
-
         }
 
         @Override
         public void onClick(View v) {
-            //App.getBusInstance().post(new AddCurrencyEvent(currencyEntity));
+            if(listener != null) {
+                listener.onItemClick(currency);
+            }
         }
 
     }
@@ -133,7 +147,6 @@ public class CurrencyPickerAdapter
 
 
     private class CurrencyFilter extends Filter {
-
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -152,16 +165,12 @@ public class CurrencyPickerAdapter
                         tempList.add(currency);
                     }
                 }
-
                 filterResults.count = tempList.size();
                 filterResults.values = tempList;
-
             } else {
-
                 filterResults.count = currencyList.size();
                 filterResults.values = currencyList;
             }
-
             return filterResults;
         }
 

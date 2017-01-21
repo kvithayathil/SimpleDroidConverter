@@ -1,13 +1,14 @@
 package com.jedikv.simpleconverter.ui.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.AppComponent;
-import com.jedikv.simpleconverter.ui.base.BaseMvpLoader;
+import com.jedikv.simpleconverter.ui.base.MvpLoaderHandler;
+import com.jedikv.simpleconverter.ui.base.MvpLoader;
 import com.jedikv.simpleconverter.ui.base.BasePresenter;
 import com.jedikv.simpleconverter.ui.base.PresenterFactory;
 import com.jedikv.simpleconverter.ui.views.MvpView;
@@ -21,6 +22,7 @@ import timber.log.Timber;
 public abstract class BaseActivity<P extends BasePresenter<V>, V extends MvpView>
         extends AppCompatActivity {
 
+    public static final String TAG = BaseActivity.class.getCanonicalName();
 
     private static final int LOADER_ID = 1001;
 
@@ -29,6 +31,7 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V extends MvpView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.tag(TAG);
         Icepick.restoreInstanceState(this, savedInstanceState);
         initMvpLoader();
     }
@@ -42,25 +45,18 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V extends MvpView
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i("onStart %1$s", getPresenterTag());
+        onPresenterPrepared(presenter);
+        presenter.attachView(getMvpView());
         App.getBusInstance().register(this);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.attachView(getMvpView());
-    }
-
-    @Override
-    protected void onPause() {
-        presenter.detachView();
-        super.onPause();
-    }
-
-    @Override
     protected void onStop() {
+        presenter.detachView();
         App.getBusInstance().unregister(this);
         super.onStop();
+        Log.i("onStop %1$s", getPresenterTag());
     }
 
     public AppComponent getApplicationComponent() {
@@ -69,33 +65,26 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V extends MvpView
 
 
     private void initMvpLoader() {
-        //LoaderCallbacks as an object, so no hint regarding Loader will be leak to the subclasses.
-        getSupportLoaderManager().initLoader(getLoaderId(),
-                null,
-                new LoaderManager.LoaderCallbacks<P>() {
 
-            @Override
-            public Loader<P> onCreateLoader(int id, Bundle args) {
-                Timber.d("onCreateLoader %1$s", getPresenterTag());
-                return new BaseMvpLoader<>(getApplicationContext(),
-                        getPresenterFactory(),
-                        getPresenterTag());
-            }
+        final MvpLoaderHandler<P> loaderHandler
+                = new MvpLoaderHandler<>(getPresenterTag(), getSupportLoaderManager(),
+                getPresenterFactory());
 
+        loaderHandler.init(this, new MvpLoaderHandler.Receiver<P>() {
             @Override
-            public void onLoadFinished(Loader<P> loader, P data) {
-                Timber.d("onLoadFinished %1$s", getPresenterTag());
-                presenter = data;
-                onPresenterPrepared(presenter);
-            }
-
-            @Override
-            public void onLoaderReset(Loader<P> loader) {
-                Timber.d("onLoaderReset %1$s", getPresenterTag());
-                presenter = null;
-                onPresenterDestroyed();
+            public void onPresenterCreatedOrRestored(@NonNull P presenter) {
+                Timber.d("onPresenterCreatedOrRestored: %1$s", getPresenterTag());
+                setPresenter(presenter);
             }
         });
+    }
+
+    /**
+     * Used as the final step in the presenter creation, not required for public access
+     * @param presenter
+     */
+    private void setPresenter(P presenter) {
+        this.presenter = presenter;
     }
 
     /**
@@ -136,7 +125,7 @@ public abstract class BaseActivity<P extends BasePresenter<V>, V extends MvpView
     }
 
     /**
-     * Use this method in case you want to specify a spefic ID for the {@link BaseMvpLoader}.
+     * Use this method in case you want to specify a spefic ID for the {@link MvpLoader}.
      * By default its value would be {@link #LOADER_ID}.
      */
     public static int getLoaderId() {
