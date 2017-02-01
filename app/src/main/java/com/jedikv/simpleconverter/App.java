@@ -1,11 +1,11 @@
 package com.jedikv.simpleconverter;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.Stetho;
 import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
-import com.jedikv.simpleconverter.injection.component.DaggerAppComponent;
 import com.jedikv.simpleconverter.utils.OttoBus;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.otto.ThreadEnforcer;
@@ -28,8 +28,8 @@ public class App extends Application {
         super.attachBaseContext(base);
     }
 
-    public static App get(Context context) {
-        return (App) context.getApplicationContext();
+    public static App get(Activity activity) {
+        return (App) activity.getApplicationContext();
     }
 
     @Override

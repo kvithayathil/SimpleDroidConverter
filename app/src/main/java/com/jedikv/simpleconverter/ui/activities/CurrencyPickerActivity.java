@@ -17,7 +17,9 @@ import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.busevents.AddCurrencyEvent;
 import com.jedikv.simpleconverter.ui.adapters.CurrencyPickerAdapter;
 import com.jedikv.simpleconverter.ui.model.CurrencyModel;
+import com.jedikv.simpleconverter.ui.selectcurrencyscreen.DaggerSelectCurrencyScreenComponent;
 import com.jedikv.simpleconverter.ui.selectcurrencyscreen.SelectCurrencyPresenterFactory;
+import com.jedikv.simpleconverter.ui.selectcurrencyscreen.SelectCurrencyScreenModule;
 import com.jedikv.simpleconverter.ui.selectcurrencyscreen.SelectCurrencyScreenPresenter;
 import com.jedikv.simpleconverter.ui.selectcurrencyscreen.SelectCurrencyView;
 import com.squareup.otto.Subscribe;
@@ -69,7 +71,11 @@ public class CurrencyPickerActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getApplicationComponent().inject(this);
+
+        DaggerSelectCurrencyScreenComponent.builder()
+                .selectCurrencyScreenModule(new SelectCurrencyScreenModule(this))
+                .appComponent(getApplicationComponent())
+                .build();
 
         //recyclerView.setScrollViewCallbacks(this);
         recyclerView.setHasFixedSize(true);
@@ -79,7 +85,6 @@ public class CurrencyPickerActivity
         adapter = new CurrencyPickerAdapter();
         adapter.setCurrencyListener(this);
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override

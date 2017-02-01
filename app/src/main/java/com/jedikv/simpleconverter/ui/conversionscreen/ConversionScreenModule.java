@@ -27,6 +27,7 @@ package com.jedikv.simpleconverter.ui.conversionscreen;
 
 import android.support.annotation.NonNull;
 
+import com.jedikv.simpleconverter.data.DataModule;
 import com.jedikv.simpleconverter.data.LocalKeyValueCache;
 import com.jedikv.simpleconverter.domain.DomainModule;
 import com.jedikv.simpleconverter.domain.interactor.ConversionOperations;
@@ -37,7 +38,7 @@ import dagger.Provides;
 /**
  * Created by Kurian on 18/01/2017.
  */
-@Module(includes = {DomainModule.class})
+@Module
 public class ConversionScreenModule {
 
     private final MainActivity activity;

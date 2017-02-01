@@ -74,6 +74,17 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
                 new BigDecimal(value).movePointRight(4).intValue());
     }
 
+    public String getCachedInputValue()  {
+        int cachedValue = localKeyValueCache.fetchSavedValue();
+        return new BigDecimal(cachedValue)
+                .movePointRight(4)
+                .toString();
+    }
+
+    public String getCachedSelectedCurrency() {
+        return localKeyValueCache.fetchSelectedSourceCurrency();
+    }
+
     public void loadSelectedSourceCurrency() {
         final String isoCode = localKeyValueCache.fetchSelectedSourceCurrency();
         final int value = localKeyValueCache.fetchSavedValue();

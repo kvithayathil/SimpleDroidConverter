@@ -33,7 +33,7 @@ import dagger.Component;
  * Created by Kurian on 18/01/2017.
  */
 @ConversionScreenScope
-@Component(modules = ConversionActivityModule.class, dependencies = AppComponent.class)
+@Component(modules = ConversionScreenModule.class, dependencies = AppComponent.class)
 public interface ConversionScreenComponent {
 
     void inject(MainActivity activity);

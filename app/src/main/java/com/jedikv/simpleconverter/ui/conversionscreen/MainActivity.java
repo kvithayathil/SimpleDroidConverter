@@ -30,9 +30,7 @@ import com.jedikv.simpleconverter.ui.base.PresenterFactory;
 import com.jedikv.simpleconverter.ui.model.ConversionItemModel;
 import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 import com.jedikv.simpleconverter.ui.views.CurrencyInputView;
-import com.jedikv.simpleconverter.utils.Constants;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,7 +38,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import converter_db.CurrencyEntity;
 import icepick.State;
 import timber.log.Timber;
 
@@ -66,10 +63,12 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
     @Inject
     ConversionPresenterFactory presenterFactory;
 
-    private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
+    private CurrencyConversionsAdapter currencyConversionsAdapter;
 
     @State
-    String mInputedValueString;
+    String inputedValue;
+    @State
+    String selectedCurrencyCode;
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
@@ -81,16 +80,20 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
 
-        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(this, parent, getCurrentSourceCurrency());
+        DaggerConversionScreenComponent.builder()
+                .conversionScreenModule(new ConversionScreenModule(this))
+                .appComponent(getApplicationComponent())
+                .build();
+
+        currencyConversionsAdapter
+                = new CurrencyConversionsAdapter(this, parent,
+                getPresenter().getCachedSelectedCurrency());
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(mCurrencyConversionsAdapter);
-
+        recyclerView.setAdapter(currencyConversionsAdapter);
 
         setUpTouchGestures();
-
-
 
         currencyInputView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -102,7 +105,7 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
                     case EditorInfo.IME_NULL:
                     case KeyEvent.KEYCODE_ENTER:
                         currencyInputView.dismissKeyboard();
-                        conversionPresenter.updateFromSourceCurrency(getCurrentSourceCurrencyCode());
+                        //getPresenter()..updateFromSourceCurrency(getCurrentSourceCurrencyCode());
                         return true;
 
                     default:
@@ -126,15 +129,15 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
 
             @Override
             public void afterTextChanged(Editable s) {
-                    conversionPresenter.convertValue(s.toString());
+                    //conversionPresenter.convertValue(s.toString());
             }
         });
 
 
-        mInputedValueString = getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.00");
-        Timber.d("Cached input value: " + mInputedValueString);
+        inputedValue = getPresenter().getCachedInputValue();
+        Timber.d("Cached input value: " + inputedValue);
 
-        currencyInputView.setValue(mInputedValueString);
+        currencyInputView.setValue(inputedValue);
 
 
         rlContainer.setOnTouchListener(new View.OnTouchListener() {
@@ -142,12 +145,11 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 currencyInputView.dismissKeyboard();
-                conversionPresenter.updateFromSourceCurrency(getCurrentSourceCurrencyCode());
                 return true;
             }
         });
 
-        conversionPresenter.updateFromSourceCurrency(getCurrentSourceCurrencyCode());
+        //conversionPresenter.updateFromSourceCurrency(getCurrentSourceCurrencyCode());
 
     }
 
@@ -164,15 +166,14 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
 
     private void setUpTouchGestures() {
 
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new CurrencyTouchItemCallback(mCurrencyConversionsAdapter));
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new CurrencyTouchItemCallback(currencyConversionsAdapter));
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
 
     private void startCurrencyPicker(int requestCode) {
-
         Bundle bundle = new Bundle();
-        bundle.putLong(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, getCurrentSourceCurrencyCode());
+        bundle.putString(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, selectedCurrencyCode);
         Intent pickCurrencyIntent = new Intent(this, CurrencyPickerActivity.class);
         pickCurrencyIntent.putExtras(bundle);
         startActivityForResult(pickCurrencyIntent, requestCode);
@@ -210,19 +211,6 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
         super.onPause();
     }
 
-
-    private void updateSourceCurrency(long currencyCode) {
-
-        CurrencyEntity currencyEntity = mCurrencyEntityHelper.getById(currencyCode);
-        Timber.d("id: " + currencyCode + " code: " + currencyEntity.getCode());
-
-        if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyEntity.getCode()).commit()) {
-            getDefaultSharedPrefs().edit().putLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, currencyCode).commit();
-            updateViews();
-        }
-        conversionPresenter.updateFromSourceCurrency(currencyCode);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -243,8 +231,7 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
                 }
 
                 case CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY: {
-                    updateSourceCurrency(currencyCode);
-                    getPresenter().cacheSourceEntry(isoCode, mInputedValueString);
+                    getPresenter().cacheSourceEntry(isoCode, inputedValue);
                     break;
                 }
             }
@@ -263,10 +250,6 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
     public void insertConversionItem(ConversionItemModel conversionItem) {
     }
 
-    public void updateList(BigDecimal inputValue) {
-        mCurrencyConversionsAdapter.updateCurrencyTargets(getCurrentSourceCurrency(), inputValue);
-    }
-
     /* Handling lifecycle lifetimes of presenters */
     @Override
     public PresenterFactory<ConversionViewPresenter> getPresenterFactory() {
@@ -281,5 +264,7 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
     @Override
     protected void onPresenterPrepared(ConversionViewPresenter presenter) {
         Timber.d("onPresenterPrepared %1$s", getPresenterTag());
+        this.selectedCurrencyCode = presenter.getCachedSelectedCurrency();
+        this.inputedValue = presenter.getCachedInputValue();
     }
 }

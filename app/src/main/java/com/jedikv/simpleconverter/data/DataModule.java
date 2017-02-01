@@ -71,8 +71,8 @@ public class DataModule {
     @Provides
     @ConversionAppScope
     @NonNull
-    public LocalKeyValueCache providesLockLocalKeyValueCache(@NonNull Resources resources,
-                                                             @NonNull SharedPreferences sharedPreferences) {
+    public LocalKeyValueCache providesLocalKeyValueCache(@NonNull Resources resources,
+                                                         @NonNull SharedPreferences sharedPreferences) {
 
         return new LocalKeyValueCache(resources, sharedPreferences);
     }
