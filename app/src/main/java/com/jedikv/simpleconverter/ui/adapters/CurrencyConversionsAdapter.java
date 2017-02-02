@@ -1,6 +1,5 @@
 package com.jedikv.simpleconverter.ui.adapters;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -8,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,19 +42,16 @@ public class CurrencyConversionsAdapter
         implements ItemTouchHelperAdapter {
 
     private List<ConversionItemModel> conversionItems;
-    private String sourceCurrencyCode;
     private BigDecimal inputValue;
     private CoordinatorLayout parent;
 
-
     @Inject
-    public CurrencyConversionsAdapter(Context context, CoordinatorLayout parent,
-                                      String sourceCurrency) {
-
+    public CurrencyConversionsAdapter(CoordinatorLayout parent) {
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         this.parent = parent;
+        this.conversionItems = Collections.emptyList();
+        inputValue = BigDecimal.ZERO;
     }
-
 
     @Override
     public void setHasStableIds(boolean hasStableIds) {
@@ -66,23 +63,8 @@ public class CurrencyConversionsAdapter
         return conversionItems.get(position).conversionId();
     }
 
-    public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
-        sourceCurrencyCode = currencyCode;
-
-        //Ensure the value is converted to int to retain float values
-        this.inputValue = inputValue;
-
-        Timber.d("Preinput: " + inputValue + " PostInput: " + this.inputValue);
-        notifyDataSetChanged();
-    }
-
-
     public BigDecimal getInputValue() {
         return inputValue;
-    }
-
-    public void updateInputValue(String inputValue) {
-        this.inputValue = new BigDecimal(inputValue);
     }
 
     @Override
@@ -111,6 +93,18 @@ public class CurrencyConversionsAdapter
     public void addItem(ConversionItemModel conversion) {
         conversionItems.add(0, conversion);
         notifyItemInserted(0);
+    }
+
+    public void updateValue(String value) {
+        //Assume 0 at these inputs
+        if(TextUtils.isEmpty(value)
+                || value.startsWith("0")
+                || value.startsWith(".")) {
+            inputValue = BigDecimal.ZERO;
+        } else {
+            inputValue = new BigDecimal(value);
+        }
+        notifyDataSetChanged();
     }
 
     public void addItemAtPosition(int position, ConversionItemModel conversion) {
@@ -186,7 +180,6 @@ public class CurrencyConversionsAdapter
         }
 
         private void setValue(BigDecimal inputValue, BigDecimal value) {
-
             Timber.d("Input value: %1$s rate: %2$s", inputValue, value);
             final BigDecimal result = inputValue.multiply(value);
             //Revert the value back to the original decimal point position

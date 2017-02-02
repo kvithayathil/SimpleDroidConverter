@@ -86,8 +86,7 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
                 .build();
 
         currencyConversionsAdapter
-                = new CurrencyConversionsAdapter(this, parent,
-                getPresenter().getCachedSelectedCurrency());
+                = new CurrencyConversionsAdapter(parent);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -99,19 +98,16 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_DONE:
                     case EditorInfo.IME_NULL:
                     case KeyEvent.KEYCODE_ENTER:
                         currencyInputView.dismissKeyboard();
-                        //getPresenter()..updateFromSourceCurrency(getCurrentSourceCurrencyCode());
+                        getPresenter().cacheSourceEntry(selectedCurrencyCode, inputedValue);
                         return true;
-
                     default:
                         return false;
                 }
-
             }
         });
 
@@ -226,7 +222,7 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
             switch (requestCode) {
 
                 case CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY: {
-                    addCurrencyToList(currencyCode);
+                    getPresenter().addConversionItem(selectedCurrencyCode, isoCode, 0);
                     break;
                 }
 
