@@ -29,6 +29,7 @@ import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
+ * https://lorentzos.com/rxjava-as-event-bus-the-right-way-10a36bdd49ba#.cl7m3hpuy
  * Created by Kurian on 01/02/2017.
  */
 
