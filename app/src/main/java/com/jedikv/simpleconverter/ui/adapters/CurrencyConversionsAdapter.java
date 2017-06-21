@@ -1,6 +1,5 @@
 package com.jedikv.simpleconverter.ui.adapters;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -14,15 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.jedikv.simpleconverter.App;
 import com.jedikv.simpleconverter.R;
-import com.jedikv.simpleconverter.busevents.RemoveConversionEvent;
 import com.jedikv.simpleconverter.ui.adapters.gestures.ItemTouchHelperAdapter;
 import com.jedikv.simpleconverter.ui.adapters.gestures.ItemTouchHelperViewHolder;
 import com.jedikv.simpleconverter.ui.model.ConversionItemModel;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,17 +40,16 @@ public class CurrencyConversionsAdapter
         implements ItemTouchHelperAdapter {
 
     private List<ConversionItemModel> conversionItems;
-    private String sourceCurrencyCode;
     private BigDecimal inputValue;
-    private CoordinatorLayout parent;
+    private final CoordinatorLayout parent;
 
+    private ConversionItemListener listener;
 
     @Inject
-    public CurrencyConversionsAdapter(Context context, CoordinatorLayout parent,
-                                      String sourceCurrency) {
-
+    public CurrencyConversionsAdapter(CoordinatorLayout parent) {
         Timber.tag(CurrencyConversionsAdapter.class.getSimpleName());
         this.parent = parent;
+        this.conversionItems = new ArrayList<>();
     }
 
 
@@ -66,16 +63,16 @@ public class CurrencyConversionsAdapter
         return conversionItems.get(position).conversionId();
     }
 
-    public void updateCurrencyTargets(String currencyCode, BigDecimal inputValue) {
-        sourceCurrencyCode = currencyCode;
-
+    public void updateCurrencyTargets(BigDecimal inputValue) {
         //Ensure the value is converted to int to retain float values
         this.inputValue = inputValue;
-
-        Timber.d("Preinput: " + inputValue + " PostInput: " + this.inputValue);
+        Timber.d("Preinput: %1$s PostInput: %2$s",inputValue, this.inputValue);
         notifyDataSetChanged();
     }
 
+    public void setListener(ConversionItemListener listener) {
+        this.listener = listener;
+    }
 
     public BigDecimal getInputValue() {
         return inputValue;
@@ -87,7 +84,6 @@ public class CurrencyConversionsAdapter
 
     @Override
     public CurrencyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.currency_list_card, parent, false);
         return new CurrencyViewHolder(v);
@@ -95,8 +91,8 @@ public class CurrencyConversionsAdapter
 
     @Override
     public void onBindViewHolder(CurrencyViewHolder holder, int position) {
-        Timber.d("onBind at position: " + position);
-        holder.bind(inputValue, conversionItems.get(position));
+        Timber.d("onBind at position: %1$d", position);
+        holder.bind(inputValue, conversionItems.get(position), listener);
     }
 
     @Override
@@ -106,6 +102,10 @@ public class CurrencyConversionsAdapter
 
     public List<ConversionItemModel> getItems() {
         return conversionItems;
+    }
+
+    public void loadItems(List<ConversionItemModel> items) {
+        this.conversionItems = items;
     }
 
     public void addItem(ConversionItemModel conversion) {
@@ -150,7 +150,7 @@ public class CurrencyConversionsAdapter
 
     @Override
     public void onItemDismiss(int position) {
-        App.getBusInstance().post(new RemoveConversionEvent(position));
+        removeItem(position);
     }
 
     static class CurrencyViewHolder extends RecyclerView.ViewHolder
@@ -169,14 +169,23 @@ public class CurrencyConversionsAdapter
         @BindView(R.id.tv_currency_code)
         AppCompatTextView tvCurrencyCode;
 
+        private ConversionItemModel conversionItem;
+
+        private ConversionItemListener listener;
+
         public CurrencyViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
         }
 
-        public void bind(BigDecimal inputValue, ConversionItemModel conversionItem) {
+        public void bind(BigDecimal inputValue,
+                         ConversionItemModel conversionItem,
+                         ConversionItemListener l) {
 
             final String code = conversionItem.isoCode();
+            this.conversionItem = conversionItem;
+            this.listener = l;
+
             final int flagId
                     = AndroidUtils.getDrawableResIdByCurrencyCode(itemView.getContext(), code);
             ivFlag.setImageResource(flagId);
@@ -186,7 +195,6 @@ public class CurrencyConversionsAdapter
         }
 
         private void setValue(BigDecimal inputValue, BigDecimal value) {
-
             Timber.d("Input value: %1$s rate: %2$s", inputValue, value);
             final BigDecimal result = inputValue.multiply(value);
             //Revert the value back to the original decimal point position
@@ -197,11 +205,14 @@ public class CurrencyConversionsAdapter
 
         @OnClick(R.id.ib_remove)
         public void removeItem() {
+            Timber.d("Remove adapter position: $1$d Layout position: %2$d Old position: %3$d",
+                    getAdapterPosition(),
+                    getLayoutPosition(),
+                    getOldPosition());
 
-            Timber.d("Remove adapter position: " + getAdapterPosition() + " Layout position: "
-                    + getLayoutPosition() + " Old position: " + getOldPosition());
-
-            App.getBusInstance().post(new RemoveConversionEvent(getAdapterPosition()));
+            if(listener != null) {
+                listener.onDelete(getAdapterPosition(), conversionItem);
+            }
         }
 
         @OnLongClick(R.id.card_view)
@@ -218,6 +229,11 @@ public class CurrencyConversionsAdapter
         public void onItemClear() {
             ((CardView) itemView).setCardBackgroundColor(Color.WHITE);
         }
+    }
+
+    public interface ConversionItemListener {
+        void onDelete(int position, ConversionItemModel conversionItem);
+        void onSelect(int position, ConversionItemModel conversionItem);
     }
 
 }

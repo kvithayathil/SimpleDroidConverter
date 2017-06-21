@@ -14,6 +14,7 @@ import converter_db.ConversionItem;
  */
 public interface ConversionView extends MvpView {
     void insertConversionItem(ConversionItemModel conversionItem);
-    void updateSelectedCurrency(CurrencyModel source, int value);
+    void updateSelectedCurrency(CurrencyModel source, String value);
     void updateConversions(List<ConversionItemModel> items);
+
 }

@@ -46,7 +46,7 @@ import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity<ConversionViewPresenter, ConversionView>
-        implements ConversionView {
+        implements ConversionView, CurrencyConversionsAdapter.ConversionItemListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -66,10 +66,10 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
     @Inject
     ConversionPresenterFactory presenterFactory;
 
-    private CurrencyConversionsAdapter mCurrencyConversionsAdapter;
+    private CurrencyConversionsAdapter adapter;
 
     @State
-    String mInputedValueString;
+    String currentInputedValue;
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
@@ -80,17 +80,13 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolBar);
-
-        mCurrencyConversionsAdapter = new CurrencyConversionsAdapter(this, parent, getCurrentSourceCurrency());
-
+        adapter = new CurrencyConversionsAdapter(parent);
+        adapter.setListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(mCurrencyConversionsAdapter);
-
+        recyclerView.setAdapter(adapter);
 
         setUpTouchGestures();
-
-
 
         currencyInputView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -131,10 +127,7 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
         });
 
 
-        mInputedValueString = getDefaultSharedPrefs().getString(Constants.PREFS_CACHED_SAVED_INPUT_VALUE, "0.00");
-        Timber.d("Cached input value: " + mInputedValueString);
-
-        currencyInputView.setValue(mInputedValueString);
+        currencyInputView.setValue(currentInputedValue);
 
 
         rlContainer.setOnTouchListener(new View.OnTouchListener() {
@@ -158,21 +151,19 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
 
     @OnClick(R.id.ib_flag)
     public void changeSourceCurrency() {
-
         startCurrencyPicker(CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY);
     }
 
     private void setUpTouchGestures() {
-
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new CurrencyTouchItemCallback(mCurrencyConversionsAdapter));
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new CurrencyTouchItemCallback(adapter));
         touchHelper.attachToRecyclerView(recyclerView);
     }
 
 
     private void startCurrencyPicker(int requestCode) {
-
         Bundle bundle = new Bundle();
-        bundle.putLong(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE, getCurrentSourceCurrencyCode());
+        bundle.putLong(CurrencyPickerActivity.EXTRA_SELECTED_CURRENCY_CODE,
+                currencyInputView.getSelectedCurrency());
         Intent pickCurrencyIntent = new Intent(this, CurrencyPickerActivity.class);
         pickCurrencyIntent.putExtras(bundle);
         startActivityForResult(pickCurrencyIntent, requestCode);
@@ -196,31 +187,7 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-
-    private void updateSourceCurrency(long currencyCode) {
-
-        CurrencyEntity currencyEntity = mCurrencyEntityHelper.getById(currencyCode);
-        Timber.d("id: " + currencyCode + " code: " + currencyEntity.getCode());
-
-        if(getDefaultSharedPrefs().edit().putString(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY, currencyEntity.getCode()).commit()) {
-            getDefaultSharedPrefs().edit().putLong(Constants.PREFS_CURRENTLY_SELECTED_CURRENCY_CODE, currencyCode).commit();
-            updateViews();
-        }
-        conversionPresenter.updateFromSourceCurrency(currencyCode);
     }
 
     @Override
@@ -238,13 +205,12 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
             switch (requestCode) {
 
                 case CurrencyPickerActivity.REQUEST_CODE_ADD_CURRENCY: {
-                    addCurrencyToList(currencyCode);
+                    getPresenter().loadSelectedSourceCurrency(isoCode);
                     break;
                 }
 
                 case CurrencyPickerActivity.REQUEST_CODE_CHANGE_CURRENCY: {
-                    updateSourceCurrency(currencyCode);
-                    getPresenter().cacheSourceEntry(isoCode, mInputedValueString);
+                    getPresenter().cacheSourceEntry(isoCode, currentInputedValue);
                     break;
                 }
             }
@@ -252,19 +218,22 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
     }
 
     @Override
-    public void updateSelectedCurrency(CurrencyModel source, int value) {
+    public void updateSelectedCurrency(CurrencyModel source, String value) {
+        currencyInputView.setCurrency(source, value);
     }
 
     @Override
     public void updateConversions(List<ConversionItemModel> items) {
+        adapter.loadItems(items);
     }
 
     @Override
     public void insertConversionItem(ConversionItemModel conversionItem) {
+        adapter.addItem(conversionItem);
     }
 
     public void updateList(BigDecimal inputValue) {
-        mCurrencyConversionsAdapter.updateCurrencyTargets(getCurrentSourceCurrency(), inputValue);
+        adapter.updateCurrencyTargets(inputValue);
     }
 
     /* Handling lifecycle lifetimes of presenters */
@@ -281,5 +250,16 @@ public class MainActivity extends BaseActivity<ConversionViewPresenter, Conversi
     @Override
     protected void onPresenterPrepared(ConversionViewPresenter presenter) {
         Timber.d("onPresenterPrepared %1$s", getPresenterTag());
+        currentInputedValue = presenter.
+    }
+
+    @Override
+    public void onDelete(int position, ConversionItemModel conversionItem) {
+        getPresenter().removeConversionItem(conversionItem.isoCode(), position);
+    }
+
+    @Override
+    public void onSelect(int position, ConversionItemModel conversionItem) {
+        //TODO react to an item selection?
     }
 }

@@ -6,7 +6,6 @@ import com.jedikv.simpleconverter.ui.base.BasePresenter;
 import com.jedikv.simpleconverter.ui.model.ConversionItemModel;
 import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,8 +32,8 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
     public void addConversionItem(String sourceCurrencyIso,
                                   String targetCurrencyIso,
                                   int position) {
-
-        conversionOperations.addConversionItem(sourceCurrencyIso, targetCurrencyIso, position)
+        addSubscription(conversionOperations
+                .addConversionItem(sourceCurrencyIso, targetCurrencyIso, position)
                 .subscribe(new Action1<ConversionItemModel>() {
                     @Override
                     public void call(ConversionItemModel item) {
@@ -42,50 +41,65 @@ public class ConversionViewPresenter extends BasePresenter<ConversionView> {
                             getView().insertConversionItem(item);
                         }
                     }
-                });
+                }));
     }
 
     public void removeConversionItem(String targetCurrencyIso,
                                      int position) {
-
-        conversionOperations.removeConversionItem(targetCurrencyIso, position)
+        addSubscription(conversionOperations
+                .removeConversionItem(targetCurrencyIso, position)
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-
+                        //Already removed from adapter
                     }
-                });
+                }));
     }
 
     public void loadConversionItems(String sourceCurrencyIso) {
-        conversionOperations.loadConversionItems(sourceCurrencyIso)
-        .subscribe(new Action1<List<ConversionItemModel>>() {
-            @Override
-            public void call(List<ConversionItemModel> items) {
-                if(isViewAttached()) {
-                    getView().updateConversions(items);
-                }
-            }
-        });
+        addSubscription(conversionOperations
+                .loadConversionItems(sourceCurrencyIso)
+                .subscribe(new Action1<List<ConversionItemModel>>() {
+                    @Override
+                    public void call(List<ConversionItemModel> items) {
+                        if (isViewAttached()) {
+                            getView().updateConversions(items);
+                        }
+                    }
+                }));
     }
 
     public void cacheSourceEntry(String currencyIso, String value) {
-        localKeyValueCache.saveSelectedSourceCurrencyIsoAndValue(currencyIso,
-                new BigDecimal(value).movePointRight(4).intValue());
+        localKeyValueCache.saveSelectedSourceCurrencyIsoAndValue(currencyIso, value);
     }
 
-    public void loadSelectedSourceCurrency() {
-        final String isoCode = localKeyValueCache.fetchSelectedSourceCurrency();
-        final int value = localKeyValueCache.fetchSavedValue();
-
-        conversionOperations.fetchSelectedSourceCurrency(isoCode)
+    public void loadSelectedSourceCurrency(String isoCode) {
+        addSubscription(conversionOperations
+                .fetchSelectedSourceCurrency(isoCode)
                 .subscribe(new Action1<CurrencyModel>() {
                     @Override
                     public void call(CurrencyModel source) {
                         if (isViewAttached()) {
-                            getView().updateSelectedCurrency(source, value);
+                            getView().updateSelectedCurrency(source,
+                                    localKeyValueCache.fetchSavedValue());
                         }
                     }
-                });
+                }));
+    }
+
+    @Override
+    public void attachView(ConversionView view) {
+        super.attachView(view);
+        final String cachedIso = localKeyValueCache.fetchSelectedSourceCurrency();
+
+        addSubscription(conversionOperations
+                .fetchSelectedSourceCurrency(cachedIso)
+                .subscribe(new Action1<CurrencyModel>() {
+                    @Override
+                    public void call(CurrencyModel currency) {
+                        final String value = localKeyValueCache.fetchSavedValue();
+                        getView().updateSelectedCurrency(currency, value);
+                    }
+                }));
     }
 }

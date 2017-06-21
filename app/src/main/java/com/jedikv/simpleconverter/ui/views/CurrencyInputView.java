@@ -18,6 +18,7 @@ import com.jedikv.simpleconverter.R;
 import com.jedikv.simpleconverter.ui.model.CurrencyModel;
 import com.jedikv.simpleconverter.utils.AndroidUtils;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -46,6 +47,8 @@ public class CurrencyInputView extends LinearLayout {
     AppCompatTextView currencySymbol;
     @BindView(R.id.tv_currency_code)
     AppCompatTextView currencyCode;
+
+    private CurrencyModel selectedCurrency;
 
     public CurrencyInputView(Context context) {
         this(context, null, 0);
@@ -88,13 +91,7 @@ public class CurrencyInputView extends LinearLayout {
     }
 
     public void setValue(String value) {
-        setValue(Double.valueOf(value));
-    }
-
-    public void setValue(double value) {
-        String stringValue = decimalFormat.format(value);
-        Timber.d("String value " + value);
-        input.setText(stringValue);
+        input.setText(new BigDecimal(value).toString());
     }
 
     public boolean isFocused() {
@@ -109,7 +106,9 @@ public class CurrencyInputView extends LinearLayout {
         input.setText("");
     }
 
-    public void setCurrency(@NonNull CurrencyModel currency) {
+    public void setCurrency(@NonNull CurrencyModel currency, String value) {
+        this.selectedCurrency = currency;
+        setValue(value);
         currencyCode.setText(currency.isoCode());
         currencySymbol.setText(currency.symbol());
 
@@ -135,4 +134,7 @@ public class CurrencyInputView extends LinearLayout {
         }
     }
 
+    public CurrencyModel getSelectedCurrency() {
+        return selectedCurrency;
+    }
 }

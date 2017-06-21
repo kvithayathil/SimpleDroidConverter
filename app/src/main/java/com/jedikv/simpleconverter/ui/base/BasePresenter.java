@@ -4,6 +4,9 @@ import com.jedikv.simpleconverter.ui.views.MvpView;
 
 import java.lang.ref.WeakReference;
 
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
+
 /**
  * Created by Kurian on 13/12/2016.
  */
@@ -11,6 +14,12 @@ import java.lang.ref.WeakReference;
 public abstract class BasePresenter<V extends MvpView> {
 
     private WeakReference<V> viewReference;
+
+    private final CompositeSubscription subscriptions;
+
+    public BasePresenter() {
+        subscriptions = new CompositeSubscription();
+    }
 
     public void attachView(V view) {
         if(!isViewAttached()) {
@@ -39,5 +48,10 @@ public abstract class BasePresenter<V extends MvpView> {
      * Any final clean up before the presenter is destroyed
      */
     public void onDestroy() {
+        subscriptions.unsubscribe();
+    }
+
+    protected void addSubscription(Subscription subscription) {
+        subscriptions.add(subscription);
     }
 }

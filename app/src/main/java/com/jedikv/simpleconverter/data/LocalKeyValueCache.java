@@ -29,11 +29,11 @@ public class LocalKeyValueCache {
      * @param currencyIso the ISO code of the selected source currency (e.g. USD)
      * @param value the numerical value that was last entered (ideally as an integer).
      */
-    public void saveSelectedSourceCurrencyIsoAndValue(String currencyIso, int value) {
+    public void saveSelectedSourceCurrencyIsoAndValue(String currencyIso, String value) {
         sharedPreferences
                 .edit()
                 .putString(SAVED_SELECTED_CURRENCY, currencyIso)
-                .putInt(SAVED_ENDTERED_VALUE, value)
+                .putString(SAVED_ENDTERED_VALUE, value)
                 .apply();
     }
 
@@ -41,8 +41,8 @@ public class LocalKeyValueCache {
      * Fetch the last entered value to be converted
      * @return cached value (or default value)
      */
-    public int fetchSavedValue() {
-        return sharedPreferences.getInt(SAVED_ENDTERED_VALUE, 0);
+    public String fetchSavedValue() {
+        return sharedPreferences.getString(SAVED_ENDTERED_VALUE, "0.0000");
     }
 
     /**
