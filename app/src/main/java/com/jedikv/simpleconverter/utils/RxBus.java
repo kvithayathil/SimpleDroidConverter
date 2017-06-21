@@ -20,21 +20,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * Last modified 18/01/17 21:00
+ * Last modified 01/02/17 23:30
  **************************************************************************************************/
 
-package com.jedikv.simpleconverter.ui.conversionscreen;
+package com.jedikv.simpleconverter.utils;
 
-import com.jedikv.simpleconverter.AppComponent;
-
-import dagger.Component;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
- * Created by Kurian on 18/01/2017.
+ * https://lorentzos.com/rxjava-as-event-bus-the-right-way-10a36bdd49ba#.cl7m3hpuy
+ * Created by Kurian on 01/02/2017.
  */
-@ConversionScreenScope
-@Component(modules = ConversionScreenModule.class, dependencies = AppComponent.class)
-public interface ConversionScreenComponent {
 
-    void inject(MainActivity activity);
+public class RxBus {
+
+    private static RxBus instance;
+    private PublishSubject<Object> subject = PublishSubject.create();
+
+    public static RxBus getInstance() {
+        if(instance == null) {
+            instance = new RxBus();
+        }
+        return instance;
+    }
+
+    /**
+     * Pass any event down to event listeners.
+     */
+    public void setEvent(Object object) {
+        subject.onNext(object);
+    }
+
+    /**
+     * Subscribe to this Observable. On event, do something
+     * e.g. replace a fragment
+     */
+    public Observable<Object> getEvents() {
+        return subject;
+    }
 }

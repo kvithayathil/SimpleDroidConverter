@@ -26,8 +26,7 @@
 package com.jedikv.simpleconverter.ui.selectcurrencyscreen;
 
 import com.jedikv.simpleconverter.AppComponent;
-import com.jedikv.simpleconverter.ui.conversionscreen.ConversionScreenScope;
-import com.jedikv.simpleconverter.ui.conversionscreen.MainActivity;
+import com.jedikv.simpleconverter.ui.activities.CurrencyPickerActivity;
 
 import dagger.Component;
 
@@ -37,6 +36,5 @@ import dagger.Component;
 @SelectCurrencyScreenScope
 @Component(modules = SelectCurrencyScreenModule.class, dependencies = AppComponent.class)
 public interface SelectCurrencyScreenComponent {
-
-    void inject(MainActivity activity);
+    void inject(CurrencyPickerActivity activity);
 }

@@ -27,14 +27,11 @@ package com.jedikv.simpleconverter.ui.selectcurrencyscreen;
 
 import android.support.annotation.NonNull;
 
+import com.jedikv.simpleconverter.data.DataModule;
 import com.jedikv.simpleconverter.data.LocalKeyValueCache;
 import com.jedikv.simpleconverter.domain.DomainModule;
-import com.jedikv.simpleconverter.domain.interactor.ConversionOperations;
 import com.jedikv.simpleconverter.domain.interactor.GetCurrencyList;
 import com.jedikv.simpleconverter.ui.activities.CurrencyPickerActivity;
-import com.jedikv.simpleconverter.ui.conversionscreen.ConversionPresenterFactory;
-import com.jedikv.simpleconverter.ui.conversionscreen.ConversionScreenScope;
-import com.jedikv.simpleconverter.ui.conversionscreen.MainActivity;
 
 import dagger.Module;
 import dagger.Provides;
@@ -42,7 +39,7 @@ import dagger.Provides;
 /**
  * Created by Kurian on 18/01/2017.
  */
-@Module(includes = {DomainModule.class})
+@Module
 public class SelectCurrencyScreenModule {
 
     private final CurrencyPickerActivity activity;

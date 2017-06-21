@@ -23,6 +23,7 @@ public class ApiModule {
     public static final String CACHE_NAME = "okhttp3_cache";
 
     @NonNull
+    @Provides
     @OkhttpCacheFile
     @ConversionAppScope
     File provideHttpCacheFile(Context context) {

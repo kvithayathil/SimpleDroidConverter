@@ -6,14 +6,8 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
-import com.jedikv.simpleconverter.dbutils.ConversionItemDbHelper;
-import com.jedikv.simpleconverter.dbutils.CurrencyDbHelper;
-import com.jedikv.simpleconverter.dbutils.CurrencyPairDbHelper;
 import com.jedikv.simpleconverter.domain.database.AppDbHelper;
 
-import java.io.File;
-
-import converter_db.DaoSession;
 import dagger.Module;
 import dagger.Provides;
 
@@ -32,7 +26,7 @@ public class AppModule {
     @Provides
     @NonNull
     @ConversionAppScope
-    public App providesApplication() {
+    App providesApplication() {
         return this.application;
     }
 
@@ -40,7 +34,7 @@ public class AppModule {
     @Provides
     @NonNull
     @ConversionAppScope
-    public Context providesContext() {
+    Context providesContext() {
         return this.application;
     }
 
@@ -58,17 +52,11 @@ public class AppModule {
         return context.getResources();
     }
 
-    @Provides
-    @NonNull
-    @ConversionAppScope
-    public File providesLocalCacheDir() {
-        return application.getCacheDir();
-    }
 
     @Provides
     @NonNull
     @ConversionAppScope
-    public AppDbHelper providesDbHelper(@NonNull Context context) {
+    AppDbHelper providesDbHelper(@NonNull Context context) {
         return new AppDbHelper(context, "converter_db", 1);
     }
 }

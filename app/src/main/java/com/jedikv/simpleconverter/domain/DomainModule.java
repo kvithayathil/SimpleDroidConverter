@@ -13,8 +13,6 @@ import com.jedikv.simpleconverter.domain.interactor.ExecutionThread;
 import com.jedikv.simpleconverter.domain.interactor.GetCurrencyList;
 import com.jedikv.simpleconverter.ui.MainThreadExecutor;
 
-import javax.inject.Named;
-
 import dagger.Module;
 import dagger.Provides;
 
