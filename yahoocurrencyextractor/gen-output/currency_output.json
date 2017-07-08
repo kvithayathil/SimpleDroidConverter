@@ -92,7 +92,7 @@
   {
     "numericCode": 974,
     "symbol": "p.",
-    "name": "Belarusian Ruble",
+    "name": "Belarusian Ruble (2000-2016)",
     "countryName": "Belarus",
     "code": "BYR",
     "showAtEnd": true,
@@ -662,7 +662,7 @@
   {
     "numericCode": 454,
     "symbol": "MK",
-    "name": "Malawian Kwacha",
+    "name": "Malawian Malawi Kwacha",
     "countryName": "Malawi",
     "code": "MWK",
     "showAtEnd": true,
@@ -682,7 +682,7 @@
   {
     "numericCode": 604,
     "symbol": "S/.",
-    "name": "Peruvian Nuevo Sol",
+    "name": "Peruvian Sol",
     "countryName": "Peru",
     "code": "PEN",
     "showAtEnd": false,
@@ -1212,7 +1212,7 @@
   {
     "numericCode": 191,
     "symbol": "kn",
-    "name": "Croatian Kuna",
+    "name": "Kuna",
     "countryName": "Croatia",
     "code": "HRK",
     "showAtEnd": false,

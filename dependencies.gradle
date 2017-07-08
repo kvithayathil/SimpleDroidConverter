@@ -8,11 +8,11 @@ ext.versions = [
 
 
         minSdk: 16,
-        targetSdk: 25,
-        compileSdk: 25,
-        buildTools: '25.0.0',
+        targetSdk: 26,
+        compileSdk: 26,
+        buildTools: '26.0.0',
 
-        androidGradlePlugin: '3.0.0-alpha1',
+        androidGradlePlugin: '3.0.0-alpha5',
         aptGradlePlugin: '1.8',
 
         multidex: '1.0.1',
@@ -21,7 +21,7 @@ ext.versions = [
         androidDevMetricsGradlePlugin: '0.4',
         //aptPlugin: '0.6',
 
-        dagger: '2.7',
+        dagger: '2.11',
         javaxInject: '1',
         javaxAnnotationApi: '1.2',
         javaxGlassfish: '10.0-b28',

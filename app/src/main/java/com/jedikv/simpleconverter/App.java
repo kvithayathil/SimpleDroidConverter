@@ -19,8 +19,6 @@ public class App extends Application {
 
     private static final String TAG = App.class.getCanonicalName();
 
-    private AppComponent appComponent;
-
     private static OttoBus bus;
 
     @Override
@@ -49,20 +47,8 @@ public class App extends Application {
                         .build());
 
 
-        setUpGraph();
-
         bus = new OttoBus(ThreadEnforcer.MAIN);
         Timber.plant(new Timber.DebugTree());
-    }
-
-    private void setUpGraph() {
-        appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .build();
-    }
-
-    public AppComponent getAppComponent() {
-        return appComponent;
     }
 
     public static OttoBus getBusInstance() {

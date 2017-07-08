@@ -6,8 +6,6 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
-import com.jedikv.simpleconverter.domain.database.AppDbHelper;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -50,13 +48,5 @@ public class AppModule {
     @ConversionAppScope
     Resources providesAndroidResources(@NonNull Context context) {
         return context.getResources();
-    }
-
-
-    @Provides
-    @NonNull
-    @ConversionAppScope
-    AppDbHelper providesDbHelper(@NonNull Context context) {
-        return new AppDbHelper(context, "converter_db", 1);
     }
 }
