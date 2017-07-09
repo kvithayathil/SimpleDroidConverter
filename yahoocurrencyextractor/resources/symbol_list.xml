@@ -48,7 +48,7 @@
     <entry code="HKD" unicode-decimal="36" unicode-hex="24">Hong Kong Dollar</entry>
     <entry code="HUF" unicode-decimal="70, 116" unicode-hex="46, 74">Hungary Forint</entry>
     <entry code="ISK" unicode-decimal="107, 114" unicode-hex="6b, 72">Iceland Krona</entry>
-    <entry code="INR" unicode-decimal="8377" unicode-hex="20b9">India Rupee</entry>
+    <entry code="INR" unicode-decimal="" unicode-hex="">India Rupee</entry>
     <entry code="IDR" unicode-decimal="82, 112" unicode-hex="52, 70">Indonesia Rupiah</entry>
     <entry code="IRR" unicode-decimal="65020" unicode-hex="fdfc">Iran Rial</entry>
     <entry code="IMP" unicode-decimal="163" unicode-hex="a3">Isle of Man Pound</entry>
@@ -56,7 +56,7 @@
     <entry code="JMD" unicode-decimal="74, 36" unicode-hex="4a, 24">Jamaica Dollar</entry>
     <entry code="JPY" unicode-decimal="165" unicode-hex="a5">Japan Yen</entry>
     <entry code="JEP" unicode-decimal="163" unicode-hex="a3">Jersey Pound</entry>
-    <entry code="KZT" unicode-decimal="8376" unicode-hex="20b8">Kazakhstan Tenge</entry>
+    <entry code="KZT" unicode-decimal="1083, 1074" unicode-hex="43b, 432">Kazakhstan Tenge</entry>
     <entry code="KPW" unicode-decimal="8361" unicode-hex="20a9">Korea (North) Won</entry>
     <entry code="KRW" unicode-decimal="8361" unicode-hex="20a9">Korea (South) Won</entry>
     <entry code="KGS" unicode-decimal="1083, 1074" unicode-hex="43b, 432">Kyrgyzstan Som</entry>
@@ -175,7 +175,4 @@
     <entry code="BHD" unicode-decimal="1576, 46, 1583" unicode-hex="d8, a8, 2e, d8, af"></entry>
     <entry code="MMK" unicode-decimal="75" unicode-hex="4b"></entry>
     <entry code="TRY" unicode-decimal="8378" unicode-hex="e2, 82, ba"></entry>
-
-
-
 </currency-symbol>
