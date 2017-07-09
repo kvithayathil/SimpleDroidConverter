@@ -20,36 +20,31 @@ public class SymbolDataParser {
 
     private final Map<String, CurrencyEntity> currencyEntityMap;
 
-    //Taken from: https://github.com/RubyMoney/money/blob/03c2034e7674097d536f084f40c57770411550a9/config/currency_iso.json
+    //Taken from: https://github.com/RubyMoney/money/blob/master/config/currency_iso.json
 
-    private final String inputPath = "../yahoocurrencyextractor/resources/symbol_data.json";
+    private static final String INPUT_PATH = "../yahoocurrencyextractor/resources/symbol_data.json";
 
     public SymbolDataParser() {
         currencyEntityMap = new HashMap<>();
         parseAndCreateMap();
     }
 
-
     private void parseAndCreateMap() {
 
         Gson gson = new GsonBuilder().create();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(inputPath));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(INPUT_PATH));
             List<CurrencyEntity> currencyEntityList =
-                gson.fromJson(bufferedReader, new TypeToken<List<CurrencyEntity>>() {
-                }.getType());
+                gson.fromJson(bufferedReader, new TypeToken<List<CurrencyEntity>>() {}.getType());
 
-            for(CurrencyEntity entity : currencyEntityList) {
+            for (CurrencyEntity entity : currencyEntityList) {
                 currencyEntityMap.put(entity.getIsoCode(), entity);
             }
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
-
 
     public boolean isInMap(String code) {
         return currencyEntityMap.containsKey(code);
@@ -60,7 +55,6 @@ public class SymbolDataParser {
     }
 
     public CurrencyEntity getCurreny(String code) {
-
         return currencyEntityMap.get(code);
     }
 }

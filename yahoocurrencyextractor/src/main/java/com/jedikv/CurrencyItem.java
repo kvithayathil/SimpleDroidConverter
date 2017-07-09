@@ -27,7 +27,7 @@ public class CurrencyItem {
         this.id = currency.getNumericCode();
         this.countryName = locale.getDisplayCountry();
 
-        System.out.print("CurrencyItem: " + locale.getDisplayCountry(locale) + " No Locale: " + locale.getDisplayCountry() + "\n");
+        //System.out.print("CurrencyItem: " + locale.getDisplayCountry(locale) + " No Locale: " + locale.getDisplayCountry() + "\n");
     }
 
     public long getId() {

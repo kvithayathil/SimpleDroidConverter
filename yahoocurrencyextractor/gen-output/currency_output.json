@@ -15,7 +15,7 @@
     "name": "Vietnamese Dong",
     "countryName": "Vietnam",
     "code": "VND",
-    "showAtEnd": false,
+    "showAtEnd": true,
     "decimalmark": ",",
     "thousandsSeparator": "."
   },
@@ -475,7 +475,7 @@
     "name": "Nicaraguan Córdoba",
     "countryName": "Nicaragua",
     "code": "NIO",
-    "showAtEnd": true,
+    "showAtEnd": false,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
@@ -625,7 +625,7 @@
     "name": "Barbadian Dollar",
     "countryName": "Barbados",
     "code": "BBD",
-    "showAtEnd": true,
+    "showAtEnd": false,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
@@ -695,7 +695,7 @@
     "name": "United Arab Emirates Dirham",
     "countryName": "United Arab Emirates",
     "code": "AED",
-    "showAtEnd": false,
+    "showAtEnd": true,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
@@ -745,7 +745,7 @@
     "name": "Romanian Leu",
     "countryName": "Romania",
     "code": "RON",
-    "showAtEnd": false,
+    "showAtEnd": true,
     "decimalmark": ",",
     "thousandsSeparator": "."
   },
@@ -1057,7 +1057,7 @@
     "code": "CZK",
     "showAtEnd": true,
     "decimalmark": ",",
-    "thousandsSeparator": "."
+    "thousandsSeparator": " "
   },
   {
     "numericCode": 348,
@@ -1067,7 +1067,7 @@
     "code": "HUF",
     "showAtEnd": true,
     "decimalmark": ",",
-    "thousandsSeparator": "."
+    "thousandsSeparator": " "
   },
   {
     "numericCode": 84,
@@ -1135,7 +1135,7 @@
     "name": "Panamanian Balboa",
     "countryName": "Panama",
     "code": "PAB",
-    "showAtEnd": true,
+    "showAtEnd": false,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
@@ -1215,7 +1215,7 @@
     "name": "Kuna",
     "countryName": "Croatia",
     "code": "HRK",
-    "showAtEnd": false,
+    "showAtEnd": true,
     "decimalmark": ",",
     "thousandsSeparator": "."
   },
@@ -1365,7 +1365,7 @@
     "name": "Maldivian Rufiyaa",
     "countryName": "Maldives",
     "code": "MVR",
-    "showAtEnd": false,
+    "showAtEnd": true,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
