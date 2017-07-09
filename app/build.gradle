@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.frogermcs.androiddevmetrics'
 apply plugin: 'com.getkeepsafe.dexcount'
@@ -152,6 +154,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation libraries.kotlinStdLib
+
     //Android support libraries
     compile libraries.supportAppCompat
     compile libraries.supportCardView

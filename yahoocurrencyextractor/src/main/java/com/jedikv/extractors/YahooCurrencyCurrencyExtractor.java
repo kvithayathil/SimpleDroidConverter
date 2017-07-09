@@ -10,6 +10,7 @@ import com.jedikv.currencyUtils.SymbolDataParser;
 import com.jedikv.currencyUtils.SymbolSaxParser;
 import com.jedikv.interfaces.ICurrencyExtractor;
 
+import com.jedikv.parser.CurrencyEntity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -193,7 +194,7 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
                     if(!isInEurozone(code)) {
 
                         CurrencyItem item = createCurrencyList(code);
-                        SymbolDataParser.CurrencyEntity entity = symbolDataParser.getCurreny(code);
+                        CurrencyEntity entity = symbolDataParser.getCurreny(code);
                         if(entity != null) {
                             item.setShowAtEnd(!entity.isSymbolFirst());
                             item.setDecimalmark(entity.getDecimalMark());
