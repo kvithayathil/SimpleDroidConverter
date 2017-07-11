@@ -9,7 +9,6 @@ import com.jedikv.currencyUtils.CurrencyUtils;
 import com.jedikv.currencyUtils.SymbolDataParser;
 import com.jedikv.currencyUtils.SymbolSaxParser;
 import com.jedikv.interfaces.ICurrencyExtractor;
-
 import com.jedikv.parser.CurrencyEntity;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,25 +35,21 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
     private Set<String> missingSymbolSet;
 
     public YahooCurrencyCurrencyExtractor() {
-
         setUpEuroZoneSet();
         symbolParser = new SymbolSaxParser();
         symbolDataParser = new SymbolDataParser();
         missingSymbolSet = new HashSet<>();
-
     }
 
     /**
      * Pre-populate a hashset with the current Eurozone currency members
      */
-    private void setUpEuroZoneSet () {
+    private void setUpEuroZoneSet() {
 
         eurozoneCodeSet = Sets.newHashSet(
-                //19 Eurozone territories
-                "AT","BE","CY","EE","FI","FR","DE","GR","IE","IT","LV","LT","LU","MT","NL","PT","SK","SI","ES"
-        );
-
-
+            //19 Eurozone territories
+            "AT", "BE", "CY", "EE", "FI", "FR", "DE", "GR", "IE", "IT", "LV", "LT", "LU", "MT",
+            "NL", "PT", "SK", "SI", "ES");
     }
 
 
@@ -64,30 +59,22 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
      * @return true if the country code (FR, DE etc..) is present in the Eurozone set
      */
     private boolean isInEurozone(String currencyCode) {
-
-        if(!Strings.isNullOrEmpty(currencyCode)) {
-
-            String countryCode = currencyCode.substring(0,2);
-
-            System.out.println("Euro Currency code: " + currencyCode + " Euro Country code: " + countryCode);
-
-            if(eurozoneCodeSet.contains(currencyCode.substring(0,2).toUpperCase())) {
+        if (!Strings.isNullOrEmpty(currencyCode)) {
+            String countryCode = currencyCode.substring(0, 2);
+            System.out.println(
+                "Euro Currency code: " + currencyCode + " Euro Country code: " + countryCode);
+            if (eurozoneCodeSet.contains(currencyCode.substring(0, 2).toUpperCase())) {
                 System.out.println(countryCode + " is in the EUROZONE");
                 return true;
             }
         }
-
         return false;
     }
 
 
     private CurrencyItem createCurrencyList(String currencyCode) {
-
         String countryCode = currencyCode.substring(0,2);
         Locale locale = new Locale("", countryCode);
-
-
-
         try {
             Currency instance = Currency.getInstance(currencyCode);
 
@@ -96,8 +83,6 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
             System.out.print(CurrencyUtils.getCurrencySymbol(currencyCode) + "\n");
 
             String symbol = CurrencyUtils.getCurrencySymbol(currencyCode);
-
-
 
             //Various currency symbol adjustments
             String currencyDisplayName = instance.getDisplayName(locale);
@@ -109,78 +94,52 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
             } else if (currencyDisplayName.contains("Rupee")) {
                 symbol = "Rs.";
             } else if (currencyDisplayName.contains("Dollar") && symbol.equals(currencyCode)) {
-
                 System.out.println("Dollar - " + currencyCode + ": " + symbol);
-
                 symbol = "$";
             }
-
 
             if(symbol.equals("US$")) {
                 symbol = "$";
             }
 
-
             switch (currencyCode) {
-
                 case "AMD" : {
                     symbol = "\u058F";
                     break;
                 }
-
                 case "AZN": {
                     symbol = "ман";
                     break;
                 }
-
                 case "AFN": {
                     symbol = "\u060b";
                     break;
                 }
-
             }
 
-
             //Testing out the unicode conversion
-
-
             if(symbolParser.hasUnicodeSymbol(currencyCode)) {
                 symbol = symbolParser.getCurrencyUnicodeSymbol(currencyCode);
             } else {
-                System.out.println("MISSING SYMBOL: " + currencyCode);
+                System.out.format("MISSING SYMBOL: %1$s\n",currencyCode);
                 missingSymbolSet.add(currencyCode);
             }
-
             return new CurrencyItem(locale, instance, symbol);
-
         } catch (IllegalArgumentException e) {
-            System.out.print("SKIPPED " + currencyCode + " " + locale.getDisplayCountry());
+            System.out.format("SKIPPED %1$s %2$s\n", currencyCode, locale.getDisplayCountry());
         }
-
-
-
         return null;
-
     }
 
     @Override
     public void readAndExtract(String inputPath, String outputPath) {
 
         File file = new File(inputPath);
-
         List<CurrencyItem> currencyItemList = new ArrayList<>();
-
         try {
-
             Scanner scanner = new Scanner(file);
-
-            int lineNum = 0;
-
             while (scanner.hasNext()) {
-
                 String currentLine = scanner.nextLine();
-                lineNum++;
-
                 if(currentLine.contains("USD/")) {
 
                     int index = currentLine.indexOf('/');
@@ -188,7 +147,7 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
 
                     //E.g. /USD",
                     String code = currentLine.substring(index + 1, end - 2);
-                    System.out.print(code + " ");
+                    System.out.format("%1$s\n", code);
 
                     //Exclude any countries in the Eurozone we don't want their old currencies
                     if(!isInEurozone(code)) {
@@ -209,18 +168,16 @@ public class YahooCurrencyCurrencyExtractor implements ICurrencyExtractor {
             }
 
             if(!currencyItemList.isEmpty()) {
-
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 PrintWriter writer = new PrintWriter(outputPath, "UTF-8");
                 writer.print(gson.toJson(currencyItemList));
                 writer.close();
             }
 
-            System.out.println(Arrays.toString(missingSymbolSet.toArray(new String[missingSymbolSet.size()])));
+            System.out.println(
+                Arrays.toString(missingSymbolSet.toArray(new String[missingSymbolSet.size()])));
 
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } catch (UnsupportedEncodingException e) {
+        } catch (FileNotFoundException | UnsupportedEncodingException e) {
             System.out.println(e.getMessage());
         }
     }

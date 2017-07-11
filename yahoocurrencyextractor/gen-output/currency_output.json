@@ -110,6 +110,16 @@
     "thousandsSeparator": ","
   },
   {
+    "numericCode": 979,
+    "symbol": "MXV",
+    "name": "Mexican Investment Unit",
+    "countryName": "Mexico",
+    "code": "MXV",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
     "numericCode": 788,
     "symbol": "د.ت",
     "name": "Tunisian Dinar",
@@ -380,22 +390,22 @@
     "thousandsSeparator": ","
   },
   {
-    "numericCode": 404,
-    "symbol": "KSh",
-    "name": "Kenyan Shilling",
-    "countryName": "Kenya",
-    "code": "KES",
-    "showAtEnd": false,
-    "decimalmark": ".",
-    "thousandsSeparator": ","
-  },
-  {
     "numericCode": 934,
     "symbol": "T",
     "name": "Turkmenistani Manat",
     "countryName": "Turkmenistan",
     "code": "TMT",
     "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 404,
+    "symbol": "KSh",
+    "name": "Kenyan Shilling",
+    "countryName": "Kenya",
+    "code": "KES",
+    "showAtEnd": false,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
@@ -418,6 +428,16 @@
     "showAtEnd": false,
     "decimalmark": ",",
     "thousandsSeparator": "."
+  },
+  {
+    "numericCode": 933,
+    "symbol": "Руб",
+    "name": "Belarusian Ruble",
+    "countryName": "Belarus",
+    "code": "BYN",
+    "showAtEnd": true,
+    "decimalmark": ",",
+    "thousandsSeparator": " "
   },
   {
     "numericCode": 760,
@@ -780,16 +800,6 @@
     "thousandsSeparator": ","
   },
   {
-    "numericCode": 840,
-    "symbol": "$",
-    "name": "US Dollar",
-    "countryName": "United States",
-    "code": "USD",
-    "showAtEnd": false,
-    "decimalmark": ".",
-    "thousandsSeparator": ","
-  },
-  {
     "numericCode": 834,
     "symbol": "Sh",
     "name": "Tanzanian Shilling",
@@ -800,21 +810,21 @@
     "thousandsSeparator": ","
   },
   {
-    "numericCode": 524,
-    "symbol": "₨",
-    "name": "Nepalese Rupee",
-    "countryName": "Nepal",
-    "code": "NPR",
-    "showAtEnd": false,
-    "decimalmark": ".",
-    "thousandsSeparator": ","
-  },
-  {
     "numericCode": 936,
     "symbol": "₵",
     "name": "Ghanaian Cedi",
     "countryName": "Ghana",
     "code": "GHS",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 524,
+    "symbol": "₨",
+    "name": "Nepalese Rupee",
+    "countryName": "Nepal",
+    "code": "NPR",
     "showAtEnd": false,
     "decimalmark": ".",
     "thousandsSeparator": ","
@@ -850,21 +860,21 @@
     "thousandsSeparator": ","
   },
   {
-    "numericCode": 144,
-    "symbol": "₨",
-    "name": "Sri Lankan Rupee",
-    "countryName": "Sri Lanka",
-    "code": "LKR",
-    "showAtEnd": true,
-    "decimalmark": ".",
-    "thousandsSeparator": ","
-  },
-  {
     "numericCode": 238,
     "symbol": "£",
     "name": "Falkland Islands Pound",
     "countryName": "Falkland Islands",
     "code": "FKP",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 144,
+    "symbol": "₨",
+    "name": "Sri Lankan Rupee",
+    "countryName": "Sri Lanka",
+    "code": "LKR",
     "showAtEnd": true,
     "decimalmark": ".",
     "thousandsSeparator": ","
@@ -1130,22 +1140,22 @@
     "thousandsSeparator": ","
   },
   {
-    "numericCode": 590,
-    "symbol": "B/.",
-    "name": "Panamanian Balboa",
-    "countryName": "Panama",
-    "code": "PAB",
-    "showAtEnd": false,
-    "decimalmark": ".",
-    "thousandsSeparator": ","
-  },
-  {
     "numericCode": 516,
     "symbol": "$",
     "name": "Namibian Dollar",
     "countryName": "Namibia",
     "code": "NAD",
     "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 590,
+    "symbol": "B/.",
+    "name": "Panamanian Balboa",
+    "countryName": "Panama",
+    "code": "PAB",
+    "showAtEnd": false,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
@@ -1180,21 +1190,21 @@
     "thousandsSeparator": ","
   },
   {
-    "numericCode": 174,
-    "symbol": "Fr",
-    "name": "Comorian Franc",
-    "countryName": "Comoros",
-    "code": "KMF",
-    "showAtEnd": true,
-    "decimalmark": ".",
-    "thousandsSeparator": ","
-  },
-  {
     "numericCode": 51,
     "symbol": "դր.",
     "name": "Armenian Dram",
     "countryName": "Armenia",
     "code": "AMD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 174,
+    "symbol": "Fr",
+    "name": "Comorian Franc",
+    "countryName": "Comoros",
+    "code": "KMF",
     "showAtEnd": true,
     "decimalmark": ".",
     "thousandsSeparator": ","
@@ -1218,6 +1228,16 @@
     "showAtEnd": true,
     "decimalmark": ",",
     "thousandsSeparator": "."
+  },
+  {
+    "numericCode": 332,
+    "symbol": "G",
+    "name": "Haitian Gourde",
+    "countryName": "Haiti",
+    "code": "HTG",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   },
   {
     "numericCode": 116,
@@ -1300,22 +1320,22 @@
     "thousandsSeparator": "."
   },
   {
-    "numericCode": 554,
-    "symbol": "$",
-    "name": "New Zealand Dollar",
-    "countryName": "New Zealand",
-    "code": "NZD",
-    "showAtEnd": false,
-    "decimalmark": ".",
-    "thousandsSeparator": ","
-  },
-  {
     "numericCode": 242,
     "symbol": "$",
     "name": "Fijian Dollar",
     "countryName": "Fiji",
     "code": "FJD",
     "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 554,
+    "symbol": "$",
+    "name": "New Zealand Dollar",
+    "countryName": "New Zealand",
+    "code": "NZD",
+    "showAtEnd": false,
     "decimalmark": ".",
     "thousandsSeparator": ","
   },
@@ -1568,5 +1588,105 @@
     "showAtEnd": false,
     "decimalmark": ",",
     "thousandsSeparator": "."
+  },
+  {
+    "numericCode": 238,
+    "symbol": "£",
+    "name": "Falkland Islands Pound",
+    "countryName": "Falkland Islands",
+    "code": "FKP",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 756,
+    "symbol": "CHF",
+    "name": "Swiss Franc",
+    "countryName": "Switzerland",
+    "code": "CHF",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 981,
+    "symbol": "ლ",
+    "name": "Georgian Lari",
+    "countryName": "Georgia",
+    "code": "GEL",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 446,
+    "symbol": "P",
+    "name": "Macanese Pataca",
+    "countryName": "Macao",
+    "code": "MOP",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 174,
+    "symbol": "Fr",
+    "name": "Comorian Franc",
+    "countryName": "Comoros",
+    "code": "KMF",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 932,
+    "symbol": "$",
+    "name": "Zimbabwean Dollar (2009)",
+    "countryName": "Zimbabwe",
+    "code": "ZWL",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 977,
+    "symbol": "KM",
+    "name": "Bosnia-Herzegovina Convertible Mark",
+    "countryName": "Bosnia and Herzegovina",
+    "code": "BAM",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 973,
+    "symbol": "Kz",
+    "name": "Angolan Kwanza",
+    "countryName": "Angola",
+    "code": "AOA",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 156,
+    "symbol": "¥",
+    "name": "Chinese Yuan",
+    "countryName": "China",
+    "code": "CNY",
+    "showAtEnd": false,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
+  },
+  {
+    "numericCode": 780,
+    "symbol": "TT$",
+    "name": "Trinidad and Tobago Dollar",
+    "countryName": "Trinidad and Tobago",
+    "code": "TTD",
+    "showAtEnd": true,
+    "decimalmark": ".",
+    "thousandsSeparator": ","
   }
 ]
