@@ -1,12 +1,9 @@
 package com.jedikv.simpleconverter.api.yahoofinance;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jedikv.simpleconverter.BuildConfig;
 import com.jedikv.simpleconverter.api.RestAdapter;
 import com.jedikv.simpleconverter.api.jsonadapters.DateAdapter;
 import com.squareup.moshi.Moshi;
-
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -35,10 +32,6 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
                 .cache(cache)
                 .build();
         //Show http logs only in debug builds
-        final Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                .create();
-
         final Moshi moshi = new Moshi.Builder()
                 .add(new DateAdapter("yyyy-MM-dd'T'HH:mm:ss'Z'"))
                 .build();

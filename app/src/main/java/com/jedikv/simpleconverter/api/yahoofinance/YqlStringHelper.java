@@ -1,5 +1,6 @@
 package com.jedikv.simpleconverter.api.yahoofinance;
 
+import android.support.annotation.VisibleForTesting;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +10,13 @@ import java.util.List;
 
 public class YqlStringHelper {
 
+    @VisibleForTesting
+    static final String QUERY_PREFIX = "select * from yahoo.finance.xchange where pair in ";
+
     /**
      * Build the YQL statement to pass into the request
      *
-     * @param currencyPairs list of currency pairs to pass in e.g. USDGBP, USDCHF...
+     * @param targetCurrencies list of currency pairs to pass in e.g. USDGBP, USDCHF...
      * @return the YQL statement to execute the request
      */
     public String generateYQLCurrencyQuery(List<String> targetCurrencies,
@@ -20,11 +24,10 @@ public class YqlStringHelper {
 
         List<String> currencyPairs = createReverseFromPairs(targetCurrencies, sourceCurrency);
 
-        StringBuilder sb = new StringBuilder("select * from yahoo.finance.xchange where pair in ");
+        StringBuilder sb = new StringBuilder(QUERY_PREFIX);
         sb.append("(");
         for (int i = 0; i < currencyPairs.size(); i++) {
             sb.append("\"").append(currencyPairs.get(i)).append("\"");
-
             //Check if it's not the last entry in the list
             if (i < currencyPairs.size() - 1) {
                 sb.append(",");
@@ -43,8 +46,8 @@ public class YqlStringHelper {
      * @param sourceCurrency   the currency at the source of the conversion
      * @return A string list of currency pairs
      */
-    private List<String> createReverseFromPairs(List<String> targetCurrencies,
-                                                String sourceCurrency) {
+    @VisibleForTesting
+    List<String> createReverseFromPairs(List<String> targetCurrencies, String sourceCurrency) {
 
         List<String> currencyPairs = new ArrayList<>();
         for (String targetCurrency : targetCurrencies) {

@@ -167,41 +167,24 @@ dependencies {
     //Butterknife
     compile libraries.butterKnife
     apt libraries.butterKnifeCompiler
-    //Otto Event bus
-    compile libraries.otto
     //Gson JSON parser
-    compile libraries.gson
     compile libraries.moshi
     //Dagger 2.0
     compile libraries.dagger
     apt libraries.daggerCompiler
     provided libraries.jsr250
-    //Greendao ORM database
-    compile libraries.greendao
-    //ReQuery database
-    compile libraries.requery
-    compile libraries.requeryAndroid
-
-    apt libraries.requeryProcessor
     //StorIO
     compile libraries.storIO
-
-
-    //Date4J date parser
-    //compile libraries.date4j
+    compile libraries.sqlBrite
 
     //Timber logging library
     compile libraries.timber
-    //Icepick
-    compile libraries.icePick
-    provided libraries.icePickProcessor
     //Okhttp & Retrofit
     compile libraries.okHttp
     compile libraries.okHttpLoggingInterceptor
     compile libraries.retrofit
     compile libraries.okHttpUrlConnection
     compile libraries.retrofitRxJavaAdapter
-    compile libraries.retrofitGsonConverter
     compile libraries.retrofitMoshiConverter
 
 
@@ -249,6 +232,7 @@ dependencies {
     androidTestCompile libraries.supportTestRules
     // Junit
     testCompile libraries.junit
+    testCompile libraries.mockitoCore
 }
 
 configurations.all {
