@@ -3,8 +3,10 @@ package com.jedikv.simpleconverter;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 import com.facebook.stetho.Stetho;
 import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
+import com.jedikv.simpleconverter.model.CurrencyModel;
 import com.squareup.leakcanary.LeakCanary;
 import timber.log.Timber;
 
@@ -14,6 +16,10 @@ import timber.log.Timber;
 public class App extends Application {
 
     private static final String TAG = App.class.getCanonicalName();
+
+    @VisibleForTesting
+    public static AppComponent appComponent;
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -26,7 +32,6 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-
         super.onCreate();
         Timber.tag(TAG);
         LeakCanary.install(this);
@@ -41,5 +46,17 @@ public class App extends Application {
                         .build());
 
         Timber.plant(new Timber.DebugTree());
+
+        initDagger();
+    }
+
+    private void initDagger() {
+        appComponent = DaggerAppComponent.builder()
+            .appModule(new AppModule(this))
+            .build();
+    }
+
+    public static AppComponent get() {
+        return appComponent;
     }
 }

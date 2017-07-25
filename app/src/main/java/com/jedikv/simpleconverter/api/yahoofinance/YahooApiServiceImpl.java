@@ -1,7 +1,6 @@
 package com.jedikv.simpleconverter.api.yahoofinance;
 
 import android.support.annotation.VisibleForTesting;
-import com.jedikv.simpleconverter.api.RestAdapter;
 import com.jedikv.simpleconverter.api.jsonadapters.DateAdapter;
 import com.squareup.moshi.Moshi;
 import java.text.SimpleDateFormat;

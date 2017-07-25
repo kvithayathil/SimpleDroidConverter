@@ -2,17 +2,14 @@ package com.jedikv.simpleconverter.api;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
 import com.jedikv.simpleconverter.AppModule;
 import com.jedikv.simpleconverter.BuildConfig;
 import com.jedikv.simpleconverter.ConversionAppScope;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiServiceImpl;
-
-import java.io.File;
-
 import dagger.Module;
 import dagger.Provides;
+import java.io.File;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

@@ -43,7 +43,7 @@ ext.versions = [
         junit: '4.12',
         robolectric: '3.1',
         assertJ: '3.5.2',
-        mockito: '1.10.19',
+        mockito: '2.1.0',
         supportTestRunner: '0.5',
 
         jodaAndroid: '2.9.2',
@@ -61,6 +61,7 @@ ext.versions = [
         sqlbrite: '2.0.0',
 
         autoValue: '1.4.1',
+        autoValueMoshi: '0.4.3',
 
         jsr250: '1.0',
 
@@ -100,6 +101,9 @@ ext.libraries = [
 
 
         autoValue: "com.google.auto.value:auto-value:$versions.autoValue",
+        autoValueMoshi: "com.ryanharter.auto.value:auto-value-moshi-annotations:$versions.autoValueMoshi",
+        autoValueMoshiProcessor: "com.ryanharter.auto.value:auto-value-moshi:$versions.autoValueMoshi",
+
         gson: "com.google.code.gson:gson:$versions.gson",
         moshi: "com.squareup.moshi:moshi:$versions.moshi",
 

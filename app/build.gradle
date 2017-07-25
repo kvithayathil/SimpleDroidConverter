@@ -169,6 +169,8 @@ dependencies {
     apt libraries.butterKnifeCompiler
     //Gson JSON parser
     compile libraries.moshi
+    provided libraries.autoValueMoshi
+    annotationProcessor libraries.autoValueMoshiProcessor
     //Dagger 2.0
     compile libraries.dagger
     apt libraries.daggerCompiler
