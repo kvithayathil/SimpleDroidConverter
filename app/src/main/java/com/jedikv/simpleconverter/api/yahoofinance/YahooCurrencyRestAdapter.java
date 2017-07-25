@@ -18,19 +18,8 @@ public class YahooCurrencyRestAdapter implements RestAdapter {
 
     private final Retrofit instance;
 
-    public YahooCurrencyRestAdapter(final Cache cache) {
+    public YahooCurrencyRestAdapter(final OkHttpClient client) {
 
-        final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        if(BuildConfig.DEBUG) {
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        } else {
-            logging.setLevel(HttpLoggingInterceptor.Level.NONE);
-        }
-
-        final OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .cache(cache)
-                .build();
         //Show http logs only in debug builds
         final Moshi moshi = new Moshi.Builder()
                 .add(new DateAdapter("yyyy-MM-dd'T'HH:mm:ss'Z'"))

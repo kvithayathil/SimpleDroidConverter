@@ -22,7 +22,8 @@ public class YahooCurrencyRateResponse {
     @Json(name = "Bid")
     public final String bid;
 
-    public YahooCurrencyRateResponse(String id, String name, String rate, String date, String time, String ask, String bid) {
+    public YahooCurrencyRateResponse(String id, String name, String rate, String date, String time,
+        String ask, String bid) {
         this.id = id;
         this.name = name;
         this.rate = rate;
