@@ -6,7 +6,6 @@ import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 import com.facebook.stetho.Stetho;
 import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
-import com.jedikv.simpleconverter.model.CurrencyModel;
 import com.squareup.leakcanary.LeakCanary;
 import timber.log.Timber;
 
@@ -39,11 +38,10 @@ public class App extends Application {
             AndroidDevMetrics.initWith(this);
         }
 
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
-                        .build());
+        Stetho.initialize(Stetho.newInitializerBuilder(this)
+            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+            .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+            .build());
 
         Timber.plant(new Timber.DebugTree());
 

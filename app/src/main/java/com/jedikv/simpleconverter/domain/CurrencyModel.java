@@ -23,7 +23,7 @@
  * Last modified 25/07/17 18:50
  **************************************************************************************************/
 
-package com.jedikv.simpleconverter.model;
+package com.jedikv.simpleconverter.domain;
 
 import com.google.auto.value.AutoValue;
 
