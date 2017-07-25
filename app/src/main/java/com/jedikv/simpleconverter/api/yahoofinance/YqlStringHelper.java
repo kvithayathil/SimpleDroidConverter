@@ -34,7 +34,6 @@ public class YqlStringHelper {
             }
         }
         sb.append(")");
-
         return sb.toString();
     }
 
@@ -54,8 +53,6 @@ public class YqlStringHelper {
             currencyPairs.add(targetCurrency + sourceCurrency);
             currencyPairs.add(sourceCurrency + targetCurrency);
         }
-
         return currencyPairs;
     }
-
 }

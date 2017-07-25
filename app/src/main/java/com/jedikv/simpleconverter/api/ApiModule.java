@@ -7,7 +7,7 @@ import com.jedikv.simpleconverter.AppModule;
 import com.jedikv.simpleconverter.BuildConfig;
 import com.jedikv.simpleconverter.ConversionAppScope;
 import com.jedikv.simpleconverter.api.yahoofinance.YahooApiService;
-import com.jedikv.simpleconverter.api.yahoofinance.YahooCurrencyRestAdapter;
+import com.jedikv.simpleconverter.api.yahoofinance.YahooApiServiceImpl;
 
 import java.io.File;
 
@@ -45,9 +45,7 @@ public class ApiModule {
     @NonNull
     @ConversionAppScope
     YahooApiService providesYahooApiService(@NonNull OkHttpClient client) {
-        return new YahooCurrencyRestAdapter(client)
-                .getRestAdapter()
-                .create(YahooApiService.class);
+        return new YahooApiServiceImpl(client);
     }
 
     @Provides

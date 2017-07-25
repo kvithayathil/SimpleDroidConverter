@@ -196,7 +196,6 @@ dependencies {
     compile libraries.rxJava
     compile libraries.rxAndroid
 
-    //compile libraries.jodaAndroid
     //Open source acknowledgements
     compile(libraries.aboutLibraries) {
         transitive = true

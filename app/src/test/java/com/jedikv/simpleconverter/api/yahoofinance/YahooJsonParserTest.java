@@ -30,7 +30,7 @@ public class YahooJsonParserTest {
 
         Moshi moshi = new Moshi
                 .Builder()
-                .add(new DateAdapter("yyyy-MM-dd'T'HH:mm:ss'Z'"))
+                .add(new DateAdapter(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")))
                 .build();
 
         final InputStream in = this.getClass()
@@ -51,7 +51,6 @@ public class YahooJsonParserTest {
             Assert.assertEquals(response.query.count, 2);
             Assert.assertEquals(targetDate.getTime(), response.query.created.getTime());
             Assert.assertEquals(response.query.count, response.query.results.rate.size());
-
         } catch (IOException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

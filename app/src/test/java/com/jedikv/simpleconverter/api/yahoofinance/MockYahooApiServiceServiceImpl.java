@@ -22,10 +22,15 @@ public class MockYahooApiServiceServiceImpl implements YahooApiService {
 
         //Set up the dummy currency result to send back to the caller
         List<YahooCurrencyRateResponse> rateList = new ArrayList<>(2);
-        rateList.add(new YahooCurrencyRateResponse("USDMXN", "USD/MXN", "18.9500", "10/29/2016", "10:53pm", "19.0000", "18.9500"));
-        rateList.add(new YahooCurrencyRateResponse("USDCHF", "USD/CHF", "0.9872", "10/28/2016", "9:00pm", "0.9885", "0.9872"));
+        rateList.add(
+            new YahooCurrencyRateResponse("USDMXN", "USD/MXN", "18.9500", "10/29/2016", "10:53pm",
+                "19.0000", "18.9500"));
+        rateList.add(
+            new YahooCurrencyRateResponse("USDCHF", "USD/CHF", "0.9872", "10/28/2016", "9:00pm",
+                "0.9885", "0.9872"));
 
-        YahooDataContainerResponse.YahooCurrencyRatesHolder resultContainer = new YahooDataContainerResponse.YahooCurrencyRatesHolder(rateList);
+        YahooDataContainerResponse.YahooCurrencyRatesHolder resultContainer =
+            new YahooDataContainerResponse.YahooCurrencyRatesHolder(rateList);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         Date targetDate;
@@ -37,7 +42,9 @@ public class MockYahooApiServiceServiceImpl implements YahooApiService {
             targetDate = new Date();
         }
 
-        YahooDataContainerResponse.YahooCurrencyQueryResult result = new YahooDataContainerResponse.YahooCurrencyQueryResult(2, targetDate, "en-US", resultContainer);
+        YahooDataContainerResponse.YahooCurrencyQueryResult result =
+            new YahooDataContainerResponse.YahooCurrencyQueryResult(2, targetDate, "en-US",
+                resultContainer);
         containerResponse = new YahooDataContainerResponse(result);
     }
 

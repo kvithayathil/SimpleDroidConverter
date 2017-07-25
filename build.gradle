@@ -8,10 +8,10 @@ buildscript {
     apply from: 'dependencies.gradle'
 
     repositories {
+        google()
         jcenter()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://clojars.org/repo/" }
-        maven { url "https://maven.google.com" }
+        //maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        //maven { url "https://clojars.org/repo/" }
         mavenCentral()
     }
 
@@ -36,17 +36,10 @@ buildscript {
 }
 
 allprojects {
-    //apply plugin: 'com.github.ben-manes.versions'
     repositories {
+        google()
         jcenter()
-        maven { url "https://clojars.org/repo/" }
-
-    }
-
-    // Workaround to prevent Gradle from stealing focus from other apps during tests run/etc.
-    // https://gist.github.com/artem-zinnatullin/4c250e04636e25797165
-    tasks.withType(JavaForkOptions) {
-        jvmArgs '-Djava.awt.headless=true'
+        //maven { url "https://clojars.org/repo/" }
     }
 }
 

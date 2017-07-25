@@ -1,11 +1,13 @@
 package com.jedikv.simpleconverter.api.jsonadapters;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
 import com.squareup.moshi.ToJson;
-
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,16 +18,17 @@ import java.util.Date;
 
 public class DateAdapter {
 
-    final SimpleDateFormat sdf;
+    @VisibleForTesting
+    private final DateFormat df;
 
-    public DateAdapter(String format) {
-        this.sdf = new SimpleDateFormat(format);
+    public DateAdapter(@NonNull DateFormat dateFormat) {
+        this.df = dateFormat;
     }
 
     @FromJson
     public Date fromJson(JsonReader reader) throws IOException {
         try {
-            return sdf.parse(reader.nextString());
+            return df.parse(reader.nextString());
         } catch (ParseException e) {
             e.printStackTrace();
             return new Date();
@@ -34,7 +37,7 @@ public class DateAdapter {
 
     @ToJson
     public void toJson(JsonWriter writer, Date value) throws IOException {
-        String output = sdf.format(value);
+        String output = df.format(value);
         writer.value(output);
     }
 }

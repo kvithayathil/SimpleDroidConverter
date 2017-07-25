@@ -30,10 +30,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -57,7 +56,7 @@ public class DateAdapterTest {
 
 
   private DateAdapter createDateAdapter(String format) {
-    return new DateAdapter(format);
+    return new DateAdapter(new SimpleDateFormat(format));
   }
 
 }
