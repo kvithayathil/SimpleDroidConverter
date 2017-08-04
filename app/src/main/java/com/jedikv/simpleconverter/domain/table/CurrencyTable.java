@@ -20,8 +20,7 @@ public class CurrencyTable implements BaseTable {
     throw new IllegalStateException("Do not instantiate");
   }
 
-  @Override
-  public String createTable() {
+  public static String createTable() {
     return new StringBuilder()
         .append("CREATE TABLE IF NOT EXISTS " + TABLE + "(")
         .append(COLUMN_NUM_CODE + " INTEGER PRIMARY KEY, ")

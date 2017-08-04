@@ -20,17 +20,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  *
- * Last modified 25/07/17 20:20
+ * Last modified 25/07/17 20:34
  **************************************************************************************************/
 
-package com.jedikv.simpleconverter.domain.table;
+package com.jedikv.simpleconverter.domain;
 
-import android.provider.BaseColumns;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import com.jedikv.simpleconverter.domain.table.ConversionTable;
+import com.jedikv.simpleconverter.domain.table.CurrencyTable;
+import timber.log.Timber;
 
 /**
  * Created by Kurian on 25/07/2017.
  */
 
-public interface BaseTable extends BaseColumns {
-  String COLUMN_ID = _ID;
+public class DbOpenHelper extends SQLiteOpenHelper {
+
+  private static final String DB_NAME = "converter_db";
+  private static final int DB_CURRENT_VERSION = 1;
+
+  public DbOpenHelper(Context context) {
+    super(context, DB_NAME, null, DB_CURRENT_VERSION);
+    Timber.tag(DbOpenHelper.class.getCanonicalName());
+  }
+
+  @Override
+  public void onCreate(SQLiteDatabase db) {
+    db.execSQL(CurrencyTable.createTable());
+    db.execSQL(ConversionTable.createTable());
+  }
+
+  @Override
+  public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    if(oldVersion != newVersion) {
+      db.execSQL(String.format("DROP TABLE IF EXISTS %s", CurrencyTable.TABLE));
+      db.execSQL(String.format("DROP TABLE IF EXISTS %s", ConversionTable.TABLE));
+      onCreate(db);
+    }
+  }
 }
