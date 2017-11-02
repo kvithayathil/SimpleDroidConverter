@@ -8,19 +8,17 @@ ext.versions = [
 
 
         minSdk: 16,
-        targetSdk: 26,
-        compileSdk: 26,
-        buildTools: '26.0.0',
+        targetSdk: 27,
+        compileSdk: 27,
+        buildTools: '27.0.0',
 
-        androidGradlePlugin: '3.0.0-alpha8',
-        aptGradlePlugin: '1.8',
-        supportLibs: '26.0.0',
+        androidGradlePlugin: '3.0.0',
+        supportLibs: '27.0.0',
 
         multidex: '1.0.1',
 
         jacocoGradlePlugin: '0.7.7.201606060606',
         androidDevMetricsGradlePlugin: '0.4',
-        //aptPlugin: '0.6',
 
         dagger: '2.11',
         javaxInject: '1',
@@ -70,12 +68,10 @@ ext.versions = [
 
 ext.gradlePlugins = [
         android: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
-        apt: "com.neenbedankt.gradle.plugins:android-apt:$versions.aptGradlePlugin",
         jacoco: "org.jacoco:org.jacoco.core:$versions.jacocoGradlePlugin",
         androidDevMetrics: "com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:$versions.androidDevMetricsGradlePlugin",
         keepSafeDexCount: "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexCount",
         gradleVersionsPlugin: "com.github.ben-manes:gradle-versions-plugin:$versions.gradleVersionsPlugn",
-        //androidAptPlugin: "net.ltgt.gradle:gradle-apt-plugin:$versions.aptPlugin",
         kotlinGradlePlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlinVersion",
 ]
 

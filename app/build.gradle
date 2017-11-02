@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.frogermcs.androiddevmetrics'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'com.github.ben-manes.versions'
@@ -166,14 +165,14 @@ dependencies {
 
     //Butterknife
     compile libraries.butterKnife
-    apt libraries.butterKnifeCompiler
+    annotationProcessor libraries.butterKnifeCompiler
     //Gson JSON parser
     compile libraries.moshi
     provided libraries.autoValueMoshi
     annotationProcessor libraries.autoValueMoshiProcessor
     //Dagger 2.0
     compile libraries.dagger
-    apt libraries.daggerCompiler
+    annotationProcessor libraries.daggerCompiler
     provided libraries.jsr250
     //StorIO
     compile libraries.storIO
@@ -192,7 +191,7 @@ dependencies {
 
     //AutoValue
     provided libraries.autoValue
-    apt libraries.autoValue
+    annotationProcessor libraries.autoValue
 
     //RxAndroid
     compile libraries.rxJava

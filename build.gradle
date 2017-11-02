@@ -19,9 +19,6 @@ buildscript {
         // See dependencies.gradle for declaration of plugins.
 
         classpath gradlePlugins.android
-
-        // Compile-time annotation processing.
-        classpath gradlePlugins.apt
         //Dexcounter
         classpath gradlePlugins.keepSafeDexCount
         //Gradle plugin to discover dependency updates
